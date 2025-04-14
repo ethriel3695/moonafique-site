@@ -16,6 +16,8 @@ export const config = {
     '/settings',
     '/order-history',
     '/admin',
+    '/about',
+    '/contact',
     '/account',
     '/cart',
     '/product/:path*',
