@@ -11,11 +11,12 @@ import { Product } from '@/lib/schema';
 export default async function ProductPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
+  const { id: productId } = await params;
   const productsResponse = await getProducts();
   const product = productsResponse?.data.find(
-    (p: Product) => p.id === params.id
+    (p: Product) => p.id === productId
   );
 
   if (!product) {

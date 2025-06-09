@@ -52,26 +52,26 @@ export async function POST(req: Request) {
   }
 }
 
-export async function sendInvoiceEmail({
-  to,
-  trackingUrl,
-  invoicePdf,
-}: {
-  to: string;
-  trackingUrl: string;
-  invoicePdf: Buffer;
-}) {
-  await resend.emails.send({
-    from: 'Moonafique <hello@moonafique.com>',
-    to,
-    subject: 'Your Moonafique Order + Tracking Info',
-    html: `<p>Thanks for your order! Track it <a href="${trackingUrl}">here</a>.</p>`,
-    attachments: [
-      {
-        filename: 'invoice.pdf',
-        content: invoicePdf.toString('base64'),
-        contentType: 'application/pdf',
-      },
-    ],
-  });
-}
+// export async function sendInvoiceEmail({
+//   to,
+//   trackingUrl,
+//   invoicePdf,
+// }: {
+//   to: string;
+//   trackingUrl: string;
+//   invoicePdf: Buffer;
+// }) {
+//   await resend.emails.send({
+//     from: 'Moonafique <hello@moonafique.com>',
+//     to,
+//     subject: 'Your Moonafique Order + Tracking Info',
+//     html: `<p>Thanks for your order! Track it <a href="${trackingUrl}">here</a>.</p>`,
+//     attachments: [
+//       {
+//         filename: 'invoice.pdf',
+//         content: invoicePdf.toString('base64'),
+//         contentType: 'application/pdf',
+//       },
+//     ],
+//   });
+// }

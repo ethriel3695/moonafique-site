@@ -15,7 +15,14 @@ export function ProductList({
   initialList: ProductListResponse | undefined;
 }) {
   const [allProducts, setAllProducts] = useState<ProductWithPrice[]>(
-    initialList?.data || []
+    (initialList?.data || []).map((product) => ({
+      ...product,
+      price: {
+        ...product.price,
+        amount: product.price.amount ?? 0,
+        display_amount: product.price.display_amount ?? '',
+      },
+    }))
   );
   const [hasMore, setHasMore] = useState(initialList?.has_more || false);
   const [loading, setLoading] = useState(false);
@@ -32,7 +39,16 @@ export function ProductList({
         : '';
       const res = await fetch(`/api/products${searchParam}`);
       const newList: ProductListResponse = await res.json();
-      setAllProducts(newList.data);
+      setAllProducts(
+        (newList.data || []).map((product) => ({
+          ...product,
+          price: {
+            ...product.price,
+            amount: product.price.amount ?? 0,
+            display_amount: product.price.display_amount ?? '',
+          },
+        }))
+      );
       setHasMore(newList.has_more);
       setLoading(false);
     };
@@ -52,7 +68,17 @@ export function ProductList({
     );
     const newList: ProductListResponse = await res.json();
 
-    setAllProducts((prevProducts) => [...prevProducts, ...newList.data]);
+    setAllProducts((prevProducts) => [
+      ...prevProducts,
+      ...(newList.data || []).map((product) => ({
+        ...product,
+        price: {
+          ...product.price,
+          amount: product.price.amount ?? 0,
+          display_amount: product.price.display_amount ?? '',
+        },
+      })),
+    ]);
     setHasMore(newList.has_more);
     setLoading(false);
   };
