@@ -15,10 +15,35 @@ import {
 import { useCartContext } from '@/lib/cart-context';
 import Image from 'next/image';
 import { formatCurrency } from '@/lib/utils';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 export function Cart() {
   const { items, removeItem, updateQuantity, total } = useCartContext();
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+
+  const handleCheckout = async () => {
+    setCheckoutLoading(true);
+    const response = await fetch('/api/checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        items: items.map((item) => ({
+          id: item.id,
+          name: item.name,
+          price: item.price.unit_amount,
+          priceId: item.price.id, // fallback to id if price.id missing
+          quantity: item.quantity,
+        })),
+      }),
+    });
+    const data = await response.json();
+    setCheckoutLoading(false);
+    if (data.url) {
+      window.location.href = data.url;
+    } else {
+      alert('Failed to start checkout');
+    }
+  };
 
   return (
     <Sheet>
@@ -28,7 +53,7 @@ export function Cart() {
             <Button
               variant="ghost"
               size="icon"
-              className="border-border size-8 shrink-0 border"
+              className="relative border-border size-8 shrink-0 border"
             >
               <CartIcon className="size-4" />
               <span className="sr-only">Cart</span>
@@ -62,7 +87,7 @@ export function Cart() {
                   <div className="flex-1">
                     <h3 className="font-medium">{item.name}</h3>
                     <p className="text-sm text-gray-500">
-                      {formatCurrency(item.price)}
+                      {formatCurrency(item.price.unit_amount)}
                     </p>
                     <div className="flex items-center gap-2">
                       <Button
@@ -109,8 +134,13 @@ export function Cart() {
                 <span className="font-medium">Total:</span>
                 <span>{formatCurrency(total)}</span>
               </div>
-              <Button variant="default" size="sm">
-                Proceed to Checkout
+              <Button
+                variant="default"
+                size="sm"
+                onClick={handleCheckout}
+                disabled={checkoutLoading}
+              >
+                {checkoutLoading ? 'Loading...' : 'Proceed to Checkout'}
               </Button>
             </div>
           )}

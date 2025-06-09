@@ -5,7 +5,10 @@ import { useState, useEffect } from 'react';
 export interface CartItem {
   id: string;
   name: string;
-  price: number;
+  price: {
+    id: string;
+    unit_amount: number;
+  };
   image: string;
   quantity: number;
 }
@@ -62,7 +65,7 @@ export function useCart() {
   };
 
   const total = items.reduce(
-    (sum, item) => sum + item.price * item.quantity,
+    (sum, item) => sum + item.price.unit_amount * item.quantity,
     0
   );
 

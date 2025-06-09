@@ -4,21 +4,33 @@ import { useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import {
+  Sheet,
+  SheetTitle,
+  SheetContent,
+  SheetTrigger,
+} from '@/components/ui/sheet';
 import {
   Tooltip,
+  TooltipPortal,
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { Menu, Search } from 'lucide-react';
 import Link from 'next/link';
 import { Cart } from '@/components/cart';
-import { useCartContext } from '@/lib/cart-context';
 import { Logo } from '@/components/logo';
-
+// import { User } from '@workos-inc/node';
+// import { SignInButton } from '@/components/signInButton';
+// import { UserMenu } from '@/components/userMenu';
 export function SiteHeader() {
-  const { items } = useCartContext();
-  const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
+  //   {
+  //   signInUrl,
+  //   user,
+  // }: {
+  //   signInUrl: string;
+  //   user: User | null;
+  //     }
   return (
     <header className="bg-background sticky top-0 z-20 w-full">
       <div className="mx-auto flex h-16 max-w-screen-xl items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -26,9 +38,9 @@ export function SiteHeader() {
           <Sidebar />
           <Link
             href="/"
-            className="flex items-center gap-2 px-2 text-xl font-bold tracking-tighter"
+            className="flex items-center gap-2 px-2 text-xl font-bold tracking-tighter pt-5"
           >
-            <Logo className="size-5" style={{ zoom: 6 }} />
+            <Logo className="size-5" style={{ zoom: 4 }} />
           </Link>
         </div>
         <nav className="text-muted-foreground hover:[&_a]:text-foreground hidden items-center gap-6 text-sm font-medium md:flex [&_a]:transition-colors">
@@ -36,10 +48,29 @@ export function SiteHeader() {
           <Link href={`/?search=creature`}>Creatures</Link>
           <Link href={`/?search=fossil`}>Fossil</Link>
           <Link href={`/?search=misc`}>Misc</Link>
+          <Link href="/about">About</Link>
+          <Link href="/contact">Contact</Link>
         </nav>
         <div className="flex items-center gap-2">
           <SearchBar className="hidden sm:block" />
           <Cart />
+          {/* {user ? (
+            <UserMenu user={user} />
+          ) : (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <SignInButton
+                  user={user}
+                  signInUrl={signInUrl}
+                  variant="ghost"
+                  iconOnly
+                />
+              </TooltipTrigger>
+              <TooltipPortal>
+                <TooltipContent>Sign in</TooltipContent>
+              </TooltipPortal>
+            </Tooltip>
+          )} */}
         </div>
       </div>
     </header>
@@ -84,23 +115,32 @@ function Sidebar() {
             </Button>
           </TooltipTrigger>
         </SheetTrigger>
-        <TooltipContent align="start">Menu</TooltipContent>
+        <TooltipPortal>
+          <TooltipContent align="start">Menu</TooltipContent>
+        </TooltipPortal>
+        <SheetTitle className="absolute left-4 top-3 text-xl"></SheetTitle>
         <SheetContent
           side="left"
           className="flex w-full flex-col p-4 pt-12 md:w-3/4"
         >
           <SearchBar className="w-full sm:hidden" />
           <Button className="justify-start" variant="ghost">
-            <Link href="#">Women</Link>
+            <Link href={`/?search=dragon`}>Dragons</Link>
           </Button>
           <Button className="justify-start" variant="ghost">
-            <Link href="#">Men</Link>
+            <Link href={`/?search=creature`}>Creatures</Link>
           </Button>
           <Button className="justify-start" variant="ghost">
-            <Link href="#">Kids</Link>
+            <Link href={`/?search=fossil`}>Fossil</Link>
           </Button>
           <Button className="justify-start" variant="ghost">
-            <Link href="#">Accessories</Link>
+            <Link href={`/?search=misc`}>Misc</Link>
+          </Button>
+          <Button className="justify-start" variant="ghost">
+            <Link href="/about">About</Link>
+          </Button>
+          <Button className="justify-start" variant="ghost">
+            <Link href="/contact">Contact</Link>
           </Button>
         </SheetContent>
       </Tooltip>
