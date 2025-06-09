@@ -125,9 +125,7 @@ export default function TermsOfServicePage() {
             contact us at:
           </p>
           <p className="text-muted-foreground">
-            Email: legal@moonafique.com
-            <br />
-            Address: 123 3D Print Street, Tech City, TC 12345
+            Email: security@moonafique.com
           </p>
         </section>
       </div>

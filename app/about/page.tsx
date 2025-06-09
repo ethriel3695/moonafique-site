@@ -10,17 +10,17 @@ export default function AboutPage() {
           <div className="prose prose-lg text-muted-foreground">
             <p>
               Moonafique was born from a passion for 3D printing and a love for
-              creating unique, high-quality pieces that bring joy to collectors
-              and enthusiasts alike. What started as a small workshop has grown
-              into a thriving business dedicated to pushing the boundaries of
-              what&apos;s possible with 3D printing technology.
+              creating unique, high-quality pieces that bring joy to us and the
+              people around us. What started as a small workshop in our home has
+              grown into a thriving business dedicated to pushing the boundaries
+              of what&apos;s possible with 3D printing technology.
             </p>
             <p>
-              Our journey began when our founder, a lifelong 3D printing
-              enthusiast, noticed a gap in the market for premium-quality,
-              detailed 3D printed collectibles. Combining technical expertise
-              with artistic vision, we set out to create pieces that not only
-              look stunning but also stand the test of time.
+              Our journey began when our founder, a creative and artistic
+              person, noticed a gap in the market for premium-quality, detailed
+              3D printed collectibles. Combining technical expertise with
+              artistic vision, we set out to create pieces that not only look
+              stunning but also stand the test of time.
             </p>
           </div>
         </section>

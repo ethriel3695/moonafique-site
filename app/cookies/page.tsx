@@ -126,9 +126,7 @@ export default function CookiePolicyPage() {
             us at:
           </p>
           <p className="text-muted-foreground">
-            Email: privacy@moonafique.com
-            <br />
-            Address: 123 3D Print Street, Tech City, TC 12345
+            Email: security@moonafique.com
           </p>
         </section>
       </div>

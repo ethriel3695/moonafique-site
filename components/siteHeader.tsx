@@ -20,18 +20,17 @@ import { Menu, Search } from 'lucide-react';
 import Link from 'next/link';
 import { Cart } from '@/components/cart';
 import { Logo } from '@/components/logo';
-import { User } from '@workos-inc/node';
-import { SignInButton } from '@/components/signInButton';
-import { UserMenu } from '@/components/userMenu';
-
-export function SiteHeader({
-  signInUrl,
-  user,
-}: {
-  signInUrl: string;
-  user: User | null;
-}) {
-  console.log(user);
+// import { User } from '@workos-inc/node';
+// import { SignInButton } from '@/components/signInButton';
+// import { UserMenu } from '@/components/userMenu';
+export function SiteHeader() {
+  //   {
+  //   signInUrl,
+  //   user,
+  // }: {
+  //   signInUrl: string;
+  //   user: User | null;
+  //     }
   return (
     <header className="bg-background sticky top-0 z-20 w-full">
       <div className="mx-auto flex h-16 max-w-screen-xl items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -39,9 +38,9 @@ export function SiteHeader({
           <Sidebar />
           <Link
             href="/"
-            className="flex items-center gap-2 px-2 text-xl font-bold tracking-tighter"
+            className="flex items-center gap-2 px-2 text-xl font-bold tracking-tighter pt-5"
           >
-            <Logo className="size-5" style={{ zoom: 6 }} />
+            <Logo className="size-5" style={{ zoom: 4 }} />
           </Link>
         </div>
         <nav className="text-muted-foreground hover:[&_a]:text-foreground hidden items-center gap-6 text-sm font-medium md:flex [&_a]:transition-colors">
@@ -55,11 +54,23 @@ export function SiteHeader({
         <div className="flex items-center gap-2">
           <SearchBar className="hidden sm:block" />
           <Cart />
-          {user ? (
+          {/* {user ? (
             <UserMenu user={user} />
           ) : (
-            <SignInButton user={user} signInUrl={signInUrl} variant="soft" />
-          )}
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <SignInButton
+                  user={user}
+                  signInUrl={signInUrl}
+                  variant="ghost"
+                  iconOnly
+                />
+              </TooltipTrigger>
+              <TooltipPortal>
+                <TooltipContent>Sign in</TooltipContent>
+              </TooltipPortal>
+            </Tooltip>
+          )} */}
         </div>
       </div>
     </header>

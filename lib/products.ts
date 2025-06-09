@@ -88,11 +88,12 @@ function productToProductWithPrice(product: Stripe.Product): ProductWithPrice {
     images: product.images,
     price: {
       id: price.id,
-      amount,
-      display_amount: amount?.toLocaleString('en-US', {
-        style: 'currency',
-        currency: 'USD',
-      }),
+      amount: amount ?? 0,
+      display_amount:
+        amount?.toLocaleString('en-US', {
+          style: 'currency',
+          currency: 'USD',
+        }) ?? '$0.00',
     },
     metadata: product.metadata,
   };

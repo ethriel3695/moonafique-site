@@ -27,7 +27,6 @@ export default function ShippingPolicyPage() {
               <li>Delivery within 5-7 business days</li>
               <li>Package tracking</li>
               <li>Insurance coverage up to $100</li>
-              <li>Signature required for delivery</li>
             </ul>
           </div>
 
@@ -61,7 +60,7 @@ export default function ShippingPolicyPage() {
         <section className="space-y-4">
           <h2 className="text-2xl font-semibold">4. Processing Time</h2>
           <p className="text-muted-foreground">
-            All orders are processed within:
+            Most orders are processed within (Delays may occur):
           </p>
           <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
             <li>In-stock items: 1-2 business days</li>
@@ -108,10 +107,6 @@ export default function ShippingPolicyPage() {
           </p>
           <p className="text-muted-foreground">
             Email: shipping@moonafique.com
-            <br />
-            Phone: (555) 123-4567
-            <br />
-            Address: 123 3D Print Street, Tech City, TC 12345
           </p>
         </section>
       </div>

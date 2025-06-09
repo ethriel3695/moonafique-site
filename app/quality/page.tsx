@@ -112,13 +112,7 @@ export default function QualityPolicyPage() {
             If you have any questions about our quality policy or would like to
             report a quality concern, please contact us at:
           </p>
-          <p className="text-muted-foreground">
-            Email: quality@moonafique.com
-            <br />
-            Phone: (555) 123-4567
-            <br />
-            Address: 123 3D Print Street, Tech City, TC 12345
-          </p>
+          <p className="text-muted-foreground">Email: quality@moonafique.com</p>
         </section>
       </div>
     </div>

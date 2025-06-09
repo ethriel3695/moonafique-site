@@ -10,7 +10,7 @@ export function Logo({ className, ...props }: React.ComponentProps<'svg'>) {
       className={className}
       width="32"
       height="32"
-      viewBox="0 0 1898 1220"
+      viewBox="500 600 1000 600"
       enableBackground="new 0 0 1898 1220"
       xmlSpace="preserve"
       {...props}

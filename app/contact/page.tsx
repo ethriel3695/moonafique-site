@@ -70,13 +70,6 @@ export default function ContactPage() {
             <p className="text-muted-foreground">
               <span className="font-medium">Email:</span> support@moonafique.com
             </p>
-            <p className="text-muted-foreground">
-              <span className="font-medium">Phone:</span> (555) 123-4567
-            </p>
-            <p className="text-muted-foreground">
-              <span className="font-medium">Address:</span> 123 3D Print Street,
-              Tech City, TC 12345
-            </p>
           </div>
         </div>
       </div>

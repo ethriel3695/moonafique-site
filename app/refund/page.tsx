@@ -24,7 +24,6 @@ export default function RefundPolicyPage() {
           <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
             <li>The product arrives damaged or defective</li>
             <li>The product is significantly different from its description</li>
-            <li>The product was not delivered within the promised timeframe</li>
             <li>You received the wrong product</li>
           </ul>
         </section>
@@ -114,13 +113,7 @@ export default function RefundPolicyPage() {
             If you have any questions about our refund policy, please contact us
             at:
           </p>
-          <p className="text-muted-foreground">
-            Email: support@moonafique.com
-            <br />
-            Phone: (555) 123-4567
-            <br />
-            Address: 123 3D Print Street, Tech City, TC 12345
-          </p>
+          <p className="text-muted-foreground">Email: support@moonafique.com</p>
         </section>
       </div>
     </div>

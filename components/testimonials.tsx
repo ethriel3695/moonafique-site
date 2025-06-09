@@ -10,26 +10,17 @@ import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
 const testimonials = [
   {
     id: 1,
-    name: 'Sarah Johnson',
-    role: '3D Printing Enthusiast',
+    name: 'Anonymous',
+    role: 'Dino and Fossil Enthusiast',
     content:
-      'The quality of these prints is outstanding! The attention to detail is incredible, and the customer service was top-notch.',
+      'I had to have the extra large Pteranodon. It kept calling to me from my booth!',
     rating: 5,
   },
   {
     id: 2,
-    name: 'Michael Chen',
-    role: 'Collector',
-    content:
-      "I've been collecting 3D printed figures for years, and Moonafique's work is among the best I've seen. The dragons are particularly impressive!",
-    rating: 5,
-  },
-  {
-    id: 3,
-    name: 'Emily Rodriguez',
-    role: 'Gift Buyer',
-    content:
-      'Bought a custom print as a gift, and the recipient was absolutely thrilled. The packaging was beautiful, and the print arrived in perfect condition.',
+    name: 'Anonymous',
+    role: 'Teacher',
+    content: 'I am excited for the micro prints. My students will love them!',
     rating: 5,
   },
 ];

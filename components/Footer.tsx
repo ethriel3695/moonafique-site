@@ -65,12 +65,6 @@ export const Footer = ({}) => {
             Shipping Policy
           </Link>
           <Link
-            href="/warranty"
-            className="text-gray-300 hover:text-white transition-colors duration-200"
-          >
-            Warranty Policy
-          </Link>
-          <Link
             href="/quality"
             className="text-gray-300 hover:text-white transition-colors duration-200"
           >
@@ -79,7 +73,9 @@ export const Footer = ({}) => {
         </div>
       </div>
       <div className="grid grid-cols-1">
-        <p>© 2024 - All right reserved by Moonafique LLC</p>
+        <p>
+          © {new Date().getFullYear()} - All right reserved by Moonafique LLC
+        </p>
       </div>
       <div className="col-span-1 flex justify-center gap-4">
         <a

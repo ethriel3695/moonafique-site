@@ -7,12 +7,15 @@ const faqs = [
   {
     question: 'What materials do you use for your 3D prints?',
     answer:
-      'We use high-quality PLA and PETG filaments for our prints. These materials are known for their durability, detail retention, and environmental friendliness. Each material is carefully selected based on the specific requirements of the design.',
+      'We use high-quality PLA and PETG filaments for our prints. These materials are known for their durability, detail retention, and environmental friendliness. Each material is carefully selected based on the specific requirements of the design and the color selection.',
   },
   {
     question: 'How long does shipping take?',
-    answer:
-      'Standard shipping typically takes 3-5 business days within the United States. International shipping times vary by destination but generally take 7-14 business days. We also offer expedited shipping options for those who need their items sooner.',
+    answer: `<p style="font-weight: bold;">Processing Time:</p>
+        <ul style="list-style-type: disc; margin-left: 20px;"><li>In stock items typically ship within 1-2 business days</li></ul>
+      <p style="font-weight: bold;">Shipping Options:</p>
+        <ul style="list-style-type: disc; margin-left: 20px;"><li>Standard shipping: 3-5 business days</li>
+        <li>Express shipping: 1-2 business days</li></ul>`,
   },
   {
     question: 'Do you offer custom designs?',
@@ -27,7 +30,7 @@ const faqs = [
   {
     question: 'How do I care for my 3D printed items?',
     answer:
-      'To maintain the quality of your 3D printed items, avoid exposing them to direct sunlight for extended periods, keep them away from heat sources, and clean them gently with a soft, dry cloth. For more detailed care instructions, please refer to the care guide included with your purchase.',
+      'To maintain the quality of your 3D printed items, avoid exposing them to direct sunlight for extended periods, keep them away from heat sources, and clean them gently with a soft, dry cloth.',
   },
 ];
 
@@ -60,7 +63,10 @@ export function FAQ() {
               </button>
               {openIndex === index && (
                 <div className="p-4 bg-muted/50">
-                  <p className="text-muted-foreground">{faq.answer}</p>
+                  <p
+                    className="text-black"
+                    dangerouslySetInnerHTML={{ __html: faq.answer }}
+                  />
                 </div>
               )}
             </div>

@@ -4,6 +4,18 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 
+function ImagePlaceholder() {
+  return (
+    <div className="absolute inset-0 flex items-center justify-center bg-muted ">
+      <div className="text-center p-4">
+        <div className="text-2xl font-semibold text-muted-foreground mb-2 ">
+          Coming Soon
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function ProductListThumbnail({
   product,
 }: {
@@ -20,23 +32,31 @@ export function ProductListThumbnail({
   const isNew = status === 'new';
   const isFeatured = status === 'featured';
   const isOnSale = status === 'onSale';
+  const hasImage = product.images?.[0];
 
   if (isSoldOut) {
     return null; // Don't show sold out products
   }
 
   return (
-    <div className="bg-background">
+    <div className="group relative bg-card rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200">
       <Link href={`/product/${product.id}`} className="block">
-        <div className="ring-border relative aspect-square overflow-hidden rounded-xl ring-1">
-          <Image
-            src={product.images?.[0] ?? '/placeholder-image.png'}
-            alt={product.name}
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            priority
-          />
+        <div className="relative aspect-square overflow-hidden rounded-t-xl">
+          {hasImage ? (
+            <>
+              <Image
+                src={hasImage}
+                alt={product.name}
+                fill
+                className="object-cover transition-transform duration-300 group-hover:scale-105"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                priority
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+            </>
+          ) : (
+            <ImagePlaceholder />
+          )}
           {isMadeToOrder && (
             <Badge variant="madeToOrder" className="absolute top-2 right-2">
               Made to Order
@@ -69,23 +89,21 @@ export function ProductListThumbnail({
           )}
         </div>
       </Link>
-      <div className="flex items-center gap-2 py-2">
-        <div className="flex flex-col gap-1">
-          <div className="flex items-center gap-1">
-            <Link
-              href={`/product/${product.id}`}
-              className="font-medium hover:underline line-clamp-1"
-              title={product.name}
-            >
-              {product.name}
-            </Link>
-          </div>
-          <div className="text-muted-foreground">
+      <div className="p-4">
+        <div className="flex flex-col gap-2">
+          <Link
+            href={`/product/${product.id}`}
+            className="font-semibold text-lg hover:text-primary transition-colors duration-200 line-clamp-1"
+            title={product.name}
+          >
+            {product.name}
+          </Link>
+          <div className="text-lg font-medium text-primary">
             {product.price.display_amount}
           </div>
-        </div>
-        <div className="ml-auto">
-          <ProductBuyForm product={product} />
+          <div className="mt-2">
+            <ProductBuyForm product={product} />
+          </div>
         </div>
       </div>
     </div>
@@ -93,5 +111,14 @@ export function ProductListThumbnail({
 }
 
 export function ProductListThumbnailSkeleton() {
-  return <div className="bg-muted aspect-square rounded-xl" />;
+  return (
+    <div className="bg-card rounded-xl shadow-sm">
+      <div className="bg-muted aspect-square rounded-t-xl animate-pulse" />
+      <div className="p-4 space-y-3">
+        <div className="h-6 bg-muted rounded animate-pulse" />
+        <div className="h-6 w-24 bg-muted rounded animate-pulse" />
+        <div className="h-10 bg-muted rounded animate-pulse" />
+      </div>
+    </div>
+  );
 }
