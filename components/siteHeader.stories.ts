@@ -17,7 +17,6 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// This needs to be mocked out better
 export const Default: Story = {
   args: {
     signInUrl: '/auth/signin',
