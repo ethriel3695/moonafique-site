@@ -15,6 +15,7 @@ import {
   TooltipPortal,
   TooltipContent,
   TooltipTrigger,
+  TooltipProvider,
 } from '@/components/ui/tooltip';
 import { Menu, Search } from 'lucide-react';
 import Link from 'next/link';
@@ -102,6 +103,7 @@ function SearchBar({ className }: { className?: string }) {
 function Sidebar() {
   return (
     <Sheet>
+      <TooltipProvider>
       <Tooltip>
         <SheetTrigger asChild>
           <TooltipTrigger asChild>
@@ -144,6 +146,7 @@ function Sidebar() {
           </Button>
         </SheetContent>
       </Tooltip>
+      </TooltipProvider>
     </Sheet>
   );
 }
