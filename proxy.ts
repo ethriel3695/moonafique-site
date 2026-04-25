@@ -19,12 +19,12 @@ export default authkitMiddleware({
       '/cookies',
       '/cart',
       '/quality',
+      '/sign-in',
+      '/callback',
     ],
   },
 });
 
-// Match against pages that require auth
-// Leave this out if you want auth on every resource (including images, css etc.)
 export const config = {
   matcher: [
     '/',
@@ -45,5 +45,7 @@ export const config = {
     '/refund',
     '/shipping',
     '/quality',
+    '/sign-in',
+    '/callback',
   ],
 };
