@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useSyncExternalStore } from 'react';
 import { CartItem, useCart } from './use-cart';
 
 interface CartContextType {
@@ -14,19 +14,24 @@ interface CartContextType {
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
-export function CartProvider({ children }: { children: React.ReactNode }) {
-  const cart = useCart();
-  const [mounted, setMounted] = useState(false);
+function subscribe() {
+  return () => {};
+}
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+function HydratedCartProvider({ children }: { children: React.ReactNode }) {
+  const cart = useCart();
+
+  return <CartContext.Provider value={cart}>{children}</CartContext.Provider>;
+}
+
+export function CartProvider({ children }: { children: React.ReactNode }) {
+  const mounted = useSyncExternalStore(subscribe, () => true, () => false);
 
   if (!mounted) {
     return null;
   }
 
-  return <CartContext.Provider value={cart}>{children}</CartContext.Provider>;
+  return <HydratedCartProvider>{children}</HydratedCartProvider>;
 }
 
 export function useCartContext() {

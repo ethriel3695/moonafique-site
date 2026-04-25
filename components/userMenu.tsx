@@ -8,11 +8,16 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { handleSignOut } from '@/app/actions/auth';
-import { User } from '@workos-inc/node';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Link from 'next/link';
 
-export function UserMenu({ user }: { user: User }) {
+type AuthUser = {
+  firstName?: string | null;
+  lastName?: string | null;
+  profilePictureUrl?: string | null;
+};
+
+export function UserMenu({ user }: { user: AuthUser }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

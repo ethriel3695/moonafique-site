@@ -2,9 +2,14 @@
 
 import { Button } from '@radix-ui/themes';
 import { cn } from '@/lib/utils';
-import { User } from '@workos-inc/node';
 import { handleSignOut } from '@/app/actions/auth';
 import { LucideUser } from 'lucide-react';
+
+type AuthUser = {
+  firstName?: string | null;
+  lastName?: string | null;
+  profilePictureUrl?: string | null;
+};
 
 export function SignInButton({
   large,
@@ -15,7 +20,7 @@ export function SignInButton({
   iconOnly = false,
 }: {
   large?: boolean;
-  user: User | null;
+  user: AuthUser | null;
   signInUrl: string;
   variant?:
     | 'surface'

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export interface CartItem {
   id: string;
@@ -13,16 +13,27 @@ export interface CartItem {
   quantity: number;
 }
 
-export function useCart() {
-  const [items, setItems] = useState<CartItem[]>([]);
-  const [loading, setLoading] = useState(false);
+function getStoredCartItems(): CartItem[] {
+  if (typeof window === 'undefined') {
+    return [];
+  }
 
-  useEffect(() => {
-    const storedItems = localStorage.getItem('cart');
-    if (storedItems) {
-      setItems(JSON.parse(storedItems));
-    }
-  }, []);
+  const storedItems = window.localStorage.getItem('cart');
+
+  if (!storedItems) {
+    return [];
+  }
+
+  try {
+    return JSON.parse(storedItems) as CartItem[];
+  } catch {
+    return [];
+  }
+}
+
+export function useCart() {
+  const [items, setItems] = useState<CartItem[]>(getStoredCartItems);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(items));
