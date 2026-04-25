@@ -28,15 +28,23 @@ export async function POST(req: Request) {
     const { email } = subscribeSchema.parse(body);
 
     // Add subscriber to your email list
-    await resend.emails.send({
+    const { data, error } = await resend.emails.send({
       from: 'Moonafique <noreply@moonafique.com>',
       to: email,
       subject: 'Welcome to Moonafique!',
       react: WelcomeEmail({ email }),
     });
 
+    if (error) {
+      console.error('Resend error:', error);
+      return NextResponse.json(
+        { error: 'Failed to subscribe' },
+        { status: error.statusCode ?? 500 }
+      );
+    }
+
     return NextResponse.json(
-      { message: 'Successfully subscribed!' },
+      { message: 'Successfully subscribed!', emailId: data?.id },
       { status: 200 }
     );
   } catch (error) {

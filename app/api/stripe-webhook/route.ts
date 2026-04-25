@@ -4,7 +4,7 @@ import Stripe from 'stripe';
 // import { generateInvoicePdf } from '@/lib/invoice';
 // import { sendInvoiceEmail } from '@/app/api/subscribe/route';
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-02-24.acacia',
+  apiVersion: '2026-04-22.dahlia',
 });
 
 export async function POST(req: NextRequest) {
@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object as Stripe.Checkout.Session;
     // 1. Get shipping address from session
-    const shippingAddress = session.shipping_details;
+    const shippingAddress = session?.collected_information?.shipping_details;
     if (!shippingAddress) {
       return NextResponse.json(
         { error: 'No shipping address found in session' },

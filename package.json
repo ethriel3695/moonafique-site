@@ -23,6 +23,7 @@
     "@radix-ui/react-tabs": "^1.1.13",
     "@radix-ui/react-toast": "1.2.15",
     "@radix-ui/react-tooltip": "^1.2.8",
+    "@react-email/render": "^2.0.7",
     "@workos-inc/authkit-nextjs": "^4.0.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -31,12 +32,12 @@
     "pdfkit": "^0.18.0",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
-    "resend": "^4.8.0",
+    "resend": "^6.12.2",
     "shippo": "^2.18.0",
-    "stripe": "^17.7.0",
+    "stripe": "^22.1.0",
     "tailwind-merge": "^3.5.0",
     "tailwindcss-animate": "^1.0.7",
-    "zod": "^3.25.76"
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^3.2.6",
