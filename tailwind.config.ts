@@ -10,6 +10,10 @@ export default {
   ],
   theme: {
 		extend: {
+			fontFamily: {
+				sans: ['var(--font-sans)', 'sans-serif'],
+				display: ['var(--font-display)', 'serif'],
+			},
 			colors: {
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
@@ -44,6 +48,22 @@ export default {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',
+				surface: {
+					DEFAULT: 'hsl(var(--surface))',
+					strong: 'hsl(var(--surface-strong))',
+				},
+				success: {
+					DEFAULT: 'hsl(var(--success))',
+					foreground: 'hsl(var(--success-foreground))',
+				},
+				warning: {
+					DEFAULT: 'hsl(var(--warning))',
+					foreground: 'hsl(var(--warning-foreground))',
+				},
+				info: {
+					DEFAULT: 'hsl(var(--info))',
+					foreground: 'hsl(var(--info-foreground))',
+				},
 				chart: {
 					'1': 'hsl(var(--chart-1))',
 					'2': 'hsl(var(--chart-2))',
@@ -56,6 +76,10 @@ export default {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
 				sm: 'calc(var(--radius) - 4px)',
+			},
+			boxShadow: {
+				soft: '0 12px 32px -20px hsl(var(--foreground) / 0.28)',
+				lift: '0 18px 40px -20px hsl(var(--foreground) / 0.34)',
 			},
 		},
   },

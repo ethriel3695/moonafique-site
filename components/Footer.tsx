@@ -9,114 +9,104 @@ const categories = [
   { name: 'All Products', search: '' },
 ];
 
+const legalLinks = [
+  { label: 'Privacy Policy', href: '/privacy' },
+  { label: 'Terms of Service', href: '/terms' },
+  { label: 'Cookie Policy', href: '/cookies' },
+  { label: 'Refund Policy', href: '/refund' },
+  { label: 'Shipping Policy', href: '/shipping' },
+  { label: 'Quality Policy', href: '/quality' },
+];
+
 export const Footer = ({}) => {
   return (
-    <footer className="text-center gap-8 grid grid-cols-1 rounded bg-black p-10 text-white">
-      <div className="grid grid-cols-1">
-        <Link href="/">
-          <h2 className="text-2xl font-bold">Moonafique</h2>
-        </Link>
-      </div>
-      <div className="grid grid-cols-1">
-        <h3 className="text-lg font-semibold mb-4">Categories</h3>
-        <div className="flex flex-wrap justify-center gap-4">
-          {categories.map((category) => (
-            <Link
-              key={category.name}
-              href={`/?search=${encodeURIComponent(category.search)}`}
-              className="text-gray-300 hover:text-white transition-colors duration-200"
+    <footer className="border-t border-border/60 bg-[linear-gradient(180deg,_hsl(var(--surface))_0%,_hsl(var(--foreground))_100%)] text-primary-foreground">
+      <div className="mx-auto grid max-w-screen-xl gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)_minmax(0,0.9fr)] lg:px-8">
+        <div className="space-y-5">
+          <Link href="/" className="inline-flex items-center gap-3">
+            <div className="rounded-full border border-white/15 bg-white/10 px-4 py-2 shadow-soft">
+              <h2 className="font-display text-3xl text-white">Moonafique</h2>
+            </div>
+          </Link>
+          <p className="max-w-md text-base leading-7 text-primary-foreground/78">
+            Small-batch 3D-printed creatures, fossils, and curious desk pieces
+            made to feel playful, polished, and easy to gift.
+          </p>
+          <div className="flex flex-wrap gap-3">
+            <a
+              href="https://www.tiktok.com/@moonafique"
+              target="_blank"
+              rel="noreferrer noopener"
+              className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/8 px-4 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-white/14"
             >
-              {category.name}
-            </Link>
-          ))}
+              TikTok
+            </a>
+            <a
+              href="https://www.facebook.com/profile.php?id=61567210106767"
+              target="_blank"
+              rel="noreferrer noopener"
+              className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/8 px-4 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-white/14"
+            >
+              Facebook
+            </a>
+          </div>
+        </div>
+        <div className="grid gap-4">
+          <div>
+            <h3 className="text-sm font-semibold uppercase tracking-[0.24em] text-primary-foreground/70">
+              Shop by mood
+            </h3>
+            <div className="mt-4 grid gap-2">
+              {categories.map((category) => (
+                <Link
+                  key={category.name}
+                  href={`/?search=${encodeURIComponent(category.search)}`}
+                  className="text-base text-primary-foreground/82 transition-colors hover:text-white"
+                >
+                  {category.name}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="grid gap-4">
+          <div>
+            <h3 className="text-sm font-semibold uppercase tracking-[0.24em] text-primary-foreground/70">
+              Policies and contact
+            </h3>
+            <div className="mt-4 grid gap-2">
+              <Link
+                href="/contact"
+                className="text-base text-primary-foreground/82 transition-colors hover:text-white"
+              >
+                Contact Moonafique
+              </Link>
+              <Link
+                href="/about"
+                className="text-base text-primary-foreground/82 transition-colors hover:text-white"
+              >
+                About the studio
+              </Link>
+              {legalLinks.map((link) => (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  className="text-base text-primary-foreground/82 transition-colors hover:text-white"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
-      <div className="grid grid-cols-1">
-        <h3 className="text-lg font-semibold mb-4">Legal</h3>
-        <div className="flex flex-wrap justify-center gap-4">
-          <Link
-            href="/privacy"
-            className="text-gray-300 hover:text-white transition-colors duration-200"
-          >
-            Privacy Policy
-          </Link>
-          <Link
-            href="/terms"
-            className="text-gray-300 hover:text-white transition-colors duration-200"
-          >
-            Terms of Service
-          </Link>
-          <Link
-            href="/cookies"
-            className="text-gray-300 hover:text-white transition-colors duration-200"
-          >
-            Cookie Policy
-          </Link>
-          <Link
-            href="/refund"
-            className="text-gray-300 hover:text-white transition-colors duration-200"
-          >
-            Refund Policy
-          </Link>
-          <Link
-            href="/shipping"
-            className="text-gray-300 hover:text-white transition-colors duration-200"
-          >
-            Shipping Policy
-          </Link>
-          <Link
-            href="/quality"
-            className="text-gray-300 hover:text-white transition-colors duration-200"
-          >
-            Quality Policy
-          </Link>
+      <div className="border-t border-white/10">
+        <div className="mx-auto flex max-w-screen-xl flex-col gap-3 px-4 py-5 text-sm text-primary-foreground/70 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
+          <p>
+            © {new Date().getFullYear()} Moonafique LLC. All rights reserved.
+          </p>
+          <p>Made for shelves, gift tables, and curious little moments.</p>
         </div>
-      </div>
-      <div className="grid grid-cols-1">
-        <p>
-          © {new Date().getFullYear()} - All right reserved by Moonafique LLC
-        </p>
-      </div>
-      <div className="col-span-1 flex justify-center gap-4">
-        <a
-          href="https://www.tiktok.com/@moonafique"
-          target="blank"
-          rel="noreferrer noopener"
-          className="hover:opacity-80 transition-opacity duration-200"
-        >
-          <svg
-            fill="#ffffff"
-            width="24px"
-            height="24px"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-            xmlSpace="preserve"
-          >
-            <path d="M19.589 6.686a4.793 4.793 0 0 1-3.77-4.245V2h-3.445v13.672a2.896 2.896 0 0 1-5.201 1.743l-.002-.001.002.001a2.895 2.895 0 0 1 3.183-4.51v-3.5a6.329 6.329 0 0 0-5.394 10.692 6.33 6.33 0 0 0 10.857-4.424V8.687a8.182 8.182 0 0 0 4.773 1.526V6.79a4.831 4.831 0 0 1-1.003-.104z" />
-          </svg>
-        </a>
-        <a
-          href="https://www.facebook.com/profile.php?id=61567210106767"
-          target="blank"
-          rel="noreferrer noopener"
-          className="hover:opacity-80 transition-opacity duration-200"
-        >
-          <svg
-            width="24px"
-            height="24px"
-            viewBox="0 0 266.895 266.895"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M252.164 266.895c8.134 0 14.729-6.596 14.729-14.73V14.73c0-8.137-6.596-14.73-14.729-14.73H14.73C6.593 0 0 6.594 0 14.73v237.434c0 8.135 6.593 14.73 14.73 14.73h237.434z"
-              fill="#485a96"
-            />
-            <path
-              d="M184.152 266.895V163.539h34.692l5.194-40.28h-39.887V97.542c0-11.662 3.238-19.609 19.962-19.609l21.329-.01V41.897c-3.689-.49-16.351-1.587-31.08-1.587-30.753 0-51.807 18.771-51.807 53.244v29.705h-34.781v40.28h34.781v103.355h41.597z"
-              fill="#ffffff"
-            />
-          </svg>
-        </a>
       </div>
     </footer>
   );

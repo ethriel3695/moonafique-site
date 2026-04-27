@@ -3,62 +3,78 @@
 @tailwind utilities;
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), 'Avenir Next', 'Segoe UI', sans-serif;
 }
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
+    --background: 34 71% 98%;
+    --foreground: 18 24% 16%;
     --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 240 5.9% 10%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 240 10% 3.9%;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-    --radius: 0.5rem;
+    --card-foreground: 18 24% 16%;
+    --popover: 30 60% 99%;
+    --popover-foreground: 18 24% 16%;
+    --primary: 15 61% 46%;
+    --primary-foreground: 34 71% 98%;
+    --secondary: 30 48% 92%;
+    --secondary-foreground: 18 24% 20%;
+    --muted: 34 38% 94%;
+    --muted-foreground: 20 12% 38%;
+    --accent: 164 31% 83%;
+    --accent-foreground: 173 23% 22%;
+    --destructive: 4 74% 54%;
+    --destructive-foreground: 34 71% 98%;
+    --border: 24 30% 84%;
+    --input: 28 34% 88%;
+    --ring: 15 61% 46%;
+    --surface: 34 56% 96%;
+    --surface-strong: 32 42% 90%;
+    --success: 151 36% 42%;
+    --success-foreground: 0 0% 100%;
+    --warning: 34 80% 56%;
+    --warning-foreground: 22 42% 18%;
+    --info: 205 58% 46%;
+    --info-foreground: 0 0% 100%;
+    --chart-1: 15 61% 46%;
+    --chart-2: 151 36% 42%;
+    --chart-3: 205 58% 46%;
+    --chart-4: 34 80% 56%;
+    --chart-5: 336 61% 58%;
+    --radius: 1rem;
   }
   .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 240 5.9% 10%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    --background: 18 18% 10%;
+    --foreground: 34 48% 95%;
+    --card: 18 18% 13%;
+    --card-foreground: 34 48% 95%;
+    --popover: 18 18% 12%;
+    --popover-foreground: 34 48% 95%;
+    --primary: 24 72% 62%;
+    --primary-foreground: 18 18% 10%;
+    --secondary: 18 14% 19%;
+    --secondary-foreground: 34 48% 95%;
+    --muted: 18 12% 18%;
+    --muted-foreground: 30 18% 74%;
+    --accent: 169 22% 28%;
+    --accent-foreground: 34 48% 95%;
+    --destructive: 4 62% 49%;
+    --destructive-foreground: 34 48% 95%;
+    --border: 18 12% 24%;
+    --input: 18 12% 24%;
+    --ring: 24 72% 62%;
+    --surface: 18 16% 15%;
+    --surface-strong: 18 12% 22%;
+    --success: 151 38% 52%;
+    --success-foreground: 18 18% 10%;
+    --warning: 35 84% 62%;
+    --warning-foreground: 18 18% 10%;
+    --info: 205 72% 63%;
+    --info-foreground: 18 18% 10%;
+    --chart-1: 24 72% 62%;
+    --chart-2: 151 38% 52%;
+    --chart-3: 205 72% 63%;
+    --chart-4: 35 84% 62%;
+    --chart-5: 336 68% 66%;
   }
 }
 
@@ -66,7 +82,40 @@ body {
   * {
     @apply border-border;
   }
+
+  html {
+    @apply scroll-smooth;
+  }
+
   body {
     @apply bg-background text-foreground;
+    background-image:
+      radial-gradient(circle at top, hsl(var(--accent) / 0.32), transparent 34%),
+      radial-gradient(circle at bottom right, hsl(var(--primary) / 0.12), transparent 30%);
+    background-attachment: fixed;
+  }
+
+  ::selection {
+    background: hsl(var(--primary) / 0.18);
+    color: hsl(var(--foreground));
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-display), Georgia, serif;
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  :focus-visible {
+    outline: none;
   }
 }

@@ -49,20 +49,24 @@ export function EmailSignupForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto"
+      className="mx-auto flex w-full max-w-2xl flex-col gap-4 rounded-[1.75rem] border border-primary-foreground/20 bg-background/14 p-4 backdrop-blur sm:flex-row sm:items-center"
     >
+      <label htmlFor="newsletter-email" className="sr-only">
+        Email address
+      </label>
       <Input
+        id="newsletter-email"
         type="email"
-        placeholder="Enter your email"
+        placeholder="Enter your email for new releases and market drops"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        className="flex-1 bg-background text-foreground"
+        className="h-12 flex-1 border-primary-foreground/15 bg-background text-foreground shadow-none"
         required
       />
       <Button
         type="submit"
         variant="secondary"
-        className="whitespace-nowrap"
+        className="h-12 whitespace-nowrap"
         disabled={isLoading}
       >
         {isLoading ? 'Subscribing...' : 'Subscribe'}
