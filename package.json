@@ -1,77 +1,18 @@
 {
-  "name": "moonafique-site",
-  "version": "0.5.0",
+  "name": "moonafique-workspace",
   "private": true,
-  "engines": {
-    "node": ">=25.9.0"
-  },
+  "packageManager": "pnpm@10.33.2",
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint .",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
-  },
-  "dependencies": {
-    "@radix-ui/react-avatar": "1.1.1",
-    "@radix-ui/react-dialog": "^1.1.15",
-    "@radix-ui/react-dropdown-menu": "2.1.1",
-    "@radix-ui/react-label": "2.1.8",
-    "@radix-ui/react-separator": "^1.1.8",
-    "@radix-ui/react-slot": "^1.2.4",
-    "@radix-ui/react-tabs": "^1.1.13",
-    "@radix-ui/react-toast": "1.2.15",
-    "@radix-ui/react-tooltip": "^1.2.8",
-    "@react-email/render": "^2.0.7",
-    "@workos-inc/authkit-nextjs": "^4.0.1",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "lucide-react": "^0.577.0",
-    "next": "^16.2.0",
-    "pdfkit": "^0.18.0",
-    "react": "^19.2.5",
-    "react-dom": "^19.2.5",
-    "resend": "^6.12.2",
-    "shippo": "^2.18.0",
-    "stripe": "^22.1.0",
-    "tailwind-merge": "^3.5.0",
-    "tailwindcss-animate": "^1.0.7",
-    "zod": "^4.3.6"
+    "build": "turbo run build",
+    "dev": "turbo run dev --filter=moonafique-site",
+    "lint": "turbo run lint",
+    "start": "turbo run start --filter=moonafique-site",
+    "storybook": "turbo run storybook --filter=moonafique-site",
+    "build-storybook": "turbo run build-storybook",
+    "test": "turbo run test",
+    "turbo": "turbo"
   },
   "devDependencies": {
-    "@chromatic-com/storybook": "^5.1.2",
-    "@eslint/eslintrc": "^3.3.5",
-    "@radix-ui/themes": "^3.3.0",
-    "@react-email/components": "^0.5.7",
-    "@storybook/addon-a11y": "^10.3.5",
-    "@storybook/addon-docs": "^10.3.5",
-    "@storybook/addon-mcp": "^0.6.0",
-    "@storybook/addon-onboarding": "^10.3.5",
-    "@storybook/addon-vitest": "10.3.5",
-    "@storybook/nextjs-vite": "10.3.5",
-    "@storybook/react": "^10.3.5",
-    "@storybook/test": "^8.6.12",
-    "@types/node": "^22.19.17",
-    "@types/pdfkit": "^0.17.6",
-    "@types/react": "^19.1.0",
-    "@types/react-dom": "^19.1.0",
-    "@vitest/browser": "^3.2.4",
-    "@vitest/coverage-v8": "^3.2.4",
-    "eslint": "^9.39.4",
-    "eslint-config-next": "^16.2.0",
-    "eslint-plugin-storybook": "^10.3.5",
-    "playwright": "^1.59.1",
-    "postcss": "^8.5.10",
-    "storybook": "^10.3.5",
-    "tailwindcss": "^3.4.19",
-    "typescript": "^5.9.3",
-    "vite": "^7.0.0",
-    "vitest": "^3.2.4"
-  },
-  "eslintConfig": {
-    "extends": [
-      "plugin:storybook/recommended"
-    ]
+    "turbo": "^2.6.1"
   }
 }
