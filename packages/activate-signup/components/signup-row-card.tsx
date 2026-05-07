@@ -97,7 +97,7 @@ export function SignupRowCard({ row, onClaim }: SignupRowCardProps) {
         disabled={row.isFull}
         variant={row.isFull ? 'outline' : 'default'}
       >
-        <span>{row.isFull ? 'Full right now' : 'Sign up for this row'}</span>
+        <span>{row.isFull ? 'Slots filled' : 'Sign up'}</span>
         {!row.isFull ? <ArrowUpRight className="size-4" /> : null}
       </Button>
     </article>

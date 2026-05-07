@@ -61,7 +61,7 @@ describe('POST /api/signups', () => {
         slotId: row.id,
         parentName: 'Filled Already',
         phone: '555-444-1111',
-        quantity: 1,
+        quantity: row.capacity,
       },
     });
 

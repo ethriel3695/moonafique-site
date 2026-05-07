@@ -8,17 +8,16 @@ import { CapacityError, getOrganizerSummary, getPublicBoard } from '@/lib/board'
 
 let tempDir = '';
 
-function getSlot(slotId: string) {
+function getLaneRow(laneId: string, rowIndex = 0) {
   const production = getActiveProductionContent();
+  const lane = production.lanes.find((item) => item.id === laneId);
+  const row = lane?.rows[rowIndex];
 
-  for (const lane of production.lanes) {
-    const row = lane.rows.find((item) => item.id === slotId);
-    if (row) {
-      return { production, row };
-    }
+  if (!lane || !row) {
+    throw new Error(`Missing row ${rowIndex} in lane ${laneId}`);
   }
 
-  throw new Error(`Unknown slot ${slotId}`);
+  return { production, row };
 }
 
 describe('activate signup board', () => {
@@ -33,7 +32,7 @@ describe('activate signup board', () => {
   });
 
   it('calculates grouped row totals from stored claims', async () => {
-    const first = getSlot('cleanup-2026-05-16');
+    const first = getLaneRow('cleanup');
     createSignupClaim({
       productionSlug: first.production.slug,
       slot: first.row,
@@ -45,7 +44,7 @@ describe('activate signup board', () => {
       },
     });
 
-    const second = getSlot('donation-candy');
+    const second = getLaneRow('donations');
     createSignupClaim({
       productionSlug: second.production.slug,
       slot: second.row,
@@ -60,17 +59,17 @@ describe('activate signup board', () => {
     const board = await getPublicBoard();
     const cleanupLane = board.lanes.find((lane) => lane.id === 'cleanup');
     const donationLane = board.lanes.find((lane) => lane.id === 'donations');
-    const cleanupRow = cleanupLane?.rows.find((row) => row.id === 'cleanup-2026-05-16');
-    const donationRow = donationLane?.rows.find((row) => row.id === 'donation-candy');
+    const cleanupRow = cleanupLane?.rows.find((row) => row.id === first.row.id);
+    const donationRow = donationLane?.rows.find((row) => row.id === second.row.id);
 
     expect(cleanupRow?.claimedCount).toBe(2);
-    expect(cleanupRow?.remainingCount).toBe(2);
+    expect(cleanupRow?.remainingCount).toBe(first.row.capacity - 2);
     expect(donationRow?.claimedCount).toBe(1);
-    expect(donationRow?.remainingCount).toBe(3);
+    expect(donationRow?.remainingCount).toBe(second.row.capacity - 1);
   });
 
   it('rejects overbooking when a row is already full', () => {
-    const target = getSlot('meal-2026-05-12');
+    const target = getLaneRow('meals');
     createSignupClaim({
       productionSlug: target.production.slug,
       slot: target.row,
@@ -78,7 +77,7 @@ describe('activate signup board', () => {
         slotId: target.row.id,
         parentName: 'First Family',
         phone: '555-000-1111',
-        quantity: 1,
+        quantity: target.row.capacity,
       },
     });
 
@@ -97,7 +96,7 @@ describe('activate signup board', () => {
   });
 
   it('builds organizer output grouped by row', async () => {
-    const cleanup = getSlot('cleanup-2026-05-15');
+    const cleanup = getLaneRow('cleanup', 1);
     createSignupClaim({
       productionSlug: cleanup.production.slug,
       slot: cleanup.row,
@@ -112,7 +111,7 @@ describe('activate signup board', () => {
 
     const summary = await getOrganizerSummary();
     const cleanupLane = summary.lanes.find((lane) => lane.id === 'cleanup');
-    const cleanupRow = cleanupLane?.rows.find((row) => row.id === 'cleanup-2026-05-15');
+    const cleanupRow = cleanupLane?.rows.find((row) => row.id === cleanup.row.id);
 
     expect(summary.totals.people).toBe(2);
     expect(cleanupRow?.claims).toHaveLength(1);

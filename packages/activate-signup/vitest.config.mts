@@ -13,9 +13,11 @@ export default defineConfig({
   test: {
     name: 'activate-signup',
     environment: 'node',
+    exclude: ['**/.next/**', '**/storybook-static/**', '**/node_modules/**'],
     coverage: {
       exclude: [
         ...coverageConfigDefaults.exclude,
+        '**/.next/**',
         '**/.storybook/**',
         '**/*.stories.*',
         '**/storybook-static/**',
