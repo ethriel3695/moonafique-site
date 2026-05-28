@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: var(--font-sans), 'Avenir Next', 'Segoe UI', sans-serif;
+}
+
+@layer base {
+  :root {
+    --background: 47 46% 97%;
+    --foreground: 204 30% 16%;
+    --card: 0 0% 100%;
+    --card-foreground: 204 30% 16%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 204 30% 16%;
+    --primary: 14 73% 45%;
+    --primary-foreground: 45 60% 98%;
+    --secondary: 170 27% 89%;
+    --secondary-foreground: 194 33% 23%;
+    --muted: 45 31% 93%;
+    --muted-foreground: 205 14% 38%;
+    --accent: 201 62% 90%;
+    --accent-foreground: 202 44% 24%;
+    --destructive: 4 74% 54%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 33 26% 84%;
+    --input: 33 26% 84%;
+    --ring: 14 73% 45%;
+    --surface: 45 46% 95%;
+    --surface-strong: 44 42% 88%;
+    --success: 151 36% 42%;
+    --success-foreground: 0 0% 100%;
+    --warning: 39 88% 54%;
+    --warning-foreground: 24 32% 18%;
+    --info: 206 56% 48%;
+    --info-foreground: 0 0% 100%;
+    --radius: 1rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    background-image:
+      radial-gradient(circle at top left, hsl(var(--accent) / 0.55), transparent 34%),
+      radial-gradient(circle at bottom right, hsl(var(--secondary) / 0.8), transparent 28%),
+      linear-gradient(180deg, hsl(var(--background)), hsl(var(--surface)) 100%);
+    background-attachment: fixed;
+  }
+
+  ::selection {
+    background: hsl(var(--primary) / 0.18);
+    color: hsl(var(--foreground));
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-display), Georgia, serif;
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+}

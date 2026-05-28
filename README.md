@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Moonafique Workspace
 
-## Getting Started
+This repository is now a `pnpm` workspace backed by Turborepo.
 
-First, run the development server:
+## Structure
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```text
+packages/
+	moonafique-site/   Next.js storefront app
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The monorepo shape mirrors the package-first layout used in `~/source/storybook-addon-manifest`, with the app living under `packages/*` and the workspace managed from the root.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Commands
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Run these from the repository root:
 
-## Learn More
+```bash
+pnpm install
+pnpm dev
+pnpm lint
+pnpm storybook
+pnpm build
+```
 
-To learn more about Next.js, take a look at the following resources:
+To run commands directly against the app package:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+pnpm --filter moonafique-site dev
+pnpm --filter moonafique-site lint
+pnpm --filter moonafique-site storybook
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## App Location
 
-## Deploy on Vercel
+The storefront source now lives in `packages/moonafique-site`, including:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Next.js app routes
+- Storybook config
+- components and UI primitives
+- Tailwind, Vitest, and ESLint config
+- local `.env` files for the app package
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Notes
+
+- The app package currently declares `node >=25.9.0` in `packages/moonafique-site/package.json`.
+- In this environment, package-level linting works for targeted files, but some broader lint commands still surface pre-existing Node and formatter/tooling issues unrelated to the monorepo move.
