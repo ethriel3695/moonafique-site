@@ -49,39 +49,31 @@ export function SiteHeader() {
           <Sidebar />
           <Link
             href="/"
-            className="group flex items-center gap-3 rounded-full border border-border/70 bg-background/90 px-3 py-2 shadow-soft transition-colors hover:border-primary/30"
+            className="group flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-full border border-border/70 bg-[#f2f2f2] shadow-soft transition-colors hover:border-primary/30"
+            aria-label="Moonafique home"
           >
-            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-primary/85 via-primary to-accent shadow-soft">
-              <Logo className="size-5 text-primary-foreground" style={{ zoom: 4 }} />
-            </div>
-            <div className="hidden min-w-0 sm:block">
-              <p className="font-display text-lg leading-none text-foreground">
-                Moonafique
-              </p>
-              <p className="mt-1 text-xs font-medium uppercase tracking-[0.24em] text-muted-foreground">
-                Playful printed curiosities
-              </p>
-            </div>
+            <Logo className="size-10" />
           </Link>
         </div>
-        <nav className="hidden items-center gap-1 rounded-full border border-border/70 bg-surface/85 p-1 md:flex">
+        <nav className="hidden items-center gap-1 rounded-full border border-border/70 bg-surface/85 p-1 lg:flex">
           {navigation.map((item) => (
             <Link
               key={item.label}
               href={item.href}
-              className="rounded-full px-4 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:bg-background hover:text-foreground"
+              className="rounded-full px-4 py-2 text-sm font-bold text-foreground/85 transition-colors hover:bg-background hover:text-foreground"
             >
               {item.label}
             </Link>
           ))}
+          <Link
+            href="/#shop"
+            className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-accent/35 px-3.5 py-2 text-sm font-semibold text-accent-foreground transition-colors hover:bg-accent/50"
+          >
+            <Sparkles className="size-3.5" />
+            New Drops
+          </Link>
         </nav>
         <div className="flex items-center gap-2 sm:gap-3">
-          <div className="hidden items-center gap-2 rounded-full border border-primary/20 bg-primary/8 px-3 py-2 lg:flex">
-            <Sparkles className="size-4 text-primary" />
-            <span className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">
-              Fresh weekly drops
-            </span>
-          </div>
           <SearchBar className="hidden sm:block" />
           <Cart />
           {/* {user ? (
@@ -119,14 +111,14 @@ function SearchBar({ className }: { className?: string }) {
       <label htmlFor={id} className="sr-only">
         Search products
       </label>
-      <Search className="absolute left-4 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+      <Search className="absolute left-4 top-1/2 size-4 -translate-y-1/2 text-foreground/75" />
       <Input
         type="search"
         name="search"
         id={id}
         defaultValue={searchParams.get('search') ?? ''}
         placeholder="Search dragons, fossils, and more"
-        className="h-11 w-full rounded-full border-border/70 bg-background/85 pl-11 pr-4 text-sm shadow-none sm:w-[220px] lg:w-[270px]"
+        className="h-11 w-full rounded-full border-border/70 bg-background/90 pl-11 pr-4 text-sm font-semibold text-foreground shadow-none placeholder:text-muted-foreground sm:w-[220px] lg:w-[270px]"
       />
     </form>
   );
@@ -142,7 +134,7 @@ function Sidebar() {
               <Button
                 variant="outline"
                 size="icon"
-                className="size-10 shrink-0 rounded-full border-border/70 bg-background/90 md:hidden"
+                className="size-10 shrink-0 rounded-full border-border/70 bg-background/90 lg:hidden"
               >
                 <Menu className="size-4" />
                 <span className="sr-only">Menu</span>
@@ -176,6 +168,16 @@ function Sidebar() {
                   <Link href={item.href}>{item.label}</Link>
                 </Button>
               ))}
+              <Button
+                asChild
+                className="justify-start rounded-2xl bg-accent/35 text-accent-foreground hover:bg-accent/50"
+                variant="ghost"
+              >
+                <Link href="/#shop">
+                  <Sparkles className="size-4" />
+                  New Drops
+                </Link>
+              </Button>
             </div>
           </SheetContent>
         </Tooltip>

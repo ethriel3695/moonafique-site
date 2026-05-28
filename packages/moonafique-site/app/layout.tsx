@@ -3,7 +3,7 @@
 import { cn } from '@/lib/utils';
 import { SiteHeader } from '@/components/siteHeader';
 import { TooltipProvider } from '@/components/ui/tooltip';
-import { Fraunces, Manrope } from 'next/font/google';
+import { Lora, Manrope } from 'next/font/google';
 import { CartProvider } from '@/lib/cart-context';
 import { Toaster } from '@/components/ui/toaster';
 import { Footer } from '@/components/Footer';
@@ -11,7 +11,7 @@ const manrope = Manrope({
   subsets: ['latin'],
   variable: '--font-sans',
 });
-const fraunces = Fraunces({
+const lora = Lora({
   subsets: ['latin'],
   variable: '--font-display',
 });
@@ -59,7 +59,7 @@ export default async function Layout({
           'flex min-h-svh flex-col antialiased',
           manrope.className,
           manrope.variable,
-          fraunces.variable
+          lora.variable
         )}
       >
         {/* <AuthKitProvider initialAuth={initialAuth}> */}

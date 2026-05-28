@@ -1,132 +1,124 @@
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { ArrowRight, Sparkles, Stars } from 'lucide-react';
+import { ProductListResponse } from '@/lib/schema';
+import { ArrowRight, Heart, Sparkles } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 
-export function Hero() {
+const fallbackHeroImages = ['/placeholder-image.png'];
+
+function getHeroImages(products?: ProductListResponse) {
+  const productImages =
+    products?.data.flatMap((product) => product.images ?? []) ?? [];
+  const candidates =
+    productImages.length > 0 ? productImages : fallbackHeroImages;
+  const images: string[] = [];
+
+  for (const image of candidates) {
+    if (!images.includes(image)) {
+      images.push(image);
+    }
+
+    if (images.length === 6) {
+      return images;
+    }
+  }
+
+  while (images.length < 6) {
+    images.push(candidates[images.length % candidates.length]);
+  }
+
+  return images;
+}
+
+export function Hero({ products }: { products?: ProductListResponse }) {
+  const heroImages = getHeroImages(products);
+
   return (
-    <section className="relative overflow-hidden rounded-[2rem] border border-border/70 bg-[radial-gradient(circle_at_top_left,_hsl(var(--accent)/0.5),_transparent_30%),linear-gradient(135deg,_hsl(var(--background)),_hsl(var(--surface))_52%,_hsl(var(--secondary)))] px-6 py-14 shadow-lift sm:px-10 lg:px-14 lg:py-20">
-      <div className="absolute inset-y-0 right-0 hidden w-1/2 bg-[radial-gradient(circle_at_center,_hsl(var(--primary)/0.16),_transparent_55%)] lg:block" />
-      <div className="absolute -left-16 top-8 h-40 w-40 rounded-full bg-primary/10 blur-3xl" />
-      <div className="absolute bottom-0 right-10 h-52 w-52 rounded-full bg-accent/40 blur-3xl" />
-      <div className="relative grid items-center gap-12 lg:grid-cols-[minmax(0,1.1fr)_minmax(320px,0.9fr)]">
-        <div className="space-y-7">
-          <div className="flex flex-wrap items-center gap-3">
-            <Badge variant="featured" className="px-4 py-1.5 text-[0.65rem]">
-              Boutique 3D studio
-            </Badge>
-            <span className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground">
-              <Sparkles className="size-4 text-primary" />
-              Designed for collectors, classrooms, and curious desks
-            </span>
+    <section className="relative isolate min-h-[620px] overflow-hidden bg-background text-foreground shadow-lift sm:min-h-[680px] lg:min-h-[700px]">
+      <div className="absolute inset-0 grid grid-cols-2 grid-rows-3 gap-1 sm:grid-cols-3 sm:grid-rows-2 lg:grid-cols-6 lg:grid-rows-1">
+        {heroImages.map((image, index) => (
+          <div
+            key={`${image}-${index}`}
+            className="relative min-h-36 overflow-hidden bg-muted"
+          >
+            <Image
+              src={image}
+              alt=""
+              fill
+              className="scale-[1.02] object-cover contrast-[1.05] saturate-[1.18]"
+              priority={index < 2}
+              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 17vw"
+            />
           </div>
-          <div className="space-y-4">
-            <h1 className="max-w-3xl text-5xl leading-[0.95] sm:text-6xl lg:text-7xl">
-              Whimsical creatures with a collector&rsquo;s finish.
-            </h1>
-            <p className="max-w-2xl text-lg leading-8 text-muted-foreground sm:text-xl">
-              Moonafique turns playful ideas into tactile 3D-printed keepsakes,
-              from articulated dragons to tiny fossil curiosities made to spark
-              delight the moment they land on a shelf.
-            </p>
-          </div>
-          <div className="flex flex-col gap-3 sm:flex-row">
+        ))}
+      </div>
+      <div className="absolute inset-0 bg-[hsl(var(--background)/0.82)] sm:hidden" />
+      <div className="absolute inset-0 hidden bg-[linear-gradient(90deg,_hsl(var(--background)/0.98)_0%,_hsl(var(--background)/0.88)_42%,_hsl(var(--background)/0.36)_72%,_transparent_100%)] sm:block" />
+      <div className="absolute inset-0 bg-[linear-gradient(0deg,_hsl(var(--background)/0.86)_0%,_transparent_48%,_hsl(var(--background)/0.18)_100%)]" />
+
+      <div className="relative mx-auto flex min-h-[620px] max-w-screen-xl flex-col justify-between px-4 py-10 sm:min-h-[680px] sm:px-6 sm:py-14 lg:min-h-[700px] lg:px-8">
+        <div className="max-w-4xl pt-8 sm:pt-12 lg:pt-16">
+          <Badge
+            variant="featured"
+            className="shadow-[0_12px_30px_rgb(0_0_0_/_0.12)]"
+          >
+            Family run 3D print shop
+          </Badge>
+          <h1 className="mt-6 max-w-4xl text-4xl font-bold leading-[0.94] text-foreground sm:text-7xl lg:text-8xl">
+            Moonafique 3D prints, made with ridiculous heart.
+          </h1>
+          <p className="mt-6 max-w-2xl text-lg font-semibold leading-8 text-foreground/78 sm:text-xl">
+            We still stop to watch the printer build each creature layer by
+            layer. Every dragon, fossil, and tiny desk companion is printed,
+            checked, packed, and fussed over by the same two people who dreamed
+            it up.
+          </p>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Button asChild size="lg" className="group">
-              <Link href="/?search=dragon">
-                Explore Dragons
+              <Link href="/#shop">
+                Shop the latest
                 <ArrowRight className="transition-transform group-hover:translate-x-0.5" />
               </Link>
             </Button>
-            <Button asChild variant="outline" size="lg">
-              <Link href="/?search=">Browse All Creations</Link>
+            <Button
+              asChild
+              size="lg"
+              variant="outline"
+              className="bg-background/75 backdrop-blur"
+            >
+              <Link href="/about">Meet the makers</Link>
             </Button>
           </div>
-          <div className="grid gap-3 sm:grid-cols-3">
-            <div className="rounded-[1.5rem] border border-border/70 bg-background/70 p-4 shadow-soft">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-                Finish
-              </p>
-              <p className="mt-2 text-lg font-semibold text-foreground">
-                Display-worthy color and texture
-              </p>
-            </div>
-            <div className="rounded-[1.5rem] border border-border/70 bg-background/70 p-4 shadow-soft">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-                Rhythm
-              </p>
-              <p className="mt-2 text-lg font-semibold text-foreground">
-                Weekly drops and market-ready favorites
-              </p>
-            </div>
-            <div className="rounded-[1.5rem] border border-border/70 bg-background/70 p-4 shadow-soft">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-                Vibe
-              </p>
-              <p className="mt-2 text-lg font-semibold text-foreground">
-                Cute, curious, and just a little celestial
-              </p>
-            </div>
-          </div>
         </div>
-        <div className="relative mx-auto w-full max-w-xl">
-          <div className="absolute -top-6 right-8 flex items-center gap-2 rounded-full border border-border/70 bg-background/90 px-4 py-2 shadow-soft">
-            <Stars className="size-4 text-primary" />
-            <span className="text-sm font-semibold text-foreground">
-              Small-batch originals
-            </span>
+
+        <div className="mt-12 grid gap-3 pb-2 sm:grid-cols-3">
+          <div className="border-t border-foreground/25 pt-4">
+            <p className="flex items-center gap-2 text-sm font-bold uppercase tracking-[0.18em] text-foreground">
+              <Heart className="size-4 fill-primary text-primary" />
+              Made by us
+            </p>
+            <p className="mt-2 max-w-xs text-base font-semibold leading-6 text-foreground/70">
+              Printed, checked, and packed by the two of us.
+            </p>
           </div>
-          <div className="rounded-[2rem] border border-border/70 bg-background/85 p-6 shadow-lift backdrop-blur">
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="rounded-[1.75rem] bg-[linear-gradient(160deg,_hsl(var(--primary)/0.18),_hsl(var(--background))_70%)] p-5">
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
-                  Best sellers
-                </p>
-                <h2 className="mt-3 text-2xl font-semibold text-foreground">
-                  Articulated dragons
-                </h2>
-                <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                  Flexible silhouettes with collector-friendly detail and a
-                  playful shelf presence.
-                </p>
-              </div>
-              <div className="rounded-[1.75rem] bg-[linear-gradient(160deg,_hsl(var(--accent)/0.4),_hsl(var(--background))_72%)] p-5">
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-foreground/70">
-                  Classroom favorites
-                </p>
-                <h2 className="mt-3 text-2xl font-semibold text-foreground">
-                  Tiny fossils and creatures
-                </h2>
-                <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                  A growing lineup of tactile miniatures sized for desks,
-                  demos, and curiosity cabinets.
-                </p>
-              </div>
-            </div>
-            <div className="mt-4 rounded-[1.75rem] border border-border/70 bg-surface p-5">
-              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-                Why people stop at the booth
-              </p>
-              <div className="mt-4 grid gap-3 sm:grid-cols-3">
-                <div>
-                  <p className="text-3xl font-semibold text-foreground">3D</p>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    Layered prints with tactile character
-                  </p>
-                </div>
-                <div>
-                  <p className="text-3xl font-semibold text-foreground">100%</p>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    Designed to feel giftable on first glance
-                  </p>
-                </div>
-                <div>
-                  <p className="text-3xl font-semibold text-foreground">∞</p>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    Enough whimsy for new drops and custom requests
-                  </p>
-                </div>
-              </div>
-            </div>
+          <div className="border-t border-foreground/25 pt-4">
+            <p className="flex items-center gap-2 text-sm font-bold uppercase tracking-[0.18em] text-foreground">
+              <Sparkles className="size-4 text-primary" />
+              Small batches
+            </p>
+            <p className="mt-2 max-w-xs text-base font-semibold leading-6 text-foreground/70">
+              New colors and creatures when inspiration hits.
+            </p>
+          </div>
+          <div className="border-t border-foreground/25 pt-4">
+            <p className="text-sm font-bold uppercase tracking-[0.18em] text-foreground">
+              Built for delight
+            </p>
+            <p className="mt-2 max-w-xs text-base font-semibold leading-6 text-foreground/70">
+              The kind of prints people pick up, grin at, and show someone
+              else.
+            </p>
           </div>
         </div>
       </div>

@@ -68,7 +68,7 @@ export default function ContactPage() {
           <h2 className="text-2xl font-semibold">Other Ways to Reach Us</h2>
           <div className="space-y-2">
             <p className="text-muted-foreground">
-              <span className="font-medium">Email:</span> support@moonafique.com
+              <span className="font-medium">Email:</span> hello@moonafique.com
             </p>
           </div>
         </div>

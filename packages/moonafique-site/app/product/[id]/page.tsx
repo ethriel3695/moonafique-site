@@ -1,4 +1,4 @@
-import { getProducts } from '@/lib/products';
+import { getProduct } from '@/lib/products';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import { ProductBuyForm } from '@/components/product-buy-form';
@@ -6,7 +6,6 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
 import { AlertTriangle } from 'lucide-react';
-import { Product } from '@/lib/schema';
 
 export default async function ProductPage({
   params,
@@ -14,10 +13,7 @@ export default async function ProductPage({
   params: Promise<{ id: string }>;
 }) {
   const { id: productId } = await params;
-  const productsResponse = await getProducts();
-  const product = productsResponse?.data.find(
-    (p: Product) => p.id === productId
-  );
+  const product = await getProduct(productId);
 
   if (!product) {
     notFound();

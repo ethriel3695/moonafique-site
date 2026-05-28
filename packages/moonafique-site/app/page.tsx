@@ -7,28 +7,25 @@ import { AlertTriangle } from 'lucide-react';
 import { EmailSignupForm } from '@/components/email-signup-form';
 
 export default async function Page() {
-  const products = await getProducts();
+  const products = await getProducts({ limit: 8 });
 
   return (
     <div className="flex min-h-screen flex-col">
-      <section className="px-4 pb-8 pt-8 sm:px-6 lg:px-8 lg:pb-10 lg:pt-10">
-        <div className="mx-auto max-w-screen-xl">
-          <Hero />
-        </div>
-      </section>
+      <Hero products={products} />
 
-      <section className="py-14 sm:py-16">
+      <section id="shop" className="scroll-mt-24 pb-8 pt-14 sm:pb-10 sm:pt-16">
         <div className="mx-auto max-w-screen-xl px-4">
           <div className="mx-auto mb-10 max-w-3xl text-center">
             <p className="text-sm font-semibold uppercase tracking-[0.26em] text-primary">
-              Shop the collection
+              Shop the latest
             </p>
             <h2 className="mt-4 text-4xl sm:text-5xl">
-              Creatures, fossils, and small-batch favorites ready to browse.
+              Find the creature that makes you smile first.
             </h2>
             <p className="mt-4 text-lg leading-8 text-muted-foreground">
-              Browse the newest Moonafique pieces with the updated boutique
-              styling system applied across the storefront experience.
+              Browse fresh prints, booth favorites, and the small surprises we
+              could not resist making. If something catches your eye, that is
+              usually the right place to start.
             </p>
           </div>
           <ProductList initialList={products} />
@@ -50,18 +47,20 @@ export default async function Page() {
               </div>
               <div>
                 <p className="text-sm font-semibold uppercase tracking-[0.22em] text-primary">
-                  Collector notice
+                  A quick care note
                 </p>
-                <h3 className="mt-2 text-2xl font-semibold">Made for display first, play with care.</h3>
+                <h3 className="mt-2 text-2xl font-semibold">
+                  Built for wonder, happiest when handled with care.
+                </h3>
                 <p className="mb-4 mt-3 text-base leading-7 text-muted-foreground">
-                  Our 3D printed items are collectibles and display pieces, not
-                  toys. They are designed for collectors and careful little hands.
+                  These pieces are made to be admired, posed, gifted, and
+                  collected. They are not mass-market toys, so a little care
+                  helps the magic last.
                 </p>
                 <ul className="list-disc space-y-2 pl-6 text-muted-foreground marker:text-primary">
                   <li>Not suitable for children under 3 years of age</li>
                   <li>
-                    Some items can be used by children for learning and
-                    development with adult supervision
+                    Great for curious kids when an adult is nearby to help
                   </li>
                   <li>Handle with care as pieces may be delicate</li>
                   <li>
@@ -76,24 +75,26 @@ export default async function Page() {
 
       <section className="pb-16 pt-10 sm:pb-20">
         <div className="mx-auto max-w-screen-xl px-4">
-          <div className="overflow-hidden rounded-[2rem] bg-[linear-gradient(140deg,_hsl(var(--primary))_0%,_hsl(12_68%_38%)_100%)] px-6 py-10 text-primary-foreground shadow-lift sm:px-10 lg:px-14 lg:py-14">
+          <div className="overflow-hidden rounded-[2rem] bg-[linear-gradient(140deg,_hsl(var(--primary))_0%,_hsl(284_31%_45%)_100%)] px-6 py-10 text-primary-foreground shadow-lift sm:px-10 lg:px-14 lg:py-14">
             <div className="mx-auto max-w-3xl text-center">
-              <p className="text-sm font-semibold uppercase tracking-[0.26em] text-primary-foreground/75">
-                Stay in the loop
+              <p className="text-sm font-bold uppercase tracking-[0.26em] text-primary-foreground/90">
+                Join the print table
               </p>
               <h2 className="mt-4 text-4xl sm:text-5xl">
-                Get first notice when the next creatures arrive.
+                Want to see what comes off the printer next?
               </h2>
-              <p className="mb-8 mt-4 text-lg leading-8 text-primary-foreground/85">
-                Subscribe for new releases, market announcements, and the kind
-                of tiny curiosities that tend to disappear quickly.
+              <p className="mb-8 mt-4 text-lg font-medium leading-8 text-primary-foreground/95">
+                We send the fun stuff: new creatures, restocks, market dates,
+                and the occasional behind-the-scenes peek at what we are
+                testing in the shop.
               </p>
             </div>
             <div className="mx-auto max-w-3xl">
               <EmailSignupForm />
             </div>
-            <p className="mt-4 text-center text-sm text-primary-foreground/70">
-              No spam. Just fresh drops, restocks, and the occasional favorite from the studio.
+            <p className="mt-4 text-center text-sm font-medium text-primary-foreground/85">
+              No inbox clutter. Just new drops, favorite finds, and a little
+              maker joy.
             </p>
           </div>
         </div>

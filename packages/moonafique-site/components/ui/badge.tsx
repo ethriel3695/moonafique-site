@@ -5,7 +5,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
 const badgeVariants = cva(
-  'inline-flex items-center rounded-full border px-3 py-1 text-[0.7rem] font-semibold uppercase tracking-[0.14em] transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
+  'inline-flex items-center rounded-full border px-3 py-1 text-[0.7rem] font-bold uppercase tracking-[0.14em] transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
   {
     variants: {
       variant: {
@@ -17,15 +17,15 @@ const badgeVariants = cva(
           'border-destructive/20 bg-destructive/10 text-destructive',
         outline: 'border-border/80 bg-background/80 text-foreground',
         madeToOrder:
-          'border-info/20 bg-info/10 text-info',
+          'border-info bg-info text-info-foreground',
         soldOut: 'border-border/70 bg-muted text-muted-foreground',
         comingSoon:
-          'border-warning/25 bg-warning/15 text-warning-foreground',
+          'border-warning bg-warning text-warning-foreground',
         limitedEdition:
-          'border-warning/25 bg-warning/15 text-warning-foreground',
-        new: 'border-success/25 bg-success/15 text-success',
-        featured: 'border-primary/15 bg-primary/10 text-primary',
-        onSale: 'border-success/25 bg-success/15 text-success',
+          'border-warning bg-warning text-warning-foreground',
+        new: 'border-success bg-success text-success-foreground',
+        featured: 'border-primary bg-primary text-primary-foreground',
+        onSale: 'border-success bg-success text-success-foreground',
       },
     },
     defaultVariants: {

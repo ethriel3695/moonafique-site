@@ -4,29 +4,32 @@
 
 body {
   font-family: var(--font-sans), 'Avenir Next', 'Segoe UI', sans-serif;
+  font-weight: 500;
+  font-variant-ligatures: none;
+  font-feature-settings: 'liga' 0, 'clig' 0;
 }
 
 @layer base {
   :root {
     --background: 34 71% 98%;
-    --foreground: 18 24% 16%;
+    --foreground: 18 28% 12%;
     --card: 0 0% 100%;
-    --card-foreground: 18 24% 16%;
+    --card-foreground: 18 28% 12%;
     --popover: 30 60% 99%;
-    --popover-foreground: 18 24% 16%;
-    --primary: 15 61% 46%;
+    --popover-foreground: 18 28% 12%;
+    --primary: 263 43% 37%;
     --primary-foreground: 34 71% 98%;
     --secondary: 30 48% 92%;
     --secondary-foreground: 18 24% 20%;
     --muted: 34 38% 94%;
-    --muted-foreground: 20 12% 38%;
-    --accent: 164 31% 83%;
-    --accent-foreground: 173 23% 22%;
+    --muted-foreground: 19 17% 28%;
+    --accent: 278 43% 79%;
+    --accent-foreground: 263 43% 25%;
     --destructive: 4 74% 54%;
     --destructive-foreground: 34 71% 98%;
     --border: 24 30% 84%;
     --input: 28 34% 88%;
-    --ring: 15 61% 46%;
+    --ring: 263 43% 37%;
     --surface: 34 56% 96%;
     --surface-strong: 32 42% 90%;
     --success: 151 36% 42%;
@@ -35,11 +38,11 @@ body {
     --warning-foreground: 22 42% 18%;
     --info: 205 58% 46%;
     --info-foreground: 0 0% 100%;
-    --chart-1: 15 61% 46%;
+    --chart-1: 263 43% 37%;
     --chart-2: 151 36% 42%;
     --chart-3: 205 58% 46%;
     --chart-4: 34 80% 56%;
-    --chart-5: 336 61% 58%;
+    --chart-5: 318 36% 58%;
     --radius: 1rem;
   }
   .dark {
@@ -49,19 +52,19 @@ body {
     --card-foreground: 34 48% 95%;
     --popover: 18 18% 12%;
     --popover-foreground: 34 48% 95%;
-    --primary: 24 72% 62%;
-    --primary-foreground: 18 18% 10%;
+    --primary: 278 43% 79%;
+    --primary-foreground: 263 43% 18%;
     --secondary: 18 14% 19%;
     --secondary-foreground: 34 48% 95%;
     --muted: 18 12% 18%;
     --muted-foreground: 30 18% 74%;
-    --accent: 169 22% 28%;
+    --accent: 263 32% 31%;
     --accent-foreground: 34 48% 95%;
     --destructive: 4 62% 49%;
     --destructive-foreground: 34 48% 95%;
     --border: 18 12% 24%;
     --input: 18 12% 24%;
-    --ring: 24 72% 62%;
+    --ring: 278 43% 79%;
     --surface: 18 16% 15%;
     --surface-strong: 18 12% 22%;
     --success: 151 38% 52%;
@@ -70,11 +73,11 @@ body {
     --warning-foreground: 18 18% 10%;
     --info: 205 72% 63%;
     --info-foreground: 18 18% 10%;
-    --chart-1: 24 72% 62%;
+    --chart-1: 278 43% 79%;
     --chart-2: 151 38% 52%;
     --chart-3: 205 72% 63%;
     --chart-4: 35 84% 62%;
-    --chart-5: 336 68% 66%;
+    --chart-5: 318 42% 68%;
   }
 }
 
@@ -107,7 +110,7 @@ body {
   h5,
   h6 {
     font-family: var(--font-display), Georgia, serif;
-    letter-spacing: -0.03em;
+    letter-spacing: 0;
     text-wrap: balance;
   }
 

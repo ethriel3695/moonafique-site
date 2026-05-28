@@ -4,6 +4,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 
+const imageBadgeClassName =
+  'absolute right-3 top-3 shadow-[0_8px_22px_rgb(0_0_0_/_0.32)] ring-1 ring-white/75';
+
 function ImagePlaceholder() {
   return (
     <div className="absolute inset-0 flex items-center justify-center bg-muted ">
@@ -58,32 +61,32 @@ export function ProductListThumbnail({
             <ImagePlaceholder />
           )}
           {isMadeToOrder && (
-            <Badge variant="madeToOrder" className="absolute top-2 right-2">
+            <Badge variant="madeToOrder" className={imageBadgeClassName}>
               Made to Order
             </Badge>
           )}
           {isComingSoon && (
-            <Badge variant="comingSoon" className="absolute top-2 right-2">
+            <Badge variant="comingSoon" className={imageBadgeClassName}>
               Coming Soon
             </Badge>
           )}
           {isLimitedEdition && (
-            <Badge variant="limitedEdition" className="absolute top-2 right-2">
+            <Badge variant="limitedEdition" className={imageBadgeClassName}>
               Limited Edition
             </Badge>
           )}
           {isNew && (
-            <Badge variant="new" className="absolute top-2 right-2">
+            <Badge variant="new" className={imageBadgeClassName}>
               New
             </Badge>
           )}
           {isFeatured && (
-            <Badge variant="featured" className="absolute top-2 right-2">
+            <Badge variant="featured" className={imageBadgeClassName}>
               Featured
             </Badge>
           )}
           {isOnSale && (
-            <Badge variant="onSale" className="absolute top-2 right-2">
+            <Badge variant="onSale" className={imageBadgeClassName}>
               On Sale
             </Badge>
           )}

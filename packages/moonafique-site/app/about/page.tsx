@@ -9,18 +9,9 @@ export default function AboutPage() {
           <h1 className="text-4xl font-bold tracking-tight mb-6">Our Story</h1>
           <div className="prose prose-lg text-muted-foreground">
             <p>
-              Moonafique was born from a passion for 3D printing and a love for
-              creating unique, high-quality pieces that bring joy to us and the
-              people around us. What started as a small workshop in our home has
-              grown into a thriving business dedicated to pushing the boundaries
-              of what&apos;s possible with 3D printing technology.
-            </p>
-            <p>
-              Our journey began when our founder, a creative and artistic
-              person, noticed a gap in the market for premium-quality, detailed
-              3D printed collectibles. Combining technical expertise with
-              artistic vision, we set out to create pieces that not only look
-              stunning but also stand the test of time.
+              We are a family business that creates high quality 3D printed creatures, collectibles, and one-of-a-kind original, 
+              hand-crafted ACEOs (Artist Cards Editions and Originals) ATCs (Artist Trading Cards). 
+              With us, you can get fun and colorful prints, hand painted one-of-a-kind 3D creations, and original hand-crafted ACEOs.
             </p>
           </div>
         </section>
@@ -32,7 +23,7 @@ export default function AboutPage() {
           <div className="prose prose-lg text-muted-foreground">
             <p>
               At Moonafique, our mission is simple: to create exceptional 3D
-              printed pieces that inspire and delight. We believe in the power
+              creations that inspire and delight. We believe in the power
               of technology to bring artistic visions to life, and we&apos;re
               committed to using that power responsibly and sustainably.
             </p>

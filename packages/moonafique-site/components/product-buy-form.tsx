@@ -25,7 +25,6 @@ export function ProductBuyForm({ product }: ProductBuyFormProps) {
 
   const handleAddToCart = async () => {
     if (!product.images?.[0]) return;
-    console.log('product', product);
 
     await addItem({
       id: product.id,

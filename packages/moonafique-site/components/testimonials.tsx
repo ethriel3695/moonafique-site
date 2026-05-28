@@ -1,11 +1,17 @@
 'use client';
 
 import { useState } from 'react';
+import type { ReactNode } from 'react';
 import { Button } from '@/components/ui/button';
-import { ChevronLeft, ChevronRight, Quote, Star } from 'lucide-react';
-// import { Textarea } from '@/components/ui/textarea';
-// import { Input } from '@/components/ui/input';
-// import { Label } from '@/components/ui/label';
+import {
+  ChevronLeft,
+  ChevronRight,
+  HandHeart,
+  MessageCircleHeart,
+  PackageCheck,
+  ShieldCheck,
+  Star,
+} from 'lucide-react';
 
 const testimonials = [
   {
@@ -27,14 +33,7 @@ const testimonials = [
 
 export function Testimonials() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  //   const [showForm, setShowForm] = useState(false);
-  //   const [rating, setRating] = useState(0);
-  //   const [hoverRating, setHoverRating] = useState(0);
-  //   const [formData, setFormData] = useState({
-  //     name: '',
-  //     role: '',
-  //     content: '',
-  //   });
+  const currentTestimonial = testimonials[currentIndex];
 
   const nextTestimonial = () => {
     setCurrentIndex((prev) => (prev + 1) % testimonials.length);
@@ -46,178 +45,146 @@ export function Testimonials() {
     );
   };
 
-  //   const handleSubmit = (e: React.FormEvent) => {
-  //     e.preventDefault();
-  //     // TODO: Implement actual submission logic
-  //     console.log('Submitting review:', { ...formData, rating });
-  //     setShowForm(false);
-  //     setRating(0);
-  //     setFormData({ name: '', role: '', content: '' });
-  //   };
-
-  const currentTestimonial = testimonials[currentIndex];
-
   return (
-    <section className="w-full py-20">
+    <section className="relative overflow-hidden bg-[linear-gradient(180deg,_hsl(var(--background)),_hsl(var(--surface))_44%,_hsl(var(--background)))] pb-16 pt-10 sm:pb-20 sm:pt-14">
       <div className="mx-auto max-w-screen-xl px-4">
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-end">
-          <div className="space-y-5">
-            <p className="text-sm font-semibold uppercase tracking-[0.26em] text-primary">
-              Testimonials
-            </p>
-            <h2 className="text-4xl sm:text-5xl">Collectors remember the details.</h2>
-            <p className="max-w-xl text-lg leading-8 text-muted-foreground">
-              The most consistent feedback is simple: Moonafique pieces feel
-              thoughtful, tactile, and impossible to leave behind once someone
-              picks one up.
-            </p>
-            <div className="grid gap-3 sm:grid-cols-2">
-              <div className="rounded-[1.5rem] border border-border/70 bg-background/80 p-5 shadow-soft">
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-muted-foreground">
-                  Favorite quality
-                </p>
-                <p className="mt-2 text-lg font-semibold text-foreground">
-                  Articulated motion with polished finish
-                </p>
-              </div>
-              <div className="rounded-[1.5rem] border border-border/70 bg-background/80 p-5 shadow-soft">
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-muted-foreground">
-                  Common use
-                </p>
-                <p className="mt-2 text-lg font-semibold text-foreground">
-                  Giftable desk pieces and classroom conversation starters
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="relative rounded-[2rem] border border-border/70 bg-background/90 p-8 shadow-lift">
-            <Quote className="absolute right-8 top-8 size-10 text-primary/25" />
-            <div className="mb-5 flex items-center gap-1">
-              {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  className={`h-5 w-5 ${
-                    i < currentTestimonial.rating
-                      ? 'fill-warning text-warning'
-                      : 'text-border'
-                  }`}
-                />
-              ))}
-            </div>
-            <p className="min-h-[120px] text-xl leading-9 text-foreground">
-              &ldquo;{currentTestimonial.content}&rdquo;
-            </p>
-            <div className="mt-8 flex flex-col gap-1">
-              <p className="font-semibold text-foreground">{currentTestimonial.name}</p>
-              <p className="text-sm text-muted-foreground">
-                {currentTestimonial.role}
-              </p>
-            </div>
-            <div className="mt-8 flex items-center justify-between gap-4 border-t border-border/70 pt-6">
-              <p className="text-sm text-muted-foreground">
-                {currentIndex + 1} of {testimonials.length}
-              </p>
-              <div className="flex gap-3">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={prevTestimonial}
-                  className="rounded-full"
-                  aria-label="Previous testimonial"
-                >
-                  <ChevronLeft className="h-4 w-4" />
-                </Button>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={nextTestimonial}
-                  className="rounded-full"
-                  aria-label="Next testimonial"
-                >
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-          </div>
+        <div className="mx-auto max-w-3xl text-center">
+          <p className="text-sm font-bold uppercase tracking-[0.24em] text-primary">
+            Why people trust Moonafique
+          </p>
+          <h2 className="mt-4 text-4xl sm:text-5xl">
+            Every print leaves our hands before it reaches yours.
+          </h2>
+          <p className="mt-4 text-lg font-medium leading-8 text-muted-foreground">
+            This is not a warehouse catalog. It is a family-run print table:
+            small batches, careful checks, honest expectations, and pieces we
+            are proud to hand to someone in person.
+          </p>
         </div>
 
-        {/* Temporarily hidden until review functionality is implemented
-        <div className="mt-16 text-center">
-          <Button onClick={() => setShowForm(!showForm)}>
-            {showForm ? 'Cancel' : 'Write a Review'}
-          </Button>
-        </div>
+        <div className="mt-12 grid gap-8 lg:grid-cols-[minmax(0,0.95fr)_minmax(420px,1.05fr)] lg:items-stretch">
+          <div className="grid gap-4">
+            <TrustPoint
+              icon={<HandHeart className="size-5" />}
+              iconClassName="bg-primary/12 text-primary"
+              title="Made by the people behind the shop"
+            >
+              We print, inspect, pack, and answer questions ourselves, so the
+              care does not disappear after checkout.
+            </TrustPoint>
+            <TrustPoint
+              icon={<ShieldCheck className="size-5" />}
+              iconClassName="bg-warning/20 text-warning-foreground"
+              title="Clear about what these pieces are"
+            >
+              Moonafique prints are collectible display pieces made for wonder,
+              gifting, classrooms, and careful hands.
+            </TrustPoint>
+            <TrustPoint
+              icon={<PackageCheck className="size-5" />}
+              iconClassName="bg-success/15 text-success"
+              title="Packed like we care what happens next"
+            >
+              The goal is simple: open the box, smile immediately, and feel like
+              the piece was meant for you.
+            </TrustPoint>
+          </div>
 
-        {showForm && (
-          <form
-            onSubmit={handleSubmit}
-            className="mt-8 max-w-2xl mx-auto bg-background p-8 rounded-lg shadow-lg"
-          >
-            <div className="space-y-6">
+          <div className="rounded-lg border border-border/80 bg-background p-6 shadow-lift sm:p-8">
+            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border/70 pb-5">
               <div>
-                <Label htmlFor="rating">Rating</Label>
-                <div className="flex gap-1 mt-2">
+                <p className="text-sm font-bold uppercase tracking-[0.22em] text-primary">
+                  Customer words
+                </p>
+                <div className="mt-3 flex items-center gap-1">
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
-                      className={`w-8 h-8 cursor-pointer ${
-                        i < (hoverRating || rating)
-                          ? 'fill-yellow-400 text-yellow-400'
-                          : 'text-gray-300'
+                      className={`size-5 ${
+                        i < currentTestimonial.rating
+                          ? 'fill-warning text-warning'
+                          : 'text-border'
                       }`}
-                      onClick={() => setRating(i + 1)}
-                      onMouseEnter={() => setHoverRating(i + 1)}
-                      onMouseLeave={() => setHoverRating(0)}
                     />
                   ))}
                 </div>
               </div>
-
-              <div>
-                <Label htmlFor="name">Name</Label>
-                <Input
-                  id="name"
-                  value={formData.name}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setFormData({ ...formData, name: e.target.value })
-                  }
-                  required
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="role">Role (e.g., Collector, Enthusiast)</Label>
-                <Input
-                  id="role"
-                  value={formData.role}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setFormData({ ...formData, role: e.target.value })
-                  }
-                  required
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="content">Your Review</Label>
-                <Textarea
-                  id="content"
-                  value={formData.content}
-                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-                    setFormData({ ...formData, content: e.target.value })
-                  }
-                  required
-                  className="min-h-[100px]"
-                />
-              </div>
-
-              <Button type="submit" className="w-full">
-                Submit Review
-              </Button>
+              <span className="flex size-12 items-center justify-center rounded-full bg-accent/35 text-primary">
+                <MessageCircleHeart className="size-6" />
+              </span>
             </div>
-          </form>
-        )}
-        */}
+
+            <figure className="mt-7">
+              <blockquote className="text-2xl font-semibold leading-10 text-foreground">
+                &ldquo;{currentTestimonial.content}&rdquo;
+              </blockquote>
+              <figcaption className="mt-8 flex flex-col gap-5 border-t border-border/70 pt-5 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                  <p className="font-bold text-foreground">
+                    {currentTestimonial.name}
+                  </p>
+                  <p className="mt-1 text-sm font-medium text-muted-foreground">
+                    {currentTestimonial.role}
+                  </p>
+                </div>
+                <div className="flex items-center justify-between gap-4 sm:justify-end">
+                  <p className="text-sm font-medium text-muted-foreground">
+                    {currentIndex + 1} of {testimonials.length}
+                  </p>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={prevTestimonial}
+                      className="rounded-full bg-background"
+                      aria-label="Previous testimonial"
+                    >
+                      <ChevronLeft className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={nextTestimonial}
+                      className="rounded-full bg-background"
+                      aria-label="Next testimonial"
+                    >
+                      <ChevronRight className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              </figcaption>
+            </figure>
+          </div>
+        </div>
       </div>
     </section>
+  );
+}
+
+function TrustPoint({
+  children,
+  icon,
+  iconClassName,
+  title,
+}: {
+  children: ReactNode;
+  icon: ReactNode;
+  iconClassName: string;
+  title: string;
+}) {
+  return (
+    <div className="rounded-lg border border-border/70 bg-background/85 p-5 shadow-soft">
+      <div className="flex gap-4">
+        <span
+          className={`flex size-11 shrink-0 items-center justify-center rounded-full ${iconClassName}`}
+        >
+          {icon}
+        </span>
+        <div>
+          <h3 className="text-xl font-semibold">{title}</h3>
+          <p className="mt-2 leading-7 text-muted-foreground">{children}</p>
+        </div>
+      </div>
+    </div>
   );
 }

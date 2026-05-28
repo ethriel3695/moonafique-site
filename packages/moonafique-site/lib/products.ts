@@ -1,4 +1,4 @@
-import { ProductListResponse, ProductWithPrice } from '@/lib/schema';
+import { Product, ProductListResponse, ProductWithPrice } from '@/lib/schema';
 import { stripe } from '@/lib/stripe';
 import Stripe from 'stripe';
 
@@ -10,17 +10,13 @@ export async function getProducts(
 ): Promise<ProductListResponse | undefined> {
   try {
     const { search } = options;
-    const products = await stripe.products.list({
-      limit: 100, // Get all products to handle search and pagination properly
-      active: true,
-      expand: ['data.default_price'],
-    });
+    const products = await listAllActiveProducts();
 
-    let filteredProducts = products.data;
+    let filteredProducts = products;
 
     if (search) {
       const searchTerms = search.toLowerCase().split(/\s+/);
-      filteredProducts = products.data.filter((product) => {
+      filteredProducts = products.filter((product) => {
         const searchableText = [
           product.name.toLowerCase(),
           product.description?.toLowerCase() || '',
@@ -55,7 +51,9 @@ export async function getProducts(
         : paginatedProducts.length < filteredProducts.length;
 
     return {
-      data: paginatedProducts.map(productToProductWithPrice),
+      data: paginatedProducts
+        .map(productToProductWithPrice)
+        .filter((product): product is ProductWithPrice => product !== null),
       has_more: hasMore,
       starting_after: paginatedProducts[paginatedProducts.length - 1]?.id,
     };
@@ -77,8 +75,35 @@ export async function getProduct(id: string): Promise<ProductWithPrice | null> {
   }
 }
 
-function productToProductWithPrice(product: Stripe.Product): ProductWithPrice {
+async function listAllActiveProducts(): Promise<Stripe.Product[]> {
+  const products: Stripe.Product[] = [];
+  let startingAfter: string | undefined;
+
+  do {
+    const page = await stripe.products.list({
+      limit: 100,
+      active: true,
+      expand: ['data.default_price'],
+      ...(startingAfter ? { starting_after: startingAfter } : {}),
+    });
+
+    products.push(...page.data);
+    startingAfter = page.has_more
+      ? page.data[page.data.length - 1]?.id
+      : undefined;
+  } while (startingAfter);
+
+  return products;
+}
+
+function productToProductWithPrice(
+  product: Stripe.Product
+): ProductWithPrice | null {
   const price = product.default_price as Stripe.Price;
+  if (!price || typeof price === 'string') {
+    return null;
+  }
+
   const amount = price.unit_amount ? price.unit_amount / 100 : undefined;
 
   return {
@@ -95,6 +120,59 @@ function productToProductWithPrice(product: Stripe.Product): ProductWithPrice {
           currency: 'USD',
         }) ?? '$0.00',
     },
-    metadata: product.metadata,
+    metadata: normalizeMetadata(product.metadata),
   };
+}
+
+function normalizeMetadata(metadata: Stripe.Metadata): Product['metadata'] {
+  return {
+    ...metadata,
+    stock: toNumber(metadata.stock),
+    madeToOrder: toBoolean(metadata.madeToOrder),
+    status: toProductStatus(metadata.status),
+  };
+}
+
+function toNumber(value: string | undefined): number | undefined {
+  if (!value) {
+    return undefined;
+  }
+
+  const numberValue = Number(value);
+  return Number.isFinite(numberValue) ? numberValue : undefined;
+}
+
+function toBoolean(value: string | undefined): boolean | undefined {
+  if (!value) {
+    return undefined;
+  }
+
+  if (['true', '1', 'yes'].includes(value.toLowerCase())) {
+    return true;
+  }
+
+  if (['false', '0', 'no'].includes(value.toLowerCase())) {
+    return false;
+  }
+
+  return undefined;
+}
+
+function toProductStatus(
+  value: string | undefined
+): NonNullable<Product['metadata']>['status'] | undefined {
+  if (
+    value === 'available' ||
+    value === 'madeToOrder' ||
+    value === 'soldOut' ||
+    value === 'comingSoon' ||
+    value === 'limitedEdition' ||
+    value === 'new' ||
+    value === 'featured' ||
+    value === 'onSale'
+  ) {
+    return value;
+  }
+
+  return undefined;
 }

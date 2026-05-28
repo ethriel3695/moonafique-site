@@ -7,8 +7,8 @@ const faqs = [
   {
     question: 'What materials do you use for your 3D prints?',
     paragraphs: [
-      'We use high-quality PLA and PETG filaments for our prints. These materials are chosen for clean detail, durable everyday handling, and a finish that suits collectible display pieces.',
-      'Each material and color is matched to the specific design so articulated creatures, fossils, and classroom-friendly miniatures all feel intentional in the hand.',
+      'Most pieces are printed in PLA or PETG, depending on what the design needs. We choose materials for clean detail, good color, and the kind of finish that feels nice in your hand.',
+      'Color is part of the fun for us, so we match filament to the creature instead of treating it like an afterthought.',
     ],
   },
   {
@@ -23,8 +23,8 @@ const faqs = [
   {
     question: 'Do you offer custom designs?',
     paragraphs: [
-      'Yes. We love collaborating on custom projects, whether you already have a creature in mind or need help shaping the idea into something printable and display-ready.',
-      'The best starting point is the contact page, where you can share references, intended size, and how you want the finished piece to feel.',
+      'Yes. Custom ideas are one of our favorite parts of the work. You can come with a clear creature in mind or just a rough spark and we can help shape it into something printable.',
+      'Send references, size ideas, colors, and what you want the finished piece to feel like. That gives us the best starting point.',
     ],
   },
   {
@@ -37,7 +37,7 @@ const faqs = [
   {
     question: 'How do I care for my 3D printed items?',
     paragraphs: [
-      'To keep your piece looking its best, avoid direct sunlight for long periods, keep it away from high heat, and clean it gently with a soft dry cloth.',
+      'Keep your piece away from high heat, avoid long stretches of direct sunlight, and clean it gently with a soft dry cloth. Treat it like a little collectible, not something meant to be tossed in a toy bin.',
     ],
   },
 ];
@@ -54,12 +54,14 @@ export function FAQ() {
       <div className="mx-auto max-w-screen-xl px-4">
         <div className="mx-auto max-w-3xl text-center">
           <p className="text-sm font-semibold uppercase tracking-[0.26em] text-primary">
-            Frequently asked
+            Good to know
           </p>
-          <h2 className="mt-4 text-4xl sm:text-5xl">Questions before you adopt a new desk creature?</h2>
+          <h2 className="mt-4 text-4xl sm:text-5xl">
+            A few practical details before a little magic ships out.
+          </h2>
           <p className="mt-4 text-lg leading-8 text-muted-foreground">
-            Here are the details customers ask for most often, from materials
-            and shipping to care and custom work.
+            We want your piece to arrive safely, make sense when you open it,
+            and stay wonderful once it is home.
           </p>
         </div>
         <div className="mx-auto mt-12 max-w-3xl space-y-4">
