@@ -1,6 +1,6 @@
 # Grimmunity implementation and review
 
-Updated October 25, 2026. The local implementation now has two Grimm tiers and two ACEO tiers, all billed on the website with shipping charged separately. The owner requested local preview only and left live Shippo disconnected; production remains unchanged. See [the current offer and Shippo setup](collections-and-shipping.md) and [the operating guide](operations.md).
+Updated October 26, 2026. The approved two Grimm tiers and two ACEO tiers are now described on separate production pages, with shipping charged separately when billing opens. The owner approved the [production deployment and migrations](deployment-20261026.md). Paid enrollment remains closed and live Shippo remains disconnected. See [the current offer and Shippo setup](collections-and-shipping.md) and [the operating guide](operations.md).
 
 | Membership | Monthly price before shipping | Member limit | Included each month |
 | --- | --- | --- | --- |

@@ -42,7 +42,7 @@ The retained development server listens only on the local computer. Storybook st
 
 The existing local installation had a missing macOS ARM optional binding for its locked `oxc-parser` 0.127.0 dependency. It was restored from the previously verified local installation of that exact package version. No package manifest or lockfile change was needed. A fresh complete install from the lockfile should provide that optional dependency normally.
 
-Production and live Shippo remain unchanged.
+The owner subsequently approved [production deployment](deployment-20261026.md) of the collection pages and copy. Storybook remains local. Paid enrollment and live Shippo remain closed.
 
 ## Verification
 

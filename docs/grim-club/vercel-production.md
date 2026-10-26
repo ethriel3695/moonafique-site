@@ -1,6 +1,6 @@
 # Grimmunity production configuration
 
-> October 25 update: the four-tier Grimm/ACEO offer and Shippo workflow are implemented and verified locally. The owner chose **local preview only** and **live shipping disconnected**. No production deployment or live Stripe pricing changes were made in this follow-up. The production configuration below remains the previous rollout record. See [the current implementation and handoff](collections-and-shipping.md).
+> October 26 update: the owner approved deployment and the recovery snapshot/migrations. The new collection pages and membership copy are live in `dpl_9XahLquzAqzQNDBsjWtZqoXuoNdA`; migrations 009 and 010 are applied. Paid enrollment remains closed and live Shippo remains disconnected. See [the current deployment record](deployment-20261026.md). The sections below preserve the earlier rollout record.
 
 
 Updated October 24, 2026. [The interest page](https://www.moonafique.com/grimmunity) is public. [The staff dashboard](https://www.moonafique.com/admin/grimmunity) requires the approved owner's Moonafique login. Waiting-list signup confirmations use their own delivery switch. Paid enrollment and paid-member notification delivery remain off.

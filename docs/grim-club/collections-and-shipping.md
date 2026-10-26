@@ -2,7 +2,7 @@
 
 Updated October 25, 2026. This document records the offer agreed during the business meeting and the new implementation. The former $25 Collector membership and $9.21 flat shipping fee are historical.
 
-**Current state: local preview only, at the owner’s request. Live Shippo remains disconnected. No production deployment, production migrations, live Stripe product changes, or live charges were made.**
+**Current state, October 26: the collection pages and updated membership copy are live. The owner approved a recovery snapshot and migrations 009/010. Paid enrollment remains closed; live Shippo remains disconnected. No live Stripe products, prices, or charges were created. See [the deployment record](deployment-20261026.md).**
 
 ## Collection pages
 
@@ -17,7 +17,7 @@ The overview summarizes both collections and links to their detail pages. The ma
 
 Both pages use the existing shared interest list for Grimm and ACEO launch news. No separate interest-list segment or database migration was added. Confirmation emails link to the Communities overview. Existing saved notification messages retain their original content.
 
-The local preview is available at `http://127.0.0.1:3049/communities`. It uses fake service credentials and has no database connection. This page restructure has not been deployed.
+The local preview remains available at `http://127.0.0.1:3049/communities`, using fake service credentials and no database connection. The approved production version is also available at `https://www.moonafique.com/communities`.
 
 ## Current offer
 

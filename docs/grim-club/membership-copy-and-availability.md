@@ -1,6 +1,6 @@
 # Membership copy and available spots
 
-Updated October 26, 2026. This update remains local; paid enrollment and live Shippo are closed.
+Updated October 26, 2026. The approved pages and copy are now [deployed](deployment-20261026.md); paid enrollment and live Shippo remain closed.
 
 The public pages describe the collecting experience and the included items. Production terms such as ink, dual extrusion, retained copies, and fixed member caps are removed from public offers. Prices, quantities, shipping, recurring billing, and cancellation information remain clear. Starter includes its accessory pack and two pets. Keeper includes the coordinated accessories worn by the Grimm.
 
