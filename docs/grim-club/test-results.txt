@@ -1,0 +1,15 @@
+
+ RUN  v3.2.4 /Users/rellis/source/business/business/moonafique-site/packages/moonafique-site
+
+ ✓ tests/grimmunity/lifecycle.test.ts (69 tests) 2617ms
+ ✓ tests/grimmunity/interest.test.ts (7 tests) 59ms
+ ✓ tests/grimmunity/worker.test.ts (3 tests) 16ms
+(node:95926) Warning: `--localstorage-file` was provided without a valid path
+(Use `node --trace-warnings ...` to show where the warning was created)
+ ✓ tests/grimmunity/routes.test.ts (9 tests) 11ms
+ ✓ tests/grimmunity/gateway.test.ts (13 tests) 7ms
+
+ Test Files  5 passed (5)
+      Tests  101 passed (101)
+   Start at  09:57:39
+   Duration  4.41s (transform 186ms, setup 0ms, collect 944ms, tests 2.71s, environment 0ms, prepare 193ms)

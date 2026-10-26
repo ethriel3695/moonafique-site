@@ -122,3 +122,10 @@ body {
     outline: none;
   }
 }
+
+/* The Grim flow must retain a visible keyboard focus indicator, including links and native inputs. */
+.grimmunity :focus-visible {
+  outline: 3px solid hsl(var(--primary));
+  outline-offset: 4px;
+}
+.grimmunity a:hover { text-decoration: underline; text-underline-offset: 4px; }

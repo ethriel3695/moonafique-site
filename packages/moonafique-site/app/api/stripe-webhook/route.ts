@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
+import { processGrimEvent } from '@/lib/grimmunity/webhook';
 // import { createShipment } from '@/lib/shippo';
 // import { generateInvoicePdf } from '@/lib/invoice';
 // import { sendInvoiceEmail } from '@/app/api/subscribe/route';
@@ -25,8 +26,15 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  // Enable only when this endpoint and Grim use the same Stripe account and mode.
+  if (process.env.GRIM_USE_SHARED_WEBHOOK === 'true') {
+    try { await processGrimEvent(event); }
+    catch { return NextResponse.json({ error: 'Event pending; retry required' }, { status: 503 }); }
+  }
+
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object as Stripe.Checkout.Session;
+    if (session.mode === 'subscription') return NextResponse.json({ received: true });
     // 1. Get shipping address from session
     const shippingAddress = session?.collected_information?.shipping_details;
     if (!shippingAddress) {

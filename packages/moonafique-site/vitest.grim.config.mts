@@ -1,0 +1,12 @@
+import { defineConfig } from "vitest/config";
+import { fileURLToPath } from "node:url";
+export default defineConfig({
+  resolve: { alias: { "@": fileURLToPath(new URL(".", import.meta.url)) } },
+  test: {
+    environment: "node",
+    include: ["tests/grimmunity/**/*.test.ts"],
+    fileParallelism: false,
+    testTimeout: 30000,
+    hookTimeout: 30000,
+  },
+});

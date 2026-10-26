@@ -1,6 +1,7 @@
 import { Product, ProductListResponse, ProductWithPrice } from '@/lib/schema';
 import { stripe } from '@/lib/stripe';
 import Stripe from 'stripe';
+import { isOneTimeProduct } from './catalog-policy';
 
 export async function getProducts(
   options: Stripe.ProductListParams & { search?: string } = {
@@ -87,7 +88,7 @@ async function listAllActiveProducts(): Promise<Stripe.Product[]> {
       ...(startingAfter ? { starting_after: startingAfter } : {}),
     });
 
-    products.push(...page.data);
+    products.push(...page.data.filter(isOneTimeProduct));
     startingAfter = page.has_more
       ? page.data[page.data.length - 1]?.id
       : undefined;
@@ -99,6 +100,7 @@ async function listAllActiveProducts(): Promise<Stripe.Product[]> {
 function productToProductWithPrice(
   product: Stripe.Product
 ): ProductWithPrice | null {
+  if (!isOneTimeProduct(product)) return null;
   const price = product.default_price as Stripe.Price;
   if (!price || typeof price === 'string') {
     return null;

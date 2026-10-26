@@ -11,7 +11,10 @@
     "start": "next start",
     "lint": "eslint .",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "test:grim": "vitest run --config vitest.grim.config.mts",
+    "grim": "tsx scripts/grimmunity/cli.ts",
+    "grim:prepare-preview": "tsx scripts/grimmunity/prepare-preview.ts"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "1.1.1",
@@ -30,6 +33,7 @@
     "lucide-react": "^0.577.0",
     "next": "^16.2.0",
     "pdfkit": "^0.18.0",
+    "pg": "^8.23.1",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
     "resend": "^6.12.2",
@@ -52,6 +56,7 @@
     "@storybook/nextjs-vite": "10.4.0",
     "@types/node": "^22.19.17",
     "@types/pdfkit": "^0.17.6",
+    "@types/pg": "^8.23.1",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.0",
     "@vitest/browser": "^3.2.4",
@@ -63,6 +68,7 @@
     "postcss": "^8.5.10",
     "storybook": "^10.4.0",
     "tailwindcss": "^3.4.19",
+    "tsx": "^4.23.15",
     "typescript": "^5.9.3",
     "vite": "^7.0.0",
     "vitest": "^3.2.4"

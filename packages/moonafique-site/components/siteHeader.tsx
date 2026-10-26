@@ -8,6 +8,7 @@ import {
   Sheet,
   SheetTitle,
   SheetContent,
+  SheetClose,
   SheetTrigger,
 } from '@/components/ui/sheet';
 import {
@@ -30,6 +31,7 @@ const navigation = [
   { label: 'Creatures', href: '/?search=creature' },
   { label: 'Fossils', href: '/?search=fossil' },
   { label: 'Curiosities', href: '/?search=misc' },
+  { label: 'Communities', href: '/communities' },
   { label: 'About', href: '/about' },
   { label: 'Contact', href: '/contact' },
 ];
@@ -55,7 +57,7 @@ export function SiteHeader() {
             <Logo className="size-10" />
           </Link>
         </div>
-        <nav className="hidden items-center gap-1 rounded-full border border-border/70 bg-surface/85 p-1 lg:flex">
+        <nav className="hidden items-center gap-1 rounded-full border border-border/70 bg-surface/85 p-1 xl:flex">
           {navigation.map((item) => (
             <Link
               key={item.label}
@@ -134,7 +136,7 @@ function Sidebar() {
               <Button
                 variant="outline"
                 size="icon"
-                className="size-10 shrink-0 rounded-full border-border/70 bg-background/90 lg:hidden"
+                className="size-10 shrink-0 rounded-full border-border/70 bg-background/90 xl:hidden"
               >
                 <Menu className="size-4" />
                 <span className="sr-only">Menu</span>
@@ -159,25 +161,28 @@ function Sidebar() {
             </div>
             <div className="grid gap-2">
               {navigation.map((item) => (
+                <SheetClose key={item.label} asChild>
+                  <Button
+                    asChild
+                    className="justify-start rounded-2xl"
+                    variant="ghost"
+                  >
+                    <Link href={item.href}>{item.label}</Link>
+                  </Button>
+                </SheetClose>
+              ))}
+              <SheetClose asChild>
                 <Button
-                  key={item.label}
                   asChild
-                  className="justify-start rounded-2xl"
+                  className="justify-start rounded-2xl bg-accent/35 text-accent-foreground hover:bg-accent/50"
                   variant="ghost"
                 >
-                  <Link href={item.href}>{item.label}</Link>
+                  <Link href="/#shop">
+                    <Sparkles className="size-4" />
+                    New Drops
+                  </Link>
                 </Button>
-              ))}
-              <Button
-                asChild
-                className="justify-start rounded-2xl bg-accent/35 text-accent-foreground hover:bg-accent/50"
-                variant="ghost"
-              >
-                <Link href="/#shop">
-                  <Sparkles className="size-4" />
-                  New Drops
-                </Link>
-              </Button>
+              </SheetClose>
             </div>
           </SheetContent>
         </Tooltip>

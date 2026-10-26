@@ -1,0 +1,37 @@
+{
+  "currency": "usd",
+  "member_cap": 24,
+  "retained_copies": 1,
+  "countries": [
+    "US"
+  ],
+  "shipping_text": "Flat U.S. shipping is $9.21 each month, charged with the $25 membership.",
+  "tax_mode": "not_collecting",
+  "terms_version": "sandbox-review-v1",
+  "cancellation_text": "Sandbox policy: cancel before the next renewal. Already-paid editions remain due unless refunded.",
+  "recovery_text": "Sandbox policy: payments recovered before the edition cutoff may be packed; later recovery requires review.",
+  "support_email": "support@example.invalid",
+  "portal_configuration_id": "bpc_REPLACE_WITH_SANDBOX_ID",
+  "tiers": [
+    {
+      "id": "mid",
+      "name": "Grim Collector",
+      "description": "A brand-new Grim and pet, with a fun custom color design each month.",
+      "amount": 2500,
+      "shipping": {
+        "price_id": "price_REPLACE_SHIPPING_SANDBOX_ID",
+        "product_id": "prod_REPLACE_SHIPPING_SANDBOX_ID",
+        "amount": 921
+      },
+      "perks": [
+        "One new subscriber Grim + matching pet every month",
+        "This Grim will be a unique creation independent of the Moonafique Grim-of-the-month releases",
+        "The Grim will be subscriber only until at least two months after its subscription month (If we choose to release it in the shop)",
+        "Collectible Grim card"
+      ],
+      "benefits_confirmed": true,
+      "price_id": "price_REPLACE_COLLECTOR_SANDBOX_ID",
+      "product_id": "prod_REPLACE_WITH_SANDBOX_ID"
+    }
+  ]
+}

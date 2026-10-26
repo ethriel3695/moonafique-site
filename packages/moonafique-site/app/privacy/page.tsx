@@ -30,13 +30,32 @@ export default function PrivacyPolicyPage() {
               <li>Register for an account</li>
               <li>Make a purchase</li>
               <li>Subscribe to our newsletter</li>
+              <li>Join the Grimmunity launch interest list</li>
+              <li>Submit a custom creation request</li>
               <li>Contact us through our website</li>
             </ul>
             <p className="text-muted-foreground">
               The personal information we collect may include your name, email
               address, shipping address, and payment information.
             </p>
+            <p className="text-muted-foreground">
+              For the Grimmunity interest list, we store your email address and
+              signup time to send a signup confirmation and the launch notice you requested. This does not
+              enroll you in a membership or our general newsletter. We also use
+              a short-lived coded identifier to limit abusive submissions. To
+              leave the list, email hello@moonafique.com.
+            </p>
           </div>
+
+          <p className="text-muted-foreground">
+            For custom requests, we store your name, email address or Whatnot username,
+            project description, additional details, and any requested date or occasion.
+            Moonafique staff receive a new-request notification and use these details to
+            review requests in the order received and follow up with you. If you provide
+            an email address, we send a request confirmation. Submitting does not add you to a mailing list. We use a
+            short-lived coded identifier to limit abusive submissions. To request
+            correction or deletion, email hello@moonafique.com.
+          </p>
 
           <div className="space-y-4">
             <h3 className="text-xl font-medium">

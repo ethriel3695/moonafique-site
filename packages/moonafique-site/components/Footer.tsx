@@ -69,6 +69,9 @@ export const Footer = () => {
               Policies and contact
             </h3>
             <div className="mt-4 grid gap-2">
+              <Link href="/communities" className="text-base text-primary-foreground/90 transition-colors hover:text-accent">Our communities</Link>
+              <Link href="/grimmunity" className="text-base text-primary-foreground/90 transition-colors hover:text-accent">Grimmunity memberships</Link>
+              <Link href="/aceos" className="text-base text-primary-foreground/90 transition-colors hover:text-accent">ACEO memberships</Link>
               <Link
                 href="/contact"
                 className="text-base text-primary-foreground/90 transition-colors hover:text-accent"

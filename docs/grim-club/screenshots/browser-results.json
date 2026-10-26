@@ -1,0 +1,108 @@
+{
+  "results": [
+    {
+      "screen": "closed",
+      "size": "desktop",
+      "status": 200,
+      "horizontalOverflow": false
+    },
+    {
+      "screen": "closed",
+      "size": "mobile",
+      "status": 200,
+      "horizontalOverflow": false
+    },
+    {
+      "screen": "closed",
+      "size": "tablet",
+      "status": 200,
+      "horizontalOverflow": false
+    },
+    {
+      "screen": "offer",
+      "size": "desktop",
+      "status": 200,
+      "horizontalOverflow": false
+    },
+    {
+      "screen": "offer",
+      "size": "mobile",
+      "status": 200,
+      "horizontalOverflow": false
+    },
+    {
+      "screen": "offer",
+      "size": "tablet",
+      "status": 200,
+      "horizontalOverflow": false
+    },
+    {
+      "screen": "account",
+      "size": "desktop",
+      "status": 200,
+      "horizontalOverflow": false
+    },
+    {
+      "screen": "account",
+      "size": "mobile",
+      "status": 200,
+      "horizontalOverflow": false
+    },
+    {
+      "screen": "account",
+      "size": "tablet",
+      "status": 200,
+      "horizontalOverflow": false
+    },
+    {
+      "screen": "canceled",
+      "size": "desktop",
+      "status": 200,
+      "horizontalOverflow": false
+    },
+    {
+      "screen": "canceled",
+      "size": "mobile",
+      "status": 200,
+      "horizontalOverflow": false
+    },
+    {
+      "screen": "canceled",
+      "size": "tablet",
+      "status": 200,
+      "horizontalOverflow": false
+    },
+    {
+      "screen": "staff",
+      "size": "desktop",
+      "status": 200,
+      "horizontalOverflow": false
+    },
+    {
+      "screen": "staff",
+      "size": "mobile",
+      "status": 200,
+      "horizontalOverflow": false
+    },
+    {
+      "screen": "staff",
+      "size": "tablet",
+      "status": 200,
+      "horizontalOverflow": false
+    },
+    {
+      "screen": "join",
+      "keyboardSubmit": true,
+      "tierSelection": "high",
+      "recurringTotalUpdated": true,
+      "noClientPricing": true,
+      "visibleFocus": true,
+      "accessibleError": true
+    },
+    {
+      "anonymousPortal": 401,
+      "anonymousAdmin": 307
+    }
+  ],
+  "pageErrors": []
+}

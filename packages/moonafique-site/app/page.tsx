@@ -1,5 +1,6 @@
 import { ProductList } from '@/components/product-list';
 import { Testimonials } from '@/components/testimonials';
+import { CreationsShowcase } from '@/components/creations-showcase';
 import { FAQ } from '@/components/faq';
 import { getProducts } from '@/lib/products';
 import { Hero } from '@/components/hero';
@@ -12,6 +13,8 @@ export default async function Page() {
   return (
     <div className="flex min-h-screen flex-col">
       <Hero products={products} />
+
+      <CreationsShowcase />
 
       <section id="shop" className="scroll-mt-24 pb-8 pt-14 sm:pb-10 sm:pt-16">
         <div className="mx-auto max-w-screen-xl px-4">
