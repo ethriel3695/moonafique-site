@@ -77,19 +77,19 @@ export const membershipTiers: Omit<Tier, "price_id" | "product_id">[] = [
     id: "grimm_starter",
     name: "Grimm Starter",
     description:
-      "A mystery Grimm with a fancy gradient or dual-extrusion finish and a different ear option each month.",
+      "A new little personality to love every month. Unbox a mystery Grimm in playful colors, with fresh ears and tiny companions to match.",
     amount: 1500,
     member_cap: null,
     retained_copies: 0,
     shipping: null,
     shipping_mode: "shippo",
     perks: [
-      "One mystery Grimm with a different ear option each month",
-      "All six emotion faces",
-      "Two pairs of pants and two boots coordinated with the monthly vibe",
-      "Two pets that match the monthly vibe",
-      "At least $24 in value for $15",
-      "Choose six preferred colors and tell us which colors to avoid",
+      "A mystery Grimm in a colorful finish, with a new ear style each month",
+      "All six emotion faces for every little mood",
+      "Two pairs of pants and two boots to dress for the monthly theme",
+      "Two tiny pets to join the adventure",
+      "At least $24 of Grimm goodness for $15",
+      "Pick six favorite colors and tell us any you’d rather skip",
     ],
     benefits_confirmed: true,
   },
@@ -97,49 +97,50 @@ export const membershipTiers: Omit<Tier, "price_id" | "product_id">[] = [
     id: "grimm_keeper",
     name: "Grimm Keeper",
     description:
-      "A Grimm with a fancier paint job exclusive to the subscription. Twelve subscriber copies and one for our collection.",
+      "A little character, a lot of magic. Add a Grimm with an exclusive painted finish to your collection each month.",
     amount: 3000,
     member_cap: 12,
     retained_copies: 1,
     shipping: null,
     shipping_mode: "shippo",
     perks: [
-      "One custom Grimm with a fancier, subscription-exclusive paint job",
-      "Coordinated accessories on the Grimm itself; no separate accessory pack",
-      "Limited to 12 members",
-      "We make 13: twelve for members and one for our collection",
-      "When all 12 memberships are taken, the Grimm is vaulted for now",
+      "One custom-painted Grimm each month",
+      "A painted finish created exclusively for Keeper members",
+      "Coordinated accessories worn by your Grimm",
     ],
     benefits_confirmed: true,
   },
   {
     id: "aceo_prints",
     name: "ACEO Prints",
-    description: "Two physical ink prints of original ACEO artwork each month.",
+    description:
+      "Make your mailbox the happiest part of the month. Collect two tiny art prints and a fresh little world to fall in love with.",
     amount: 1000,
     member_cap: 24,
     retained_copies: 0,
     shipping: null,
     shipping_mode: "shippo",
     perks: [
-      "Two physical ink prints each month",
-      "Artwork reproduced from original ACEOs",
-      "Limited to 24 members",
+      "Two ACEO prints delivered each month",
+      "Artwork from our original ACEO collections",
+      "Tiny treasures to display, collect, or share",
     ],
     benefits_confirmed: true,
   },
   {
     id: "aceo_originals",
     name: "ACEO Originals",
-    description: "One original ACEO artwork from the new monthly collection.",
+    description:
+      "A tiny original with a story all its own. Bring home a piece from our new monthly collection and grow a little gallery of your own.",
     amount: 2000,
     member_cap: 12,
     retained_copies: 0,
     shipping: null,
     shipping_mode: "shippo",
     perks: [
-      "One original ACEO from the new collection each month",
-      "Limited to 12 members",
+      "One original ACEO artwork each month",
+      "A piece from our brand-new monthly collection",
+      "Original art to make your little gallery feel like you",
     ],
     benefits_confirmed: true,
   },
@@ -199,3 +200,42 @@ export function tierAllocations(tiers: Tier[]): TierAllocations | null {
     ]),
   );
 }
+
+// Refresh public offer wording without rewriting saved paid-member snapshots.
+export function publicTierCopy<
+  T extends Pick<Tier, "id" | "amount" | "name" | "description" | "perks">,
+>(tier: T): T {
+  const current = membershipTiers.find(
+    (copy) => copy.id === tier.id && copy.amount === tier.amount,
+  );
+  return current
+    ? {
+        ...tier,
+        name: current.name,
+        description: current.description,
+        perks: current.perks,
+      }
+    : tier;
+}
+
+export function availabilityLabel(
+  tier: Pick<Tier, "id" | "member_cap">,
+  availability?: TierAvailability[TierId],
+): string | null {
+  if (availability?.full || availability?.remaining === 0)
+    return tier.id === "grimm_keeper" ? "Vaulted for now" : "Sold out";
+  if (typeof availability?.remaining === "number")
+    return `${availability.remaining} ${availability.remaining === 1 ? "spot" : "spots"} left`;
+  return tier.member_cap ? `${tier.member_cap} spots` : null;
+}
+
+export const availabilitySnapshotSchema = z.object({
+  editionId: z.string().uuid().nullable(),
+  availability: z.partialRecord(
+    z.enum(tierIds),
+    z.object({
+      full: z.boolean(),
+      remaining: z.number().int().nonnegative().nullable(),
+    }),
+  ),
+});

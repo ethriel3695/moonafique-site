@@ -53,8 +53,8 @@ export function CommunitiesView() {
               <div className="flex flex-1 flex-col p-7 sm:p-9">
                 <p className="max-w-md leading-7 text-muted-foreground">
                   {grimm
-                    ? "Collect a mystery Grimm with playful accessories, or a custom Grimm with a paint job exclusive to members."
-                    : "Grow a collection of Art Cards, Editions and Originals. Choose physical ink prints or an original piece from each month’s new collection."}
+                    ? "A mystery friend, a splash of color, and a little magic for your shelf. Find your next favorite Grimm."
+                    : "Happy mail for your inner art collector. Discover tiny prints and originals, with something new to love every month."}
                 </p>
                 <dl className="my-7 divide-y divide-border border-y border-border">
                   {membershipTiers
@@ -105,8 +105,8 @@ export function CommunitiesView() {
             in your account.
           </p>
           <p className="mt-3 text-sm leading-6 text-muted-foreground">
-            See each collection’s page for what’s included, member limits,
-            shipping, and current enrollment availability.
+            Meet the memberships, find your favorites, and see what’s waiting
+            for your collection.
           </p>
         </div>
       </section>

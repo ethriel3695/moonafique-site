@@ -6,6 +6,8 @@ Updated October 25, 2026. This document records the offer agreed during the busi
 
 ## Collection pages
 
+The [October 26 copy and availability update](membership-copy-and-availability.md) replaces public production notes with collector-focused descriptions and adds refreshing spot counts. The local preview shows capacity totals because it has no database connection.
+
 October 26, 2026: the local site now has a shared `/communities` overview and two separate membership pages:
 
 - `/grimmunity` describes Grimm Starter and Grimm Keeper, their prices, accessories, color preferences, member limits, shipping, and the Grimm showcase.

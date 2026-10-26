@@ -1,6 +1,41 @@
 import { one, type DB } from "./db";
-import type { Edition, Mode } from "./model";
-import type { TierId } from "./tiers";
+import type { Edition, Mode, Program } from "./model";
+import type { TierAvailability, TierId } from "./tiers";
+
+export async function tierAvailability(
+  db: DB,
+  mode: Mode,
+  program: Program,
+  edition: Edition,
+): Promise<TierAvailability> {
+  const availability: TierAvailability = {};
+  for (const tier of program.tiers) {
+    const allocation = edition.tier_allocations?.[tier.id];
+    if (
+      tier.member_cap !== undefined &&
+      (!allocation || allocation.capacity !== tier.member_cap)
+    )
+      continue;
+    const cap = allocation
+      ? allocation.capacity
+      : Math.min(program.member_cap, edition.capacity);
+    const used =
+      cap === null
+        ? 0
+        : await occupants(
+            db,
+            mode,
+            edition,
+            undefined,
+            allocation ? tier.id : undefined,
+          );
+    availability[tier.id] = {
+      full: cap !== null && used >= cap,
+      remaining: cap === null ? null : Math.max(0, cap - used),
+    };
+  }
+  return availability;
+}
 
 export async function occupants(
   db: DB,

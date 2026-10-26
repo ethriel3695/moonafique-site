@@ -1,5 +1,5 @@
 import type { Tier, TierAvailability } from "./tiers";
-import { occupants } from "./capacity";
+import { tierAvailability } from "./capacity";
 import { database, one } from "./db";
 import { grimMode } from "./runtime";
 import type {
@@ -46,6 +46,7 @@ export async function publicOffer() {
       editions: [] as Edition[],
       unavailable: false,
       availability: {} as TierAvailability,
+      availabilityEditionId: null,
     };
   try {
     const db = database(),
@@ -61,40 +62,35 @@ export async function publicOffer() {
         [mode],
       )
     ).rows;
-    const availability: TierAvailability = {};
+    const now = new Date();
     const edition =
       editions.find(
-        (e) => e.period_open <= new Date() && e.period_close > new Date(),
-      ) ?? editions[0];
-    if (program && edition)
-      for (const tier of program.tiers) {
-        const allocation = edition.tier_allocations?.[tier.id];
-        if (tier.member_cap !== undefined && !allocation) continue;
-        const cap = allocation
-          ? allocation.capacity
-          : Math.min(program.member_cap, edition.capacity);
-        const used =
-          cap === null
-            ? 0
-            : await occupants(
-                db,
-                mode,
-                edition,
-                undefined,
-                allocation ? tier.id : undefined,
-              );
-        availability[tier.id] = {
-          full: cap !== null && used >= cap,
-          remaining: cap === null ? null : Math.max(0, cap - used),
-        };
-      }
-    return { program, editions, unavailable: false, availability };
+        (e) =>
+          e.state === "open" &&
+          e.enrollment_open <= now &&
+          e.enrollment_close > now,
+      ) ??
+      editions.find((e) => e.enrollment_open > now) ??
+      editions.find((e) => e.period_open <= now && e.period_close > now) ??
+      editions[0];
+    const availability =
+      program && edition
+        ? await tierAvailability(db, mode, program, edition)
+        : {};
+    return {
+      program,
+      editions,
+      unavailable: false,
+      availability,
+      availabilityEditionId: edition?.id ?? null,
+    };
   } catch {
     return {
       program: undefined,
       editions: [] as Edition[],
       unavailable: true,
       availability: {} as TierAvailability,
+      availabilityEditionId: null,
     };
   }
 }

@@ -135,7 +135,7 @@ export const ChooseYourMembership: Story = {
     if (!args.showAllTiers) return;
     await userEvent.click(canvas.getByRole("radio", { name: "Grimm Keeper" }));
     await expect(
-      canvas.queryByText("Your mystery Grimm’s color preferences"),
+      canvas.queryByText("Make the mystery a little more you"),
     ).not.toBeInTheDocument();
     await expect(
       canvas.getByRole("button", { name: "Calculate shipping to continue" }),

@@ -10,6 +10,7 @@ These examples use the current four membership prices and actual application com
 - **Cost comparison → Keeper And ACEO Prints:** see two memberships with two shipping charges. The example $6.25 shipping on each subscription produces a $52.50 combined monthly subtotal, before tax.
 - **Signup and monthly totals:** view each membership before shipping and after a quote, plus loading, failed, expired, full, and sales-tax states. Change **Membership**, **Shipping / month ($)**, or **Shipping quote state** in Controls.
 - **Communities overview:** compare the two collection summaries and links to their separate detail pages.
+- **Spots left:** preview the count dropping from 24 to 23, the last print membership selling out, and Keeper entering the vault. The preview button changes example data only.
 - **Offer and availability:** review separate Grimm and ACEO pages with closed or open enrollment, the final Keeper place, Keeper vaulting, and full ACEO tiers. Use the **club** control to switch collections.
 - **Member account:** inspect all four memberships, holding a Grimm and ACEO subscription together, cancellation, missing delivery information, payment attention, shipment tracking, and a refund hold.
 - **Shippo labels:** select an example shipping service and see its displayed price change. Also review purchased labels, uncertain purchases, and transaction recovery. No postage is bought.
@@ -44,6 +45,8 @@ The existing local installation had a missing macOS ARM optional binding for its
 Production and live Shippo remain unchanged.
 
 ## Verification
+
+The October 26 copy and availability update adds three interactive spot-counter examples and one unknown-availability example, for **60 membership stories across eight groups**. See [membership copy and available spots](membership-copy-and-availability.md) for the polling behavior, database checks, and current validation.
 
 October 26, 2026: the page restructure adds the Communities overview and separate ACEO enrollment examples, for **56 membership stories across seven groups**. The production webpack build, static Storybook build, TypeScript, scoped ESLint, and 22 targeted billing/authorization tests pass. Browser checks verify the overview links and the two collection pages. The updated static Storybook output is `/private/tmp/moonafique-communities-storybook-20261026`, served at `http://localhost:6006`.
 

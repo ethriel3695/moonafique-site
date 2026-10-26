@@ -181,3 +181,15 @@ export const KeeperVaultedWhileEnrollmentClosed: Story = {
     },
   },
 };
+export const ACEOAvailabilityUnknown: Story = {
+  args: {
+    club: "aceo",
+    program: { ...storyProgram, enabled: false },
+    availability: {},
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getByText("24 spots")).toBeVisible();
+    await expect(canvas.queryByText(/spots left/)).not.toBeInTheDocument();
+  },
+};

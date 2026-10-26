@@ -15,7 +15,8 @@ import {
   refreshOrderLabel,
 } from "../../lib/grimmunity/shipping";
 import type { ShippingGateway, ShippingRate } from "../../lib/shippo";
-import type { Reservation } from "../../lib/grimmunity/model";
+import type { Edition, Program, Reservation } from "../../lib/grimmunity/model";
+import { tierAvailability } from "../../lib/grimmunity/capacity";
 
 const url = process.env.GRIM_TEST_DATABASE_URL;
 if (
@@ -195,6 +196,59 @@ it("lets one owner hold a Grimm and ACEO membership while preventing a second Gr
     ).rows.map((m) => m.club),
   ).toEqual(["aceo", "grimm"]);
 });
+it("counts held checkouts and paid members once per tier, and restores spots after an unpaid checkout expires", async () => {
+  const program = (
+    await pool.query<Program>("SELECT * FROM grim.program WHERE id='sandbox'")
+  ).rows[0];
+  const edition = (
+    await pool.query<Edition>(
+      "SELECT * FROM grim.editions WHERE program_id='sandbox' AND month='2026-11'",
+    )
+  ).rows[0];
+  const available = () => tierAvailability(pool, "sandbox", program, edition);
+  expect(await available()).toMatchObject({
+    grimm_keeper: { remaining: 12 },
+    aceo_prints: { remaining: 24 },
+    aceo_originals: { remaining: 12 },
+  });
+  const owner = { id: "spot_test", email: "spot-test@example.invalid" };
+  await c.checkout(owner, await input(owner.id, "aceo_prints"));
+  expect(await available()).toMatchObject({
+    grimm_keeper: { remaining: 12 },
+    aceo_prints: { full: false, remaining: 23 },
+  });
+  const r = (
+    await pool.query<Reservation>(
+      "SELECT * FROM grim.reservations WHERE tier_snapshot->>'id'='aceo_prints'",
+    )
+  ).rows[0];
+  const completed = billing.complete(r.session_id!);
+  await c.process({
+    id: "evt_spot_paid",
+    type: "invoice.paid",
+    object_id: completed.invoice.id,
+    livemode: false,
+  });
+  expect(await available()).toMatchObject({ aceo_prints: { remaining: 23 } });
+  await c.checkout(owner, await input(owner.id, "grimm_keeper"));
+  expect(await available()).toMatchObject({
+    grimm_keeper: { remaining: 11 },
+    aceo_prints: { remaining: 23 },
+  });
+  const pending = (
+    await pool.query<Reservation>(
+      "SELECT * FROM grim.reservations WHERE tier_snapshot->>'id'='grimm_keeper'",
+    )
+  ).rows[0];
+  billing.sessions.get(pending.session_id!)!.state = "expired";
+  now = new Date(pending.expires_at.getTime() + 1000);
+  await c.expireReservations();
+  expect(await available()).toMatchObject({
+    grimm_keeper: { remaining: 12 },
+    aceo_prints: { remaining: 23 },
+    grimm_starter: { remaining: null, full: false },
+  });
+});
 it("leaves Starter uncapped and requires six distinct preferred colors", async () => {
   expect(
     preferencesSchema.safeParse({
@@ -351,20 +405,86 @@ it("rechecks financial state before buying a previously quoted label", async () 
 
 it("limits simultaneous shipping quotes before contacting Shippo", async () => {
   let requests = 0;
-  const counted = { ...gateway, quote: async () => { requests++; return { shipment_id: "shipment_fixture", rates: [rate] }; } };
-  const results = await Promise.allSettled(Array.from({ length: 24 }, () => quoteMembership(c, counted, "same_owner", { tierId: "aceo_prints", address: delivery })));
+  const counted = {
+    ...gateway,
+    quote: async () => {
+      requests++;
+      return { shipment_id: "shipment_fixture", rates: [rate] };
+    },
+  };
+  const results = await Promise.allSettled(
+    Array.from({ length: 24 }, () =>
+      quoteMembership(c, counted, "same_owner", {
+        tierId: "aceo_prints",
+        address: delivery,
+      }),
+    ),
+  );
   expect(requests).toBe(20);
-  expect(results.filter(r => r.status === "fulfilled")).toHaveLength(20);
-  expect(results.filter(r => r.status === "rejected").every(r => r.status === "rejected" && r.reason.code === "shipping_rate_limited")).toBe(true);
+  expect(results.filter((r) => r.status === "fulfilled")).toHaveLength(20);
+  expect(
+    results
+      .filter((r) => r.status === "rejected")
+      .every(
+        (r) =>
+          r.status === "rejected" && r.reason.code === "shipping_rate_limited",
+      ),
+  ).toBe(true);
 });
 
 it("recovers an uncertain transaction only when its order reference and rate match", async () => {
-  const { f } = await paid(); const quoted = await quoteOrder(c, gateway, "staff", f.id);
-  const input = { id: f.id, quoteId: quoted.quoteId, rateId: rate.id, maxAmount: rate.amount };
-  await expect(buyOrderLabel(c, { ...gateway, buy: async () => { throw Error("Timeout"); } }, "staff", input)).rejects.toThrow("shipping_purchase_review");
-  const result = { id: "transaction_fixture", status: "SUCCESS", test: true, label_url: "https://example.invalid/label.pdf", tracking_number: "TRACK", tracking_url: null, reference: `order:${f.id}`, rate_id: rate.id };
-  await expect(refreshOrderLabel(c, { ...gateway, transaction: async () => ({ ...result, reference: "order:another" }) }, "staff", f.id, result.id)).rejects.toThrow("shipping_transaction_mismatch");
-  await refreshOrderLabel(c, { ...gateway, transaction: async () => result }, "staff", f.id, result.id);
-  expect((await pool.query("SELECT state FROM grim.shipping_labels")).rows[0].state).toBe("purchased");
+  const { f } = await paid();
+  const quoted = await quoteOrder(c, gateway, "staff", f.id);
+  const input = {
+    id: f.id,
+    quoteId: quoted.quoteId,
+    rateId: rate.id,
+    maxAmount: rate.amount,
+  };
+  await expect(
+    buyOrderLabel(
+      c,
+      {
+        ...gateway,
+        buy: async () => {
+          throw Error("Timeout");
+        },
+      },
+      "staff",
+      input,
+    ),
+  ).rejects.toThrow("shipping_purchase_review");
+  const result = {
+    id: "transaction_fixture",
+    status: "SUCCESS",
+    test: true,
+    label_url: "https://example.invalid/label.pdf",
+    tracking_number: "TRACK",
+    tracking_url: null,
+    reference: `order:${f.id}`,
+    rate_id: rate.id,
+  };
+  await expect(
+    refreshOrderLabel(
+      c,
+      {
+        ...gateway,
+        transaction: async () => ({ ...result, reference: "order:another" }),
+      },
+      "staff",
+      f.id,
+      result.id,
+    ),
+  ).rejects.toThrow("shipping_transaction_mismatch");
+  await refreshOrderLabel(
+    c,
+    { ...gateway, transaction: async () => result },
+    "staff",
+    f.id,
+    result.id,
+  );
+  expect(
+    (await pool.query("SELECT state FROM grim.shipping_labels")).rows[0].state,
+  ).toBe("purchased");
   expect(buys).toBe(0);
 });

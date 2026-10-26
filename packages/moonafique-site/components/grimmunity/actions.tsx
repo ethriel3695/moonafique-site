@@ -6,6 +6,7 @@ import { money, type Address } from "@/lib/grimmunity/model";
 import { membershipPage } from "@/lib/grimmunity/collections";
 import {
   monthlyAmount,
+  publicTierCopy,
   shippingLabel,
   tierLabels,
   type Tier,
@@ -13,6 +14,7 @@ import {
   type TierId,
 } from "@/lib/grimmunity/tiers";
 import { useRouter } from "next/navigation";
+import { AvailabilityBadge, useMembershipAvailability } from "./availability";
 
 export function ClubAction({
   endpoint,
@@ -114,7 +116,7 @@ export function JoinForm({
   taxAdded = false,
   fixture = false,
   children,
-  availability = {},
+  availability: initialAvailability = {},
   fixtureState,
 }: {
   children?: React.ReactNode;
@@ -129,6 +131,8 @@ export function JoinForm({
   /** Presentation data is used only when fixture=true. Never authorizes checkout. */
   fixtureState?: JoinFormFixtureState;
 }) {
+  const availability = useMembershipAvailability(initialAvailability);
+  const displayedTiers = tiers.map(publicTierCopy);
   const example = fixture ? fixtureState : undefined;
   const [selected, setSelected] = useState(
     example?.tierId && tiers.some((t) => t.id === example.tierId)
@@ -144,7 +148,8 @@ export function JoinForm({
   const [quoting, setQuoting] = useState(example?.quoting ?? false);
   const [consent, setConsent] = useState(false);
   const tier = tiers.find((t) => t.id === selected)!;
-  const full = availability[tier.id]?.full ?? false;
+  const full =
+    !!availability[tier.id]?.full || availability[tier.id]?.remaining === 0;
   const dynamicShipping = tier.shipping_mode === "shippo";
   const total = dynamicShipping
     ? (quote?.monthlyTotal ?? null)
@@ -214,12 +219,12 @@ export function JoinForm({
         <legend className="mb-4 text-sm font-bold">
           {tiers.length === 1
             ? "Your monthly membership"
-            : "Choose your membership tier"}
+            : "Choose your membership"}
         </legend>
         <div
           className={`grid gap-4 ${tiers.length === 1 ? "max-w-3xl" : "md:grid-cols-2"}`}
         >
-          {tiers.map((t) => (
+          {displayedTiers.map((t) => (
             <label
               key={t.id}
               className={`flex cursor-pointer flex-col rounded-3xl border-2 p-6 ${selected === t.id ? "border-primary bg-primary/5" : "border-border bg-card"}`}
@@ -244,14 +249,8 @@ export function JoinForm({
                 />
               </span>
               <span className="text-2xl font-bold">{t.name}</span>
-              <span className="mt-2 text-sm font-bold">
-                {availability[t.id]?.full
-                  ? t.id === "grimm_keeper"
-                    ? "Vaulted for now · all 12 memberships taken"
-                    : "All memberships taken"
-                  : t.member_cap
-                    ? `${t.member_cap} member places${availability[t.id]?.remaining !== undefined ? ` · ${availability[t.id]!.remaining} available` : ""}`
-                    : "No fixed member cap"}
+              <span className="mt-3">
+                <AvailabilityBadge tier={t} availability={availability} />
               </span>
               <span className="mt-3 text-sm leading-6">{t.description}</span>
               <span className="my-5 text-3xl font-bold">
@@ -281,11 +280,11 @@ export function JoinForm({
       {tier.id === "grimm_starter" && (
         <fieldset disabled={pending} className="rounded-3xl border bg-card p-6">
           <legend className="px-2 text-lg font-bold">
-            Your mystery Grimm’s color preferences
+            Make the mystery a little more you
           </legend>
           <p className="mb-4 text-sm leading-6">
-            Choose six different colors you enjoy. We use these as a guide; the
-            monthly design and finish remain a surprise.
+            Pick six colors you love and tell us any you’d rather skip. We’ll
+            take it from there—the monthly design is part of the surprise.
           </p>
           <div className="grid gap-3 sm:grid-cols-3">
             {Array.from({ length: 6 }, (_, n) => (
@@ -497,7 +496,7 @@ export function JoinForm({
             {full
               ? tier.id === "grimm_keeper"
                 ? "Vaulted for now"
-                : "All memberships taken"
+                : "Sold out"
               : shippingPending
                 ? dynamicShipping
                   ? "Calculate shipping to continue"
@@ -511,8 +510,8 @@ export function JoinForm({
                       : `Join ${tier.name}`}
           </Button>
           <p className="text-xs leading-5 text-muted-foreground">
-            Sign in to continue. Payment and delivery details are collected
-            securely by Stripe. Quantity: one membership.
+            Sign in to join. Pay securely with Stripe, then manage your
+            membership in your account.
           </p>
           {error && (
             <p role="alert" className="text-sm font-semibold text-red-800">

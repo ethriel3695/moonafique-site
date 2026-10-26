@@ -71,9 +71,9 @@ export function GrimmunityInterestEmail({ test = false }: { test?: boolean }) {
             can choose a monthly Grimm or ACEO membership.
           </Text>
           <Text style={paragraph}>
-            Choose a mystery Grimm Starter for $15, a subscription-exclusive
-            Grimm Keeper for $30, two physical ACEO prints for $10, or one
-            original ACEO for $20 each month. Shipping is additional.
+            Choose a mystery Grimm Starter for $15, an exclusive painted Grimm
+            Keeper for $30, two ACEO prints for $10, or one original ACEO for
+            $20 each month. Shipping is additional.
           </Text>
           <Text
             style={{

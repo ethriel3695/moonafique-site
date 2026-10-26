@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 export const metadata = {
   title: "ACEO memberships | Moonafique",
   description:
-    "Collect tiny artworks each month. Two physical ACEO prints for $10 or one original ACEO for $20 per month, plus shipping.",
+    "Make room for happy mail. Collect two ACEO prints for $10 a month or a new original artwork for $20. Find your next tiny treasure, plus shipping.",
 };
 
 export default async function ACEOsPage() {

@@ -1,7 +1,8 @@
 import { publicOffer } from "./queries";
 
 export async function publicOfferProps() {
-  const { program, editions, availability } = await publicOffer();
+  const { program, editions, availability, availabilityEditionId } =
+    await publicOffer();
   const now = new Date();
   // Both collection pages require the deployment-level live billing approval.
   const displayedProgram =
@@ -11,6 +12,7 @@ export async function publicOfferProps() {
   return {
     program: displayedProgram,
     availability,
+    availabilityEditionId,
     interestEnabled: process.env.GRIM_INTEREST_ENABLED === "true",
     edition: editions.find(
       (edition) =>
