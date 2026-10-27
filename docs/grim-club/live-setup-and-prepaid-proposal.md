@@ -1,4 +1,4 @@
-# Live billing setup and prepaid proposal
+# Live billing setup and prepaid pricing
 
 Updated October 26, 2026. The owner authorized connecting Shippo and preparing the four live Stripe memberships, while keeping checkout closed until testing is complete.
 
@@ -25,9 +25,9 @@ The owner wants shipping recalculated from carrier rates each month, charged aut
 
 The replacement must keep the membership amount and each month’s shipping distinct, show tax and the charge date, preserve historical invoices, handle quote/email failures without an undisclosed automatic charge, and show the same figures in the member account. Address or price changes after notice require a new reviewed notice before collecting a changed total. Initial signup consent is separate from subsequent renewal notices.
 
-## Prepaid proposal awaiting owner approval
+## Approved prepaid prices
 
-The owner clarified twelve months, not twelve years, and requested discount suggestions for review. Proposed discounts are 5% for six months and 10% for twelve months, paid upfront, on membership only. Shipping remains a separate monthly charge.
+The owner clarified twelve months, not twelve years, and approved 5% off six months and 10% off twelve months on October 26. Members pay the membership amount upfront. Shipping remains a separate monthly charge and receives no discount.
 
 | Membership | Six months at 5% off | Twelve months at 10% off |
 | --- | --- | --- |
@@ -36,7 +36,7 @@ The owner clarified twelve months, not twelve years, and requested discount sugg
 | ACEO Prints | $57.00 | $108.00 |
 | ACEO Originals | $114.00 | $216.00 |
 
-All values exclude shipping and applicable tax. These discounts are not approved or provisioned. Storybook’s **Memberships → Billing options proposal** provides interactive examples, including shipping-only charges during the remaining prepaid months.
+All values exclude shipping and applicable tax. The owner has approved these discounts. Catalog preparation adds two recurring Prices per membership to the existing inactive products. It does not enable prepaid checkout. Storybook’s **Memberships → Billing options proposal** provides interactive examples, including shipping-only charges during the remaining prepaid months.
 
 Review [the annual Keeper example](screenshots/prepaid-billing-proposal-20261026.jpg), or open [the interactive Storybook proposal](http://localhost:6006/?path=/story/memberships-billing-options-proposal--annual-keeper). The static Storybook build, TypeScript, and scoped ESLint checks pass. This verification covers the proposal display, not a working prepaid billing flow.
 
@@ -44,6 +44,6 @@ Review [the annual Keeper example](screenshots/prepaid-billing-proposal-20261026
 
 ## Pending account access
 
-Shippo is signed out in the browser. The owner was asked to sign in or confirm that a live API key is already stored in Vercel Production. No live key has been connected or extracted. The integration must remain disconnected until that handoff is complete. Never request credentials in chat.
+The owner signed in to Shippo. Its API settings show no live token and offer a **Request Live Token** button. Automatic approval review blocked clicking that button because it may submit an external request or initiate commercial contact. The owner was asked to authorize that request or complete it themselves. No live key has been connected or extracted. Never request credentials in chat.
 
-Do not activate products, enable the program, set live enrollment approval, send customer renewal notices, or purchase postage as part of preparing this proposal.
+Do not activate products, enable the program, set live enrollment approval, send customer renewal notices, or purchase postage during setup and testing.

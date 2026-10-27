@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { billingOptionSchema, membershipBilling } from "./billing-options";
 
 export const tierIds = [
   "entry",
@@ -35,12 +36,31 @@ export const tierSchema = z
     // Missing means a historical bundled price. Null means shipping billing is
     // not configured and checkout must remain closed. A value recurs monthly.
     shipping: shippingSchema.nullable().optional(),
+    // Catalog only until the prepaid billing flow passes verification.
+    billing_options: z.array(billingOptionSchema).length(3).optional(),
   })
   .strict()
   .refine(
     (tier) =>
       !tier.benefits_confirmed || tier.id === "entry" || tier.perks.length > 0,
     "Confirmed memberships must describe their included benefits.",
+  )
+  .refine(
+    (tier) =>
+      !tier.billing_options ||
+      (new Set(tier.billing_options.map((option) => option.months)).size ===
+        3 &&
+        new Set(tier.billing_options.map((option) => option.price_id)).size ===
+          3 &&
+        tier.billing_options.every((option) => {
+          const plan = membershipBilling(tier.amount, option.months);
+          return (
+            option.amount === plan.amount &&
+            option.discount === plan.discount &&
+            (option.months !== 1 || option.price_id === tier.price_id)
+          );
+        })),
+    "Billing options must match the approved membership-only discounts.",
   );
 export type Tier = z.infer<typeof tierSchema>;
 export type TierId = Tier["id"];

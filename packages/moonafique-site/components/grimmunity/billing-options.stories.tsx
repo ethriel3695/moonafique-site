@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { membershipTiers } from "@/lib/grimmunity/tiers";
 import { money } from "@/lib/grimmunity/model";
+import { membershipBilling } from "@/lib/grimmunity/billing-options";
 import { StoryFrame, type StoryTierId } from "./story-fixtures";
 
 type Args = {
@@ -16,16 +17,18 @@ function BillingProposal({
   nextShipping,
 }: Args) {
   const tier = membershipTiers.find((item) => item.id === membership)!;
-  const discount = months === 12 ? 10 : months === 6 ? 5 : 0;
-  const base = tier.amount * months;
-  const membershipDue = Math.round((base * (100 - discount)) / 100);
+  const {
+    discount,
+    amount: membershipDue,
+    savings,
+  } = membershipBilling(tier.amount, months);
   const firstPostage = Math.round(firstShipping * 100);
   const nextPostage = Math.round(nextShipping * 100);
   const price = (amount: number) => money({ amount, currency: "usd" });
   return (
     <section className="mx-auto max-w-3xl rounded-[2rem] border bg-card p-6 sm:p-9">
       <p className="text-xs font-bold uppercase tracking-widest text-primary">
-        Pricing proposal · not available for purchase
+        Approved pricing · checkout closed
       </p>
       <h1 className="mt-4 text-4xl">{tier.name}</h1>
       <p className="mt-4 leading-7">
@@ -48,7 +51,7 @@ function BillingProposal({
         {discount > 0 && (
           <div className="flex justify-between gap-4 py-3 text-primary">
             <dt>Membership savings ({discount}%)</dt>
-            <dd>{price(base - membershipDue)}</dd>
+            <dd>{price(savings)}</dd>
           </div>
         )}
         <div className="flex justify-between gap-4 py-3">
@@ -85,9 +88,9 @@ function BillingProposal({
         </p>
       </div>
       <p className="mt-5 text-sm leading-6 text-muted-foreground">
-        The proposed discount applies to membership only. Shipping is additional
-        for every monthly delivery. Prepaid renewal, cancellation, and
-        fulfillment handling must pass testing before this option can open.
+        The discount applies to membership only. Shipping is additional for
+        every monthly delivery. Prepaid renewal, cancellation, and fulfillment
+        handling must pass testing before this option can open.
       </p>
     </section>
   );
@@ -98,7 +101,7 @@ const meta = {
   parameters: { layout: "fullscreen" },
   decorators: [
     (Story) => (
-      <StoryFrame note="The 5% six-month and 10% annual discounts are proposed for owner review. No prepaid Stripe prices or checkout options have been activated.">
+      <StoryFrame note="The owner approved 5% off six months and 10% off twelve months. Checkout stays closed while prepaid billing and monthly shipping notices are tested.">
         <Story />
       </StoryFrame>
     ),

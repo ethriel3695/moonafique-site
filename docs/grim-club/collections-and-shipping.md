@@ -4,7 +4,7 @@ Updated October 25, 2026. This document records the offer agreed during the busi
 
 **Current state, October 26:** the collection pages and updated membership copy are live. The approved recovery snapshot and migrations 009/010 are complete. Four live monthly Stripe Prices now exist with inactive membership products and a disabled program. Paid enrollment remains closed; live Shippo remains disconnected. No customer subscriptions, charges, or shipping labels were created. See [the deployment record](deployment-20261026.md) and [the latest setup record](live-setup-and-prepaid-proposal.md).
 
-The owner approved recalculating shipping monthly with seven days’ itemized notice before automatic payment. The deployed billing flow still repeats the initial shipping quote, so it must remain closed until the replacement passes testing. Six-month and annual discounts are proposed for review, not approved or created.
+The owner approved recalculating shipping monthly with seven days’ itemized notice before automatic payment. The deployed billing flow still repeats the initial shipping quote, so it must remain closed until the replacement passes testing. The owner approved 5% off six months and 10% off twelve months, on membership only, paid upfront. Prepaid checkout remains closed during implementation and testing.
 
 ## Collection pages
 

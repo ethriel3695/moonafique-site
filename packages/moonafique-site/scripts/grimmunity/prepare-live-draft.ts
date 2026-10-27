@@ -1,9 +1,8 @@
 import type { Pool } from "pg";
-import type Stripe from "stripe";
 import { one, transaction } from "../../lib/grimmunity/db";
 import { saveEdition } from "../../lib/grimmunity/editions";
 import { Grimmunity } from "../../lib/grimmunity/service";
-import { membershipTiers, type Tier } from "../../lib/grimmunity/tiers";
+import { prepareMembershipPrices } from "./prepare-membership-prices";
 import { grimStripe, StripeGateway } from "../../lib/grimmunity/stripe-gateway";
 import type { Program } from "../../lib/grimmunity/model";
 
@@ -32,82 +31,19 @@ export async function prepareLiveDraft(pool: Pool) {
     ))
   )
     throw Error("Refusing to replace an approved or used live program");
-  const tiers: Tier[] = [];
-  for (const offer of membershipTiers) {
-    const productId = `prod_moonafique_live_${offer.id}_v2`;
-    let product: Stripe.Product;
-    try {
-      product = await stripe.products.retrieve(productId);
-    } catch (error) {
-      if (
-        !(error instanceof Error) ||
-        (error as { code?: string }).code !== "resource_missing"
-      )
-        throw error;
-      product = await stripe.products.create(
-        {
-          id: productId,
-          name: offer.name,
-          description: offer.description,
-          active: false,
-          metadata: {
-            grim_subscription: "true",
-            grim_program: "live",
-            moonafique_offer: "collections-v2",
-            tier: offer.id,
-          },
-        },
-        { idempotencyKey: `moonafique:collections-v2:product:${offer.id}` },
-      );
-    }
-    if (
-      !product.livemode ||
-      product.active ||
-      product.metadata.moonafique_offer !== "collections-v2"
-    )
-      throw Error("Expected an inactive live draft product");
-    const lookupKey = `moonafique_live_${offer.id}_${offer.amount}_monthly_v2`;
-    const found = await stripe.prices.list({
-      product: product.id,
-      lookup_keys: [lookupKey],
-      active: true,
-      limit: 1,
-    });
-    const price =
-      found.data[0] ??
-      (await stripe.prices.create(
-        {
-          product: product.id,
-          unit_amount: offer.amount,
-          currency: "usd",
-          tax_behavior: "exclusive",
-          recurring: { interval: "month" },
-          lookup_key: lookupKey,
-          metadata: { grim_subscription: "true", tier: offer.id },
-        },
-        {
-          idempotencyKey: `moonafique:collections-v2:price:${offer.id}:${offer.amount}`,
-        },
-      ));
-    if (
-      !price.livemode ||
-      price.unit_amount !== offer.amount ||
-      price.currency !== "usd" ||
-      price.tax_behavior !== "exclusive" ||
-      price.recurring?.interval !== "month" ||
-      price.recurring.interval_count !== 1 ||
-      price.product !== product.id
-    )
-      throw Error("Draft membership price mismatch");
-    tiers.push({ ...offer, price_id: price.id, product_id: product.id });
-  }
+  const tiers = await prepareMembershipPrices(stripe);
   const portal =
     prior?.portal_configuration_id ?? "bpc_1UU7A8DuU4RwQbePVn4QPqJ9";
   await transaction(pool, async (db) => {
     await db.query(
       "SELECT pg_advisory_xact_lock(hashtext('grim:configuration'))",
     );
-    await one(db, "SELECT id FROM grim.program WHERE id='live' FOR UPDATE");
+    const locked = await one<Program>(
+      db,
+      "SELECT * FROM grim.program WHERE id='live' FOR UPDATE",
+    );
+    if (locked?.enabled || locked?.approved_at)
+      throw Error("Program was approved during setup");
     if (
       await one(
         db,
@@ -182,6 +118,16 @@ export async function prepareLiveDraft(pool: Pool) {
     });
   }
   console.log(
-    "Four live draft memberships prepared: Grimm $15/$30 and ACEO $10/$20, plus destination-rated shipping. Products inactive; enrollment closed.",
+    "Four live draft memberships prepared with monthly, six-month (5% off), and annual (10% off) Prices. Shipping remains separate. Products inactive; enrollment closed.",
+  );
+  console.log(
+    JSON.stringify({
+      membership_prices: tiers.map((tier) => ({
+        tier: tier.id,
+        options: tier.billing_options,
+      })),
+      enabled: p.enabled,
+      approved: !!p.approved_at,
+    }),
   );
 }
