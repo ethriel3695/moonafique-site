@@ -1,8 +1,9 @@
-import { afterAll, beforeAll, expect, it } from "vitest";
+import { afterAll, beforeAll, expect, it, vi } from "vitest";
 import { Pool } from "pg";
 import { migrate } from "../../lib/grimmunity/migrations";
 import { runWorker, workerAuthorized } from "../../lib/grimmunity/worker";
 import type { Grimmunity } from "../../lib/grimmunity/service";
+import * as outbox from "../../lib/grimmunity/outbox";
 
 const url = new URL(process.env.GRIM_TEST_DATABASE_URL ?? "http://invalid");
 if (!["127.0.0.1", "localhost"].includes(url.hostname) || url.pathname !== "/grim_test") throw new Error("Use a local grim_test database.");
@@ -32,4 +33,34 @@ it("leaves an interest-only deployment independent of billing", async () => {
   expect(await runWorker(pool, "live", {} as Grimmunity, async () => [])).toEqual({ skipped: "billing_not_configured" });
   // Early return must release the transaction lease so the next run is possible.
   expect(await runWorker(pool, "live", {} as Grimmunity, async () => [])).toEqual({ skipped: "billing_not_configured" });
+});
+it("delivers queued notices and reserves time for new ones when reconciliation exhausts its budget", async () => {
+  let time = 0;
+  const order: string[] = [];
+  vi.spyOn(Date, "now").mockImplementation(() => time);
+  vi.stubEnv("GRIM_SEND_EMAILS", "approved");
+  vi.stubEnv("GRIM_SEND_INTEREST_EMAILS", "disabled");
+  const send = vi.spyOn(outbox, "drainOutbox").mockImplementation(async (_pool, _mode, _send, options) => {
+    order.push("notice");
+    expect(options?.deadline).toBeGreaterThan(time);
+    return { sent: 1 };
+  });
+  const query = async (sql: string) => ({ rows:
+    sql.includes("pg_try_advisory") ? [{ locked: true }] :
+    sql.includes("SELECT id FROM grim.program") ? [{ id: "sandbox" }] :
+    sql.includes("SELECT * FROM grim.memberships") ? [{ id: "member", owner_id: "owner", customer_id: "customer", tier_snapshot: {} }] : [],
+  });
+  const fakePool = { query, connect: async () => ({ query, release() {} }) } as unknown as Pool;
+  const service = {
+    expireReservations: async () => {},
+    refreshMember: async () => { order.push("reconcile"); time = 33_000; },
+  } as unknown as Grimmunity;
+  try {
+    await runWorker(fakePool, "sandbox", service, async () => { throw Error("No time for more provider calls"); }, 40_000);
+    expect(order).toEqual(["notice", "reconcile", "notice"]);
+    expect(send).toHaveBeenCalledTimes(2);
+  } finally {
+    vi.restoreAllMocks();
+    vi.unstubAllEnvs();
+  }
 });

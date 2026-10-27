@@ -61,7 +61,7 @@ const input = z.discriminatedUnion("action", [
     .strict(),
 ]);
 export const runtime = "nodejs";
-export const maxDuration = 120;
+export const maxDuration = 60;
 export async function POST(request: Request) {
   return jsonAction(request, true, async (user) => {
     const v = input.parse(await request.json());

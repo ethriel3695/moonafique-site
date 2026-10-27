@@ -6,13 +6,13 @@ import { runWorker, workerAuthorized } from "@/lib/grimmunity/worker";
 import { deliverCustomEmails } from "@/lib/customs/mail";
 
 export const runtime = "nodejs";
-export const maxDuration = 300;
+export const maxDuration = 60;
 async function run() {
   // Custom requests still receive backup delivery when membership billing is disabled.
   try {
     await deliverCustomEmails(database(), grimMode(), {
-      limit: 4,
-      deadline: Date.now() + 10_000,
+      limit: 2,
+      deadline: Date.now() + 5_000,
     });
   } catch {
     console.error("Custom request email backup needs attention.");
@@ -29,7 +29,7 @@ async function run() {
       (
         await stripe.invoices.list({ customer, status: "paid", limit: 2 })
       ).data.map((invoice) => invoice.id),
-    240_000,
+    40_000,
   );
 }
 export async function GET(request: Request) {

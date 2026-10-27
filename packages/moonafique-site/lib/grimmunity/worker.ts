@@ -26,6 +26,8 @@ export async function runWorker(
   budgetMs = 35_000,
 ) {
   const deadline = Date.now() + budgetMs;
+  // Preserve notice throughput when reconciliation consumes the daily run.
+  const workDeadline = deadline - Math.min(8_000, budgetMs / 4);
   const lease = await pool.connect();
   const lockKey = `grim:worker:${mode}`;
   const result = {
@@ -52,11 +54,21 @@ export async function runWorker(
       "INSERT INTO grim.worker_status(mode,started_at) VALUES($1,now()) ON CONFLICT(mode) DO UPDATE SET started_at=now(),finished_at=NULL,result=NULL",
       [mode],
     );
-    if (Date.now() < deadline) {
+    if (result.emailDeliveryEnabled && Date.now() < workDeadline) {
+      try {
+        await drainOutbox(pool, mode, true, {
+          limit: 100,
+          deadline: Math.min(workDeadline, Date.now() + 8_000),
+        });
+      } catch {
+        result.failures++;
+      }
+    }
+    if (Date.now() < workDeadline) {
       try {
         const delivery = await deliverInterestConfirmations(pool, mode, {
           limit: 5,
-          deadline,
+          deadline: workDeadline,
         });
         result.failures += delivery.failures ?? 0;
       } catch {
@@ -70,7 +82,7 @@ export async function runWorker(
       )
     ).rows;
     for (const event of events) {
-      if (Date.now() >= deadline) break;
+      if (Date.now() >= workDeadline) break;
       try {
         await service.process({ ...event, livemode: mode === "live" });
         result.events++;
@@ -78,9 +90,9 @@ export async function runWorker(
         result.failures++;
       }
     }
-    if (Date.now() < deadline) {
+    if (Date.now() < workDeadline) {
       try {
-        await service.expireReservations(3, deadline);
+        await service.expireReservations(3, workDeadline);
       } catch {
         result.failures++;
       }
@@ -93,22 +105,22 @@ export async function runWorker(
       )
     ).rows;
     for (const member of members) {
-      if (Date.now() >= deadline) break;
+      if (Date.now() >= workDeadline) break;
       try {
         await service.refreshMember(member.owner_id, member.id);
-        if (member.tier_snapshot.billing && Date.now() < deadline)
+        if (member.tier_snapshot.billing && Date.now() < workDeadline)
           await runManagedMember(
             service,
             shippoConfigured(mode) ? shippoGateway(mode) : null,
             member,
             process.env.GRIM_MANAGED_COLLECTION === "approved",
-            deadline,
+            workDeadline,
           );
-        for (const id of (await recentPaidInvoices(member.customer_id!)).slice(
+        for (const id of (Date.now() < workDeadline ? await recentPaidInvoices(member.customer_id!) : []).slice(
           0,
           2,
         )) {
-          if (Date.now() >= deadline) break;
+          if (Date.now() >= workDeadline) break;
           await service.reconcileInvoice(id);
         }
         result.members++;

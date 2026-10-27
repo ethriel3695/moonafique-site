@@ -37,13 +37,13 @@ Staff can reissue a notice for an unchanged invoice after reviewing delivery or 
 - Keep `GRIM_LIVE_ENROLLMENT=disabled`, `GRIM_MANAGED_COLLECTION=disabled`, and `GRIM_SEND_EMAILS=disabled` in Production. Products stay inactive; the program stays disabled and unapproved.
 - Resend endpoint: `/api/grimmunity/notice-delivery`, listening for delivered, bounced, complained, failed, and suppressed events. `GRIM_RESEND_WEBHOOK_SECRET` is server-only and stored as a sensitive Vercel Production variable. Never record its value in source, screenshots, logs, or chat.
 - The existing Resend API key is restricted to sending. The webhook was created through the signed-in Moonafique dashboard and must be enabled after its receiver is deployed. Receipts are scoped to a tagged outbox message and billing mode.
-- The daily worker has a four-minute work budget within a five-minute function limit. It rotates attempted members, drains up to 100 messages, and throttles sends. Missed work delays payment or requires another notice; it never permits an undisclosed charge. Availability refreshes also reconcile expired unpaid first invoices.
+- The daily worker uses a forty-second billing budget within this project's sixty-second function limit, plus a bounded custom-request email backup. It rotates attempted members, sends queued notices before reconciliation, reserves time for newly queued notices, and throttles sends. Missed work delays payment or requires another notice; it never permits an undisclosed charge. Availability refreshes also reconcile expired unpaid first invoices. Test full-capacity throughput before launch; staff can run additional passes from the admin page. A larger membership base may require a more frequent scheduler or a hosting change.
 
 Live Shippo access, current editions, active products, approved email and collection flags, program approval, and the separate enrollment switch are required before launch. Preparing this implementation opens none of them.
 
 ## Verification
 
-All **191 regression tests** pass. TypeScript, scoped ESLint, the isolated production build, and the static Storybook build also pass. Public bundles contain no actual workspace credentials or return street address.
+All **192 regression tests** pass. TypeScript, scoped ESLint, the isolated production build, and the static Storybook build also pass. Public bundles contain no actual workspace credentials or return street address.
 
 Automated checks include all twelve prepaid deliveries, annual and monthly renewal, late and bounced notices, quote recovery, changed addresses and amounts, duplicate requests, uncertain payments, cancellation, refunds, signature verification, staff review, replacements, and late-edition holds.
 
