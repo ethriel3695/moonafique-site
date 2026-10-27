@@ -2,7 +2,9 @@
 
 Updated October 25, 2026. This document records the offer agreed during the business meeting and the new implementation. The former $25 Collector membership and $9.21 flat shipping fee are historical.
 
-**Current state, October 26: the collection pages and updated membership copy are live. The owner approved a recovery snapshot and migrations 009/010. Paid enrollment remains closed; live Shippo remains disconnected. No live Stripe products, prices, or charges were created. See [the deployment record](deployment-20261026.md).**
+**Current state, October 26:** the collection pages and updated membership copy are live. The approved recovery snapshot and migrations 009/010 are complete. Four live monthly Stripe Prices now exist with inactive membership products and a disabled program. Paid enrollment remains closed; live Shippo remains disconnected. No customer subscriptions, charges, or shipping labels were created. See [the deployment record](deployment-20261026.md) and [the latest setup record](live-setup-and-prepaid-proposal.md).
+
+The owner approved recalculating shipping monthly with seven days’ itemized notice before automatic payment. The deployed billing flow still repeats the initial shipping quote, so it must remain closed until the replacement passes testing. Six-month and annual discounts are proposed for review, not approved or created.
 
 ## Collection pages
 
@@ -99,4 +101,4 @@ Automated checks cover concurrent tier caps, multiple membership families, quote
 
 The retained local preview is `http://127.0.0.1:3049/grimmunity`; the interactive fixture form is `/grimmunity/review?screen=join`. It runs from the isolated review copy at `/private/tmp/moonafique-collections-deploy-20261025`. That copy uses the previous approved deployment source plus the scoped membership changes, so unrelated working-tree drafts are excluded. No real credentials were copied into it.
 
-Future launch work requires a live Shippo key in Vercel Production, production deployment authorization, application of migrations 009 and 010, the four reviewed live Stripe products and Prices, current editions, and a separate paid-enrollment decision. Do not treat the successful sandbox checkout as approval to charge customers.
+Remaining launch work requires a live Shippo key in Vercel Production, tested variable monthly shipping and notice handling, approved billing terms, current editions, activation of the reviewed Stripe products, and a separate paid-enrollment decision. Prepaid plans also require owner approval and tested prepaid billing and fulfillment. Do not treat the successful sandbox checkout as approval to charge customers.

@@ -11,6 +11,7 @@ These examples use the current four membership prices and actual application com
 - **Signup and monthly totals:** view each membership before shipping and after a quote, plus loading, failed, expired, full, and sales-tax states. Change **Membership**, **Shipping / month ($)**, or **Shipping quote state** in Controls.
 - **Communities overview:** compare the two collection summaries and links to their separate detail pages.
 - **Spots left:** preview the count dropping from 24 to 23, the last print membership selling out, and Keeper entering the vault. The preview button changes example data only.
+- **Billing options proposal:** compare proposed monthly, six-month, and annual membership charges with separately itemized monthly shipping. The 5%/10% discounts await owner approval and are not connected to checkout.
 - **Offer and availability:** review separate Grimm and ACEO pages with closed or open enrollment, the final Keeper place, Keeper vaulting, and full ACEO tiers. Use the **club** control to switch collections.
 - **Member account:** inspect all four memberships, holding a Grimm and ACEO subscription together, cancellation, missing delivery information, payment attention, shipment tracking, and a refund hold.
 - **Shippo labels:** select an example shipping service and see its displayed price change. Also review purchased labels, uncertain purchases, and transaction recovery. No postage is bought.
@@ -45,6 +46,8 @@ The existing local installation had a missing macOS ARM optional binding for its
 The owner subsequently approved [production deployment](deployment-20261026.md) of the collection pages and copy. Storybook remains local. Paid enrollment and live Shippo remain closed.
 
 ## Verification
+
+The prepaid proposal adds five examples, for **65 membership stories across nine groups**. TypeScript, scoped ESLint, and the static Storybook build pass. Browser review confirms the annual Keeper example: $324 prepaid membership plus $6.25 illustrative first-month shipping, followed by $6.95 illustrative shipping only the next month. These examples do not implement or activate prepaid billing.
 
 The October 26 copy and availability update adds three interactive spot-counter examples and one unknown-availability example, for **60 membership stories across eight groups**. See [membership copy and available spots](membership-copy-and-availability.md) for the polling behavior, database checks, and current validation.
 

@@ -2,6 +2,8 @@
 
 Updated October 26, 2026. The approved two Grimm tiers and two ACEO tiers are now described on separate production pages, with shipping charged separately when billing opens. The owner approved the [production deployment and migrations](deployment-20261026.md). Paid enrollment remains closed and live Shippo remains disconnected. See [the current offer and Shippo setup](collections-and-shipping.md) and [the operating guide](operations.md).
 
+The four live monthly Stripe prices are now prepared with inactive products. The owner also approved a seven-day itemized notice before automatic payment of recalculated monthly shipping, and requested a six-month/annual discount proposal. That replacement billing workflow is not yet implemented. See [closed live setup and prepaid proposal](live-setup-and-prepaid-proposal.md) before any launch work.
+
 | Membership | Monthly price before shipping | Member limit | Included each month |
 | --- | --- | --- | --- |
 | Grimm Starter | $15 | No fixed cap | Mystery gradient or dual-extrusion Grimm; a different ear option; all six emotion faces; two pairs of pants; two boots; two matching pets |
