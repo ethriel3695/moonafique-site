@@ -42,9 +42,13 @@ Review [the annual Keeper example](screenshots/prepaid-billing-proposal-20261026
 
 [Stripe supports mixed billing intervals with flexible billing](https://docs.stripe.com/billing/subscriptions/mixed-interval?dashboard-or-api=api), including monthly shipping alongside six-month or yearly membership charges. Its current documentation says mixed-interval subscriptions cannot be created through Checkout Sessions. The current app also validates monthly periods and one paid monthly edition per invoice. It therefore needs checkout, invoice validation, prepaid entitlement, cancellation, and refund changes—not just extra Stripe Prices. Previously prepaid deliveries must remain accounted for when renewal is canceled or shipping payment fails.
 
-## Pending account access
+## Shippo live access requested
 
-The owner signed in to Shippo. Its API settings show no live token and offer a **Request Live Token** button. Automatic approval review blocked clicking that button because it may submit an external request or initiate commercial contact. The owner was asked to authorize that request or complete it themselves. No live key has been connected or extracted. Never request credentials in chat.
+The owner signed in to Shippo. Its API settings showed no live token and offered a **Request Live Token** button. Automatic approval review initially blocked that button because it might initiate external contact. The owner then explicitly authorized requesting the live token.
+
+The request was submitted on October 26 through Shippo’s API-key request form, using the saved account name Reuben Ellis, login email `hello@moonafique.com`, company Moonafique, and website `https://www.moonafique.com`. Shippo displayed **We got your request!** and said a confirmation would arrive by email, with an update expected within three business hours. No paid plan or contract was required by the form. See [the submission confirmation](screenshots/shippo-live-token-requested-20261026.jpg).
+
+This is a submitted access request, not a connected live integration. No live key has been issued through this workflow, connected, or extracted. Wait for Shippo’s response before configuring the server-side credential. Never request credentials in chat.
 
 Do not activate products, enable the program, set live enrollment approval, send customer renewal notices, or purchase postage during setup and testing.
 
@@ -67,4 +71,4 @@ A disposable Stripe sandbox test clock also verified an annual membership with a
 
 The probe confirmed that Stripe does not allow changing the price or amount of an existing subscription invoice line. The replacement must add a separately quoted shipping invoice item instead. It must keep renewal drafts and finalized invoices from automatic advancement until the delivered notice has aged seven days. Missing quotes, failed notices, changed addresses, or mismatched totals must block collection. Initial payment consent, cancellation across prepaid coverage, refunds/disputes, and remaining monthly deliveries still need integrated implementation and testing.
 
-Shippo access remains pending: [live token required](screenshots/shippo-live-token-required-20261026.jpg). The signed-in account has no live API token; the owner has been asked to authorize the external live-token request.
+Shippo access remains pending provider approval. The authorized live-token request has been submitted; [Shippo confirmed receipt](screenshots/shippo-live-token-requested-20261026.jpg). Checkout remains closed.
