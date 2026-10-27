@@ -34,6 +34,11 @@ export type ExceptionView = {
   resolved_at: Date | null;
 };
 export type AccountView = {
+  billingCycles?: (import("./renewals").BillingCycle & {
+    notice_delivered_at: Date | null;
+    notice_failed_at: Date | null;
+  })[];
+  coverage?: import("./renewals").Coverage[];
   memberships?: Membership[];
   membership: Membership | undefined;
   orders: OrderView[];
@@ -63,6 +68,15 @@ export async function publicOffer() {
       )
     ).rows;
     const now = new Date();
+    if (
+      program?.enabled &&
+      program.billing_policy === "notice_shipping_v1" &&
+      process.env.GRIM_STRIPE_SECRET_KEY
+    ) {
+      const { expireInitialPayments } = await import("./renewals");
+      const { club } = await import("./runtime");
+      await expireInitialPayments(club(), 1);
+    }
     const edition =
       editions.find(
         (e) =>
@@ -110,6 +124,18 @@ export async function accountView(owner: string): Promise<AccountView> {
   return {
     membership,
     memberships,
+    billingCycles: (
+      await db.query(
+        `SELECT b.*,o.delivered_at AS notice_delivered_at,o.delivery_failed_at AS notice_failed_at FROM grim.billing_cycles b JOIN grim.memberships m ON m.id=b.membership_id LEFT JOIN grim.outbox o ON o.id=b.notice_id WHERE m.owner_id=$1 AND m.program_id=$2 ORDER BY b.period_start DESC LIMIT 24`,
+        [owner, grimMode()],
+      )
+    ).rows,
+    coverage: (
+      await db.query(
+        `SELECT p.* FROM grim.prepaid_periods p JOIN grim.memberships m ON m.id=p.membership_id WHERE m.owner_id=$1 AND m.program_id=$2 ORDER BY p.period_start DESC`,
+        [owner, grimMode()],
+      )
+    ).rows,
     orders: (
       await db.query<OrderView>(
         `${ordersSQL} WHERE m.program_id=$1 AND m.owner_id=$2 ORDER BY e.month DESC,m.created_at`,
@@ -146,6 +172,17 @@ export async function adminView(month?: string) {
     editions.filter((e) => e.period_open > new Date()).at(-1) ??
     editions[0];
   return {
+    billingCycles: (
+      await db.query(
+        `SELECT b.*,m.email,m.tier_snapshot->>'name' AS membership_name,o.delivered_at AS notice_delivered_at,o.delivery_failed_at AS notice_failed_at FROM grim.billing_cycles b JOIN grim.memberships m ON m.id=b.membership_id LEFT JOIN grim.outbox o ON o.id=b.notice_id WHERE m.program_id=$1 AND b.state NOT IN ('paid','canceled') ORDER BY b.period_start LIMIT 100`,
+        [mode],
+      )
+    ).rows as (import("./renewals").BillingCycle & {
+      email: string;
+      membership_name: string;
+      notice_delivered_at: Date | null;
+      notice_failed_at: Date | null;
+    })[],
     program,
     editions,
     edition,

@@ -10,7 +10,7 @@ import {
 import { ClubAction, EditionForm } from "@/components/grimmunity/actions";
 import { assertStaff } from "@/lib/grimmunity/http";
 import { adminView } from "@/lib/grimmunity/queries";
-import { dateLabel } from "@/lib/grimmunity/model";
+import { dateLabel, money } from "@/lib/grimmunity/model";
 import { Button } from "@/components/ui/button";
 import { shippoConfigured } from "@/lib/shippo";
 import { grimMode } from "@/lib/grimmunity/runtime";
@@ -59,7 +59,11 @@ export default async function AdminPage({
         label for each ready order, then mark it dispatched after shipping.
       </p>
       <div className="my-7 flex flex-wrap gap-3">
-        <Status>{shippoConfigured(grimMode()) ? "Shippo connected" : "Shippo API key needed"}</Status>
+        <Status>
+          {shippoConfigured(grimMode())
+            ? "Shippo connected"
+            : "Shippo API key needed"}
+        </Status>
         <Status>{data.interestCount} on the interest list</Status>
         <Status>
           {data.interestMail?.pending ?? 0} waiting-list confirmations pending
@@ -104,7 +108,9 @@ export default async function AdminPage({
           submitLabel="Run billing checks"
         >
           <p className="text-xs">
-            Does not create charges or change membership prices.
+            Reconciles invoices and sends approved notifications. When automatic
+            collection is approved, this also collects unchanged invoices whose
+            delivered seven-day notice period has ended.
           </p>
         </ClubAction>
       </details>
@@ -240,6 +246,99 @@ export default async function AdminPage({
         ))}
       </section>
       <StaffOrders orders={orders} />
+      <section className="mt-10">
+        <h2 className="text-3xl">Monthly billing notices</h2>
+        <p className="mt-3 text-sm leading-6">
+          Automatic payments require an unchanged invoice and a verified email
+          delivery at least seven days earlier. A reviewed replacement notice
+          starts a fresh notice period. Changed delivery details need a fresh
+          quote and a replacement invoice; the old unpaid invoice is voided
+          first.
+        </p>
+        {!data.billingCycles.length && (
+          <p className="mt-4">No pending billing cycles.</p>
+        )}
+        <div className="mt-5 grid gap-4 md:grid-cols-2">
+          {data.billingCycles.map((cycle) => (
+            <article key={cycle.invoice_id} className="rounded-2xl border p-5">
+              <h3 className="font-bold">
+                {cycle.membership_name} · {cycle.email}
+              </h3>
+              <p className="mt-2 text-sm">
+                {cycle.state}
+                {cycle.hold_reason
+                  ? ` · ${cycle.hold_reason.replaceAll("_", " ")}`
+                  : ""}
+              </p>
+              <p className="mt-2 text-sm">
+                {cycle.total === null
+                  ? "Quote or invoice pending"
+                  : `${money({ amount: cycle.membership_amount ?? 0, currency: "usd" })} membership + ${money({ amount: cycle.shipping_amount ?? 0, currency: "usd" })} shipping + ${money({ amount: cycle.tax_amount ?? 0, currency: "usd" })} tax = ${money({ amount: cycle.total, currency: "usd" })}`}
+              </p>
+              <p className="mt-2 text-sm">
+                {cycle.notice_failed_at
+                  ? "Notice delivery failed; payment blocked."
+                  : cycle.notice_delivered_at
+                    ? `Notice delivered ${dateLabel(cycle.notice_delivered_at)}.`
+                    : "Notice delivery has not been verified."}
+                {cycle.charge_at && ` Scheduled ${dateLabel(cycle.charge_at)}.`}
+              </p>
+              {!cycle.initial && ["hold", "noticed"].includes(cycle.state) && (
+                <details className="mt-4">
+                  <summary className="cursor-pointer text-sm font-bold">
+                    Review and send a new notice
+                  </summary>
+                  <ClubAction
+                    endpoint="/api/grimmunity/admin"
+                    fields={{ action: "renotice", invoice: cycle.invoice_id }}
+                    submitLabel="Queue a fresh seven-day notice"
+                  >
+                    <label className="block text-sm">
+                      Review note
+                      <textarea
+                        name="note"
+                        required
+                        minLength={8}
+                        maxLength={1000}
+                        className="mt-2 block w-full rounded-xl border p-3"
+                      />
+                    </label>
+                    <p className="text-xs">
+                      Confirm the provider payment outcome and address first.
+                      Refunds, changed totals, changed addresses, and
+                      unsupported plans still block collection.
+                    </p>
+                  </ClubAction>
+                  <ClubAction
+                    endpoint="/api/grimmunity/admin"
+                    fields={{
+                      action: "replace_renewal",
+                      invoice: cycle.invoice_id,
+                    }}
+                    submitLabel="Refresh quote and replace unpaid invoice"
+                  >
+                    <label className="block text-sm">
+                      Address and postage review note
+                      <textarea
+                        name="note"
+                        required
+                        minLength={8}
+                        maxLength={1000}
+                        className="mt-2 block w-full rounded-xl border p-3"
+                      />
+                    </label>
+                    <p className="text-xs">
+                      Use after confirming new delivery details. This voids the
+                      unpaid invoice, recalculates postage and tax, and queues a
+                      new seven-day notice. It cannot replace a paid invoice.
+                    </p>
+                  </ClubAction>
+                </details>
+              )}
+            </article>
+          ))}
+        </div>
+      </section>
       <section className="mt-10">
         <h2 className="mb-5 text-3xl">Exceptions & payment attention</h2>
         {!exceptions.length ? (

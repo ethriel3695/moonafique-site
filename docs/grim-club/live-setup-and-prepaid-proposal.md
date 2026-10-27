@@ -21,6 +21,8 @@ Verification image: [prepared live monthly prices](screenshots/live-stripe-month
 
 ## Approved shipping direction
 
+**Implementation update:** the replacement is now implemented for closed review, with real Stripe sandbox verification. See [prepaid billing and seven-day notices](prepaid-billing-and-notices.md). The notes below record the state when the catalog was first prepared.
+
 The owner wants shipping recalculated from carrier rates each month, charged automatically after a seven-day advance notice showing the itemized total. This is a new billing workflow. The currently deployed implementation still saves the initial shipping quote as a recurring amount; **it must not be opened under the new policy until replacement billing logic is implemented and tested**.
 
 The replacement must keep the membership amount and each month’s shipping distinct, show tax and the charge date, preserve historical invoices, handle quote/email failures without an undisclosed automatic charge, and show the same figures in the member account. Address or price changes after notice require a new reviewed notice before collecting a changed total. Initial signup consent is separate from subsequent renewal notices.

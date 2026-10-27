@@ -15,6 +15,8 @@ export async function migrate(pool: Pool) {
     [8, "008_custom_request_emails.sql"],
     [9, "009_membership_collections.sql"],
     [10, "010_shippo_shipping.sql"],
+    [11, "011_prepaid_shipping_notices.sql"],
+    [12, "012_renewal_replacement.sql"],
   ] as const) {
     const sql = await readFile(
       path.join(process.cwd(), "db/grimmunity", filename),

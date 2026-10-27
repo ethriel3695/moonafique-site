@@ -26,6 +26,12 @@ export function sameOrigin(request: Request) {
     throw new ClubError("invalid_origin", 403);
 }
 const messages: Record<string, string> = {
+  billing_not_ready: "Billing is still being tested. Checkout remains closed.",
+  renewal_needs_review: "This billing cycle needs staff review before payment.",
+  cancel_payment_review:
+    "A payment changed while cancellation was being checked. Review your account or contact Moonafique before trying again.",
+  prepaid_payment_adjustment:
+    "The prepaid membership payment needs review. Remaining deliveries and automatic charges are on hold.",
   color_preferences_required: "Choose six preferred colors before continuing.",
   shipping_unavailable:
     "Shipping quotes are temporarily unavailable. Please try again shortly.",

@@ -1,7 +1,24 @@
 import { z } from "zod";
 import { jsonAction } from "@/lib/grimmunity/http";
 import { club } from "@/lib/grimmunity/runtime";
+import { reissueNotice } from "@/lib/grimmunity/renewals";
+import { replaceRenewal } from "@/lib/grimmunity/renewal-replacement";
+import { shippoGateway } from "@/lib/shippo";
 const input = z.discriminatedUnion("action", [
+  z
+    .object({
+      action: z.literal("replace_renewal"),
+      invoice: z.string().startsWith("in_"),
+      note: z.string().trim().min(8).max(1000),
+    })
+    .strict(),
+  z
+    .object({
+      action: z.literal("renotice"),
+      invoice: z.string().startsWith("in_"),
+      note: z.string().trim().min(8).max(1000),
+    })
+    .strict(),
   z
     .object({
       action: z.literal("unlock"),
@@ -44,11 +61,21 @@ const input = z.discriminatedUnion("action", [
     .strict(),
 ]);
 export const runtime = "nodejs";
-export const maxDuration = 60;
+export const maxDuration = 120;
 export async function POST(request: Request) {
   return jsonAction(request, true, async (user) => {
     const v = input.parse(await request.json());
     const c = club();
+    if (v.action === "replace_renewal")
+      await replaceRenewal(
+        c,
+        shippoGateway(c.mode),
+        user.id,
+        v.invoice,
+        v.note,
+      );
+    if (v.action === "renotice")
+      await reissueNotice(c, user.id, v.invoice, v.note);
     if (v.action === "unlock") await c.unlockOrder(user.id, v.id, v.note);
     if (v.action === "reconsider")
       await c.reconsiderInvoice(user.id, v.invoice, v.note);

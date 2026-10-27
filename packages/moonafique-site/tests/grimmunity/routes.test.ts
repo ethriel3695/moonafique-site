@@ -46,6 +46,7 @@ import { POST as newsletter } from "@/app/api/subscribe/route";
 import { POST as shippingQuote } from "@/app/api/grimmunity/shipping-quote/route";
 import { POST as shipping } from "@/app/api/grimmunity/shipping/route";
 import { POST as preferences } from "@/app/api/grimmunity/preferences/route";
+import { POST as cancelRenewal } from "@/app/api/grimmunity/cancel-renewal/route";
 import { NextRequest } from "next/server";
 import { isOneTimeProduct } from "@/lib/catalog-policy";
 import type Stripe from "stripe";
@@ -72,6 +73,7 @@ describe("route authorization and ordinary storefront regression", () => {
       shippingQuote,
       shipping,
       preferences,
+      cancelRenewal,
     ])
       expect((await handler(request())).status).toBe(401);
     expect(
@@ -107,6 +109,9 @@ describe("route authorization and ordinary storefront regression", () => {
     ).toBe(403);
     expect(
       (await preferences(request({}, "https://evil.example"))).status,
+    ).toBe(403);
+    expect(
+      (await cancelRenewal(request({}, "https://evil.example"))).status,
     ).toBe(403);
     expect(state.lock).not.toHaveBeenCalled();
   });

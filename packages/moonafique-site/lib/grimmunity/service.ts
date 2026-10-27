@@ -27,6 +27,13 @@ import {
 } from "./tiers";
 import type { ShippingQuote } from "./shipping";
 import { occupants } from "./capacity";
+import {
+  recordInitial,
+  managedPayment,
+  reviewCoverage,
+  deliveryLine,
+  type BillingCycle,
+} from "./renewals";
 
 const terminal = new Set(["canceled", "incomplete_expired"]);
 const seconds = (n: number | null) => (n ? new Date(n * 1000) : null);
@@ -132,6 +139,24 @@ export class Grimmunity {
       let tier = p.tiers.find((t) => t.id === input.tierId);
       if (!tier) throw new ClubError("membership_unavailable", 400);
       if (!tier.benefits_confirmed) throw new ClubError("tiers_not_ready", 503);
+      if (p.billing_policy === "notice_shipping_v1") {
+        const billing = tier.billing_options?.find(
+          (option) => option.months === (input.billingMonths ?? 1),
+        );
+        if (!billing || !this.billing.managed)
+          throw new ClubError("billing_not_ready", 503);
+        tier = { ...tier, billing };
+        if (
+          this.mode === "live" &&
+          (process.env.GRIM_MANAGED_COLLECTION !== "approved" ||
+            process.env.GRIM_SEND_EMAILS !== "approved" ||
+            !process.env.GRIM_RESEND_WEBHOOK_SECRET)
+        )
+          throw new ClubError("billing_not_ready", 503);
+      } else if (input.billingMonths && input.billingMonths !== 1)
+        throw new ClubError("billing_not_ready", 503);
+      if (this.mode === "live" && tier.billing_options && !tier.billing)
+        throw new ClubError("billing_not_ready", 503);
       if (tier.id === "grimm_starter" && !input.preferences)
         throw new ClubError("color_preferences_required", 400);
       if (tier.shipping === null && tier.shipping_mode !== "shippo")
@@ -182,7 +207,10 @@ export class Grimmunity {
         [m.id, input.requestKey],
       );
       if (prior) {
-        if (prior.tier_snapshot.id !== tier.id)
+        if (
+          prior.tier_snapshot.id !== tier.id ||
+          prior.tier_snapshot.billing?.months !== tier.billing?.months
+        )
           throw new ClubError("checkout_tier_conflict");
         if (
           ["creating", "open"].includes(prior.state) &&
@@ -231,11 +259,13 @@ export class Grimmunity {
           quote.rate.amount <= 0
         )
           throw new ClubError("shipping_quote_failed");
-        if (!this.billing.shippingPrice)
+        if (!this.billing.shippingPrice && !tier.billing)
           throw new ClubError("shipping_not_ready", 503);
         tier = {
           ...tier,
-          shipping: await this.billing.shippingPrice(p, quote.rate.amount),
+          shipping: tier.billing
+            ? await this.billing.managed!.postagePrice(p, quote.rate.amount)
+            : await this.billing.shippingPrice!(p, quote.rate.amount),
         };
         await db.query(
           "UPDATE grim.memberships SET address=$2,address_valid=true WHERE id=$1",
@@ -347,7 +377,38 @@ export class Grimmunity {
       s.livemode !== (this.mode === "live")
     )
       throw new ClubError("checkout_identity_mismatch");
-    if (s.state === "complete" && s.subscription) {
+    if (s.state === "complete" && r.tier_snapshot.billing && s.setupIntent) {
+      if (
+        m.subscription_id &&
+        (await one(
+          db,
+          "SELECT invoice_id FROM grim.billing_cycles WHERE membership_id=$1 AND initial LIMIT 1",
+          [m.id],
+        ))
+      )
+        return;
+      if (this.now() > r.expires_at) {
+        await db.query(
+          "UPDATE grim.reservations SET state='review' WHERE id=$1",
+          [r.id],
+        );
+        await this.exception(
+          db,
+          `setup-expired:${r.id}`,
+          "Card setup completed after the reservation expired. No initial charge was requested; review before continuing.",
+          m,
+        );
+        return;
+      }
+      const result = await this.billing.managed!.start(p, m, r, s);
+      const synced = await this.syncSubscription(db, p, result.subscription);
+      if (!synced) throw new ClubError("subscription_identity_mismatch");
+      await recordInitial(this, db, p, synced, r, result.invoice);
+      await db.query(
+        "UPDATE grim.reservations SET session_id=$2,session_url=$3,state='converted' WHERE id=$1",
+        [r.id, s.id, s.url],
+      );
+    } else if (s.state === "complete" && s.subscription) {
       await this.syncSubscription(db, p, s.subscription);
       // No fulfillment is created here: only eligible invoice.paid grants a copy.
       await db.query(
@@ -425,7 +486,12 @@ export class Grimmunity {
             "country",
           ] as const
         ).some((key) => m.address?.[key] !== c.address?.[key]));
-    if (changed && m.address && m.tier_snapshot.shipping_mode === "shippo")
+    if (
+      changed &&
+      m.address &&
+      m.tier_snapshot.shipping_mode === "shippo" &&
+      !m.tier_snapshot.billing
+    )
       await this.exception(
         db,
         `shipping-address:${m.id}`,
@@ -443,6 +509,27 @@ export class Grimmunity {
       [m.id, m.address_valid ? "paid" : "needs_address"],
     );
     if (changed) {
+      if (m.tier_snapshot.billing) {
+        await db.query(
+          "UPDATE grim.billing_cycles SET state='hold',hold_reason='shipping_address_changed' WHERE membership_id=$1 AND state IN ('initial','preparing','noticed')",
+          [m.id],
+        );
+        await db.query(
+          "UPDATE grim.outbox SET state='review' WHERE id IN (SELECT notice_id FROM grim.billing_cycles WHERE membership_id=$1 AND hold_reason='shipping_address_changed') AND state='pending'",
+          [m.id],
+        );
+        const paid = await db.query(
+          "UPDATE grim.fulfillments SET state='hold' WHERE membership_id=$1 AND state<>'shipped' AND invoice_id IN (SELECT invoice_id FROM grim.billing_cycles WHERE membership_id=$1 AND address_snapshot<>$2::jsonb) RETURNING id",
+          [m.id, JSON.stringify(m.address)],
+        );
+        if (paid.rowCount)
+          await this.exception(
+            db,
+            `shipping-address:${m.id}`,
+            "Delivery address changed after postage was paid. Review the destination and postage before dispatch.",
+            m,
+          );
+      }
       const locked = await one(
         db,
         `SELECT f.id FROM grim.fulfillments f JOIN grim.editions e ON e.id=f.edition_id WHERE f.membership_id=$1 AND f.state<>'shipped' AND (f.locked_at IS NOT NULL OR (f.ship_by IS NULL AND e.address_cutoff<=$2)) LIMIT 1`,
@@ -524,7 +611,11 @@ export class Grimmunity {
         "UPDATE grim.reservations SET state='converted' WHERE id::text=$1 AND membership_id=$2",
         [s.reservation, m.id],
       );
-    if (!s.validPlan || s.priceId !== m.tier_snapshot.price_id)
+    if (
+      !s.validPlan ||
+      s.priceId !==
+        (m.tier_snapshot.billing?.price_id ?? m.tier_snapshot.price_id)
+    )
       await this.exception(
         db,
         `plan:${s.id}`,
@@ -624,6 +715,21 @@ export class Grimmunity {
       }
       return;
     }
+    if (m.tier_snapshot.billing) await reviewCoverage(this, db, m, i);
+    if (m.tier_snapshot.billing) {
+      const linked = await one<{ coverage_invoice_id: string | null }>(
+        db,
+        "SELECT coverage_invoice_id FROM grim.entitlements WHERE invoice_id=$1",
+        [i.id],
+      );
+      if (linked?.coverage_invoice_id && linked.coverage_invoice_id !== i.id)
+        await reviewCoverage(
+          this,
+          db,
+          m,
+          await this.billing.invoice(linked.coverage_invoice_id, p),
+        );
+    }
     await db.query(
       `UPDATE grim.exceptions SET resolved_at=$2,resolution='Payment recovered' WHERE dedupe_key=$1`,
       [`${this.mode}:payment:${i.id}`, this.now()],
@@ -660,12 +766,19 @@ export class Grimmunity {
       }
       return;
     }
-    let reason = this.invoiceProblem(i, p, m.tier_snapshot);
+    const managed = m.tier_snapshot.billing
+      ? await managedPayment(this, db, p, m, i)
+      : null;
+    let reason = managed
+      ? managed.reason
+      : this.invoiceProblem(i, p, m.tier_snapshot);
     // Proration-only invoices and unrelated products are not monthly obligations, but remain visible for staff.
     const line =
+      (m.tier_snapshot.billing ? deliveryLine(this, p, i) : undefined) ??
       i.lines.find(
         (l) => l.price === m.tier_snapshot.price_id && !l.proration,
-      ) ?? i.lines[0];
+      ) ??
+      i.lines[0];
     const editions = line
       ? (
           await db.query<Edition>(
@@ -714,6 +827,22 @@ export class Grimmunity {
     )
       reason = "edition_capacity_exceeded";
     const allocated = !reason && !!edition;
+    const quotedPostage = m.tier_snapshot.billing
+      ? i.lines.find(
+          (line) => line.product === this.billing.managed?.postageProduct(p.id),
+        )
+      : undefined;
+    const savedTier =
+      quotedPostage?.price && quotedPostage.product
+        ? {
+            ...m.tier_snapshot,
+            shipping: {
+              price_id: quotedPostage.price,
+              product_id: quotedPostage.product,
+              amount: quotedPostage.amount,
+            },
+          }
+        : m.tier_snapshot;
     await db.query(
       `INSERT INTO grim.entitlements(invoice_id,membership_id,edition_id,amount_paid,currency,period_start,period_end,paid_at,allocated,review_reason,financial_state,tier_snapshot,preferences) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)`,
       [
@@ -728,10 +857,15 @@ export class Grimmunity {
         allocated,
         reason,
         i.financialState,
-        m.tier_snapshot,
+        savedTier,
         m.preferences ?? null,
       ],
     );
+    if (managed?.coverage)
+      await db.query(
+        "UPDATE grim.entitlements SET coverage_invoice_id=$2 WHERE invoice_id=$1",
+        [id, managed.coverage],
+      );
     if (allocated && edition) {
       await db.query(
         `INSERT INTO grim.fulfillments(id,invoice_id,membership_id,edition_id,state,ship_by) VALUES($1,$2,$3,$4,$5,$6)`,
@@ -902,7 +1036,7 @@ export class Grimmunity {
         [this.mode, owner, membershipId ?? null],
       );
       if (!m?.customer_id) throw new ClubError("membership_not_found", 404);
-      return this.billing.portal(p, m.customer_id);
+      return this.billing.portal(p, m.customer_id, !!m.tier_snapshot.billing);
     });
   }
   async confirmation(owner: string, sessionId: string) {
@@ -915,12 +1049,35 @@ export class Grimmunity {
     const s = await this.billing.session(sessionId);
     if (s.reservation !== row.id || s.livemode !== (this.mode === "live"))
       throw new ClubError("checkout_identity_mismatch");
+    if (row.tier_snapshot.billing && s.state === "complete") {
+      await transaction(this.pool, async (db) => {
+        const p = await lockedProgram(db, this.mode);
+        await this.applySession(db, p, row, s);
+      });
+    }
     const paid = await one(
       this.pool,
       "SELECT invoice_id FROM grim.fulfillments WHERE membership_id=$1 AND edition_id=$2",
       [row.membership_id, row.edition_id],
     );
-    return { complete: s.state === "complete", paid: !!paid };
+    const cycle = row.tier_snapshot.billing
+      ? await one<BillingCycle>(
+          this.pool,
+          "SELECT * FROM grim.billing_cycles WHERE membership_id=$1 AND initial ORDER BY created_at LIMIT 1",
+          [row.membership_id],
+        )
+      : undefined;
+    return {
+      complete: s.state === "complete",
+      paid: !!paid,
+      invoiceUrl:
+        cycle?.state === "initial" && this.now() < row.expires_at
+          ? cycle.invoice_url
+          : null,
+      managed: !!row.tier_snapshot.billing,
+      paymentDeadline:
+        cycle?.state === "initial" ? row.expires_at.toISOString() : null,
+    };
   }
   async lockOrder(actor: string, id: string) {
     const issue = await transaction(this.pool, async (db) => {
@@ -1193,10 +1350,15 @@ export class Grimmunity {
       if (!row?.allocated)
         throw new ClubError("manual_refund_or_review_required");
       const i = await this.billing.invoice(invoiceId, p);
-      if (
-        this.invoiceProblem(i, p, row.tier_snapshot as Tier) ||
-        i.financialState !== "paid"
-      )
+      const member = (await one<Membership>(
+        db,
+        "SELECT * FROM grim.memberships WHERE id=$1",
+        [row.membership_id],
+      ))!;
+      const paymentProblem = member.tier_snapshot.billing
+        ? (await managedPayment(this, db, p, member, i, true)).reason
+        : this.invoiceProblem(i, p, row.tier_snapshot as Tier);
+      if (paymentProblem || i.financialState !== "paid")
         throw new ClubError("financial_hold_active");
       await db.query(
         "UPDATE grim.entitlements SET review_reason=NULL,financial_state='paid' WHERE invoice_id=$1",

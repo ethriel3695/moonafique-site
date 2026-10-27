@@ -38,6 +38,7 @@ export const tierSchema = z
     shipping: shippingSchema.nullable().optional(),
     // Catalog only until the prepaid billing flow passes verification.
     billing_options: z.array(billingOptionSchema).length(3).optional(),
+    billing: billingOptionSchema.optional(),
   })
   .strict()
   .refine(
@@ -61,6 +62,20 @@ export const tierSchema = z
           );
         })),
     "Billing options must match the approved membership-only discounts.",
+  )
+  .refine(
+    (tier) =>
+      !tier.billing ||
+      (tier.billing.amount ===
+        membershipBilling(tier.amount, tier.billing.months).amount &&
+        tier.billing.discount ===
+          membershipBilling(tier.amount, tier.billing.months).discount &&
+        tier.billing_options?.some(
+          (option) =>
+            option.price_id === tier.billing!.price_id &&
+            option.months === tier.billing!.months,
+        ) === true),
+    "The saved billing option must be one of the approved membership prices.",
   );
 export type Tier = z.infer<typeof tierSchema>;
 export type TierId = Tier["id"];

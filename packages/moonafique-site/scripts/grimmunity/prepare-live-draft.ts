@@ -34,6 +34,23 @@ export async function prepareLiveDraft(pool: Pool) {
   const tiers = await prepareMembershipPrices(stripe);
   const portal =
     prior?.portal_configuration_id ?? "bpc_1UU7A8DuU4RwQbePVn4QPqJ9";
+  const managedPortal =
+    prior?.managed_portal_configuration_id ??
+    (
+      await stripe.billingPortal.configurations.create(
+        {
+          features: {
+            payment_method_update: { enabled: true },
+            invoice_history: { enabled: true },
+            customer_update: { enabled: true, allowed_updates: ["shipping"] },
+            subscription_update: { enabled: false },
+            subscription_cancel: { enabled: false },
+          },
+          metadata: { grim_billing: "notice_shipping_v1" },
+        },
+        { idempotencyKey: "grim:live:managed-portal:v3" },
+      )
+    ).id;
   await transaction(pool, async (db) => {
     await db.query(
       "SELECT pg_advisory_xact_lock(hashtext('grim:configuration'))",
@@ -52,16 +69,17 @@ export async function prepareLiveDraft(pool: Pool) {
     )
       throw Error("Members appeared during setup");
     await db.query(
-      `INSERT INTO grim.program(id,enabled,currency,member_cap,retained_copies,countries,shipping_text,tax_mode,terms_version,cancellation_text,recovery_text,support_email,portal_configuration_id,tiers,fulfillment_lead_days)
-      VALUES('live',false,'usd',24,1,ARRAY['US'],$1,'exclusive','moonafique-collections-v2-2026-10-25',$2,$3,'hello@moonafique.com',$4,$5,7)
+      `INSERT INTO grim.program(id,enabled,currency,member_cap,retained_copies,countries,shipping_text,tax_mode,terms_version,cancellation_text,recovery_text,support_email,portal_configuration_id,tiers,fulfillment_lead_days,billing_policy,managed_portal_configuration_id)
+      VALUES('live',false,'usd',24,1,ARRAY['US'],$1,'exclusive','moonafique-notified-shipping-v3-2026-10-26',$2,$3,'hello@moonafique.com',$4,$5,7,'notice_shipping_v1',$6)
       ON CONFLICT(id) DO UPDATE SET tiers=EXCLUDED.tiers,enabled=false,approved_at=NULL,shipping_text=EXCLUDED.shipping_text,
-        terms_version=EXCLUDED.terms_version,cancellation_text=EXCLUDED.cancellation_text,recovery_text=EXCLUDED.recovery_text`,
+        terms_version=EXCLUDED.terms_version,cancellation_text=EXCLUDED.cancellation_text,recovery_text=EXCLUDED.recovery_text,billing_policy=EXCLUDED.billing_policy,managed_portal_configuration_id=EXCLUDED.managed_portal_configuration_id`,
       [
-        "Shipping is calculated through Shippo for your address. The accepted shipping amount renews monthly with each subscription. Applicable sales tax is added at checkout.",
-        "Cancel in your account before the next renewal to stop future charges. Already-paid editions still ship unless refunded.",
-        "Unpaid editions do not ship. Payments recovered after the edition cutoff require staff review before fulfillment.",
+        "Shipping is quoted through Shippo each month. Membership, shipping, tax, total, and scheduled payment date are itemized in a notice delivered at least seven days before automatic renewal payment. The first invoice is reviewed and paid separately after saving a card.",
+        "Cancel membership renewal in your account. Prepaid membership remains covered through the paid term, with monthly postage still due for each delivery. Contact Moonafique to pause a delivery or request a refund review.",
+        "A monthly delivery needs paid membership coverage and paid postage. Failed notices, changed details, and uncertain payments block automatic collection. Payments recovered after the edition cutoff require staff review.",
         portal,
         JSON.stringify(tiers),
+        managedPortal,
       ],
     );
     await db.query(
@@ -84,6 +102,7 @@ export async function prepareLiveDraft(pool: Pool) {
     "SELECT * FROM grim.program WHERE id='live'",
   ))!;
   await gateway.checkPortal(p);
+  await gateway.checkPortal(p, true);
   const c = new Grimmunity(pool, gateway, "live");
   for (const [month, next] of [
     ["2026-11", "2026-12"],

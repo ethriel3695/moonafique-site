@@ -2,7 +2,7 @@
 
 Updated October 26, 2026. The approved two Grimm tiers and two ACEO tiers are now described on separate production pages, with shipping charged separately when billing opens. The owner approved the [production deployment and migrations](deployment-20261026.md). Paid enrollment remains closed and live Shippo remains disconnected. See [the current offer and Shippo setup](collections-and-shipping.md) and [the operating guide](operations.md).
 
-The four live monthly Stripe prices are now prepared with inactive products. The owner also approved a seven-day itemized notice before automatic payment of recalculated monthly shipping, and requested a six-month/annual discount proposal. That replacement billing workflow is not yet implemented. See [closed live setup and prepaid proposal](live-setup-and-prepaid-proposal.md) before any launch work.
+All twelve monthly, six-month, and annual Stripe Prices are prepared with inactive products. The owner approved 5% off six months and 10% off twelve months, on membership only. The prepaid and monthly shipping notice workflow is implemented for closed review; see [billing and notice setup](prepaid-billing-and-notices.md) for its safeguards and verification. The earlier [catalog setup receipt](live-setup-and-prepaid-proposal.md) remains historical evidence.
 
 | Membership | Monthly price before shipping | Member limit | Included each month |
 | --- | --- | --- | --- |
@@ -13,7 +13,7 @@ The four live monthly Stripe prices are now prepared with inactive products. The
 
 Starter includes six preferred colors and colors to avoid. Its stated value is at least $24. Keeper production is 13 copies: 12 for subscribers and one for the Moonafique collection. When all 12 Keeper memberships are taken, its public status is **Vaulted for now**. No stand or separate Keeper accessory pack is promised.
 
-Shipping is calculated through Shippo for the signup address. The accepted amount becomes a separate monthly recurring charge. Grimm uses an 8 × 8 × 8-inch, 8 oz box; ACEO uses a 7 × 5 × 1-inch, 6 oz bubble mailer. Ship-from ZIP is 83442. The full return address is server-only configuration.
+Shipping is quoted through Shippo for the delivery address each month and itemized in a notice delivered at least seven days before automatic payment. Grimm uses an 8 × 8 × 8-inch, 8 oz box; ACEO uses a 7 × 5 × 1-inch, 6 oz bubble mailer. Ship-from ZIP is 83442. The full return address is server-only configuration.
 
 The sections below describe the original implementation and historical Collector rollout. Their $25/$9.21 pricing, shared 24-member cap, and two-month public-release policy are historical. Use the current offer document for new configuration. Preserve saved promises on existing paid orders.
 

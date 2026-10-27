@@ -31,6 +31,7 @@ import { ClubAction, JoinForm } from "./actions";
 import { InterestForm } from "./interest-form";
 import { GrimDesignShowcase } from "./design-showcase";
 import { ShippingPanel } from "./shipping-panel";
+import { BillingSummary } from "./billing-summary";
 import { AvailabilityBadge, MembershipAvailability } from "./availability";
 import { PreferencesForm } from "./preferences-form";
 
@@ -145,9 +146,9 @@ function OfferTerms({
       <div>
         <dt className="font-bold">Billing</dt>
         <dd>
-          Pay your monthly total today. Your membership renews on the same date
-          each month until you cancel. Your account shows your next payment
-          date.
+          {program.billing_policy === "notice_shipping_v1"
+            ? "Choose monthly membership, six months paid upfront with 5% off, or twelve months paid upfront with 10% off. Deliveries still arrive monthly. Shipping is quoted monthly and shown with membership, tax, total, and payment date in an email delivered at least seven days before automatic renewal payment. Review and pay your first itemized invoice after saving your card. Cancel membership renewal in your account."
+            : "Pay your monthly total today. Your membership renews on the same date each month until you cancel. Your account shows your next payment date."}
         </dd>
       </div>
       <div>
@@ -380,6 +381,7 @@ export function OfferView({
               countries={program.countries}
               sandbox={program.id === "sandbox"}
               fixture={fixture}
+              managedBilling={program.billing_policy === "notice_shipping_v1"}
             >
               <OfferTerms program={program} edition={edition} />
             </JoinForm>
@@ -440,8 +442,8 @@ export function OfferView({
               ? "Your Grimm ships in a box with its included pieces."
               : "Your prints or original artwork ship in a bubble mailer."}{" "}
             Shipping is quoted for your U.S. delivery address before checkout.
-            The accepted shipping fee is added to your monthly membership
-            payment. Applicable sales tax is shown at checkout.
+            Shipping is billed for each monthly delivery. We show the shipping,
+            applicable sales tax, and total before payment.
           </p>
           <p className="mt-3 max-w-3xl text-sm leading-6 text-muted-foreground">
             If you join both collections, each membership has its own shipment
@@ -503,6 +505,12 @@ export function AccountContent({
               membership: m,
               orders: view.orders.filter((o) => o.membership_id === m.id),
               exceptions: view.exceptions,
+              billingCycles: view.billingCycles?.filter(
+                (cycle) => cycle.membership_id === m.id,
+              ),
+              coverage: view.coverage?.filter(
+                (period) => period.membership_id === m.id,
+              ),
             }}
           />
         </section>
@@ -536,8 +544,9 @@ function SingleAccountContent({
             disabled={fixture}
           >
             <p className="max-w-xs text-sm">
-              Update payment or delivery details, view invoices, or cancel
-              future renewals.
+              Update payment or delivery details and view invoices.
+              {!m.tier_snapshot.billing &&
+                " You can also cancel future renewals."}
             </p>
           </ClubAction>
         )}
@@ -561,9 +570,11 @@ function SingleAccountContent({
               <p className="mt-4 text-sm leading-6">
                 {m.status === "canceled"
                   ? "Future renewals have stopped. Your already-paid editions stay on this page."
-                  : m.period_end
-                    ? `${m.cancel_at_period_end ? "Membership ends" : "Next monthly payment"}: ${dateLabel(m.period_end)}`
-                    : "Checkout or payment confirmation is still pending."}
+                  : m.tier_snapshot.billing
+                    ? "Your itemized billing schedule and paid membership term are shown below."
+                    : m.period_end
+                      ? `${m.cancel_at_period_end ? "Membership ends" : "Next monthly payment"}: ${dateLabel(m.period_end)}`
+                      : "Checkout or payment confirmation is still pending."}
               </p>
             </section>
             <section className="rounded-3xl border bg-card p-6">
@@ -584,6 +595,7 @@ function SingleAccountContent({
               </p>
             </section>
           </div>
+          <BillingSummary member={m} view={view} fixture={fixture} />
           {m.tier_snapshot.id === "grimm_starter" && !fixture && (
             <PreferencesForm id={m.id} preferences={m.preferences} />
           )}

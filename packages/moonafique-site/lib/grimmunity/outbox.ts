@@ -11,7 +11,12 @@ type Message = {
   first_attempt_at: Date;
   dedupe_key: string;
 };
-export async function drainOutbox(pool: Pool, mode: Mode, send = false, options: { limit?: number; deadline?: number } = {}) {
+export async function drainOutbox(
+  pool: Pool,
+  mode: Mode,
+  send = false,
+  options: { limit?: number; deadline?: number } = {},
+) {
   if (!send)
     return (
       await pool.query(
@@ -40,6 +45,7 @@ export async function drainOutbox(pool: Pool, mode: Mode, send = false, options:
       "UPDATE grim.outbox SET first_attempt_at=COALESCE(first_attempt_at,now()),attempts=attempts+1 WHERE id=$1 AND state='pending'",
       [row.id],
     );
+    if (sent) await new Promise((resolve) => setTimeout(resolve, 550));
     await transaction(pool, async (db) => {
       const m = await one<Message>(
         db,
@@ -59,6 +65,10 @@ export async function drainOutbox(pool: Pool, mode: Mode, send = false, options:
           to: mode === "sandbox" ? sink! : m.email,
           subject: mode === "sandbox" ? `[SANDBOX] ${m.subject}` : m.subject,
           text: `${m.body}\n\nManage your membership: ${appOrigin()}/account/grimmunity`,
+          tags: [
+            { name: "grim_outbox", value: m.id },
+            { name: "grim_mode", value: mode },
+          ],
         },
         { idempotencyKey: `grim/${m.id}` },
       );

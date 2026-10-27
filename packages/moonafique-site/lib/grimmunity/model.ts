@@ -4,6 +4,8 @@ import { preferencesSchema, type ColorPreferences } from "./preferences";
 
 export type Mode = "sandbox" | "live";
 export type Program = {
+  billing_policy?: "notice_shipping_v1" | null;
+  managed_portal_configuration_id?: string | null;
   id: Mode;
   enabled: boolean;
   approved_at: Date | null;
@@ -115,6 +117,7 @@ export type Subscription = {
   priceId: string | null;
 };
 export type Session = {
+  setupIntent?: string | null;
   id: string;
   customer: string;
   subscription: string | null;
@@ -124,6 +127,10 @@ export type Session = {
   livemode: boolean;
 };
 export type Invoice = {
+  autoAdvance?: boolean;
+  hostedUrl?: string | null;
+  collectionMethod?: string;
+  metadata?: Record<string, string>;
   id: string;
   subscription: string | null;
   customer: string;
@@ -139,6 +146,8 @@ export type Invoice = {
   currency: string;
   paidAt: number | null;
   lines: Array<{
+    id?: string;
+    metadata?: Record<string, string>;
     invoice: string | null;
     price: string | null;
     product: string | null;
@@ -156,6 +165,7 @@ export type Invoice = {
   financialState: "paid" | "review" | "refunded" | "disputed";
 };
 export interface BillingGateway {
+  managed?: import("./managed-stripe").ManagedBilling;
   shippingPrice?(
     p: Program,
     amount: number,
@@ -170,7 +180,7 @@ export interface BillingGateway {
   subscription(id: string, p: Program, savedTier?: Tier): Promise<Subscription>;
   invoice(id: string, p: Program): Promise<Invoice>;
   affectedInvoices(type: string, objectId: string): Promise<string[]>;
-  portal(p: Program, customer: string): Promise<string>;
+  portal(p: Program, customer: string, managed?: boolean): Promise<string>;
 }
 export class ClubError extends Error {
   constructor(
@@ -189,6 +199,9 @@ export const checkoutInput = z
     consent: z.literal(true),
     preferences: preferencesSchema.optional(),
     shippingQuoteId: z.string().uuid().optional(),
+    billingMonths: z
+      .union([z.literal(1), z.literal(6), z.literal(12)])
+      .optional(),
   })
   .strict();
 export function addressValid(a: Address | null, countries: string[]): boolean {

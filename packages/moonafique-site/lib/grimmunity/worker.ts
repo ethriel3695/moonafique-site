@@ -5,6 +5,8 @@ import type { Mode, Receipt } from "./model";
 import type { Grimmunity } from "./service";
 import { drainOutbox } from "./outbox";
 import { deliverInterestConfirmations } from "./interest-mail";
+import { runManagedMember } from "./renewals";
+import { shippoConfigured, shippoGateway } from "../shippo";
 
 export function workerAuthorized(
   header: string | null,
@@ -84,9 +86,9 @@ export async function runWorker(
       }
     }
     const members = (
-      await pool.query<{ id: string; owner_id: string; customer_id: string }>(
-        `SELECT id,owner_id,customer_id FROM grim.memberships WHERE program_id=$1 AND customer_id IS NOT NULL
-       ORDER BY last_reconciled_at NULLS FIRST,created_at LIMIT 24`,
+      await pool.query<import("./model").Membership>(
+        `SELECT * FROM grim.memberships WHERE program_id=$1 AND customer_id IS NOT NULL
+       ORDER BY last_reconciled_at NULLS FIRST,created_at LIMIT 100`,
         [mode],
       )
     ).rows;
@@ -94,7 +96,15 @@ export async function runWorker(
       if (Date.now() >= deadline) break;
       try {
         await service.refreshMember(member.owner_id, member.id);
-        for (const id of (await recentPaidInvoices(member.customer_id)).slice(
+        if (member.tier_snapshot.billing && Date.now() < deadline)
+          await runManagedMember(
+            service,
+            shippoConfigured(mode) ? shippoGateway(mode) : null,
+            member,
+            process.env.GRIM_MANAGED_COLLECTION === "approved",
+            deadline,
+          );
+        for (const id of (await recentPaidInvoices(member.customer_id!)).slice(
           0,
           2,
         )) {
@@ -113,7 +123,7 @@ export async function runWorker(
     }
     if (result.emailDeliveryEnabled && Date.now() < deadline) {
       try {
-        await drainOutbox(pool, mode, true, { limit: 5, deadline });
+        await drainOutbox(pool, mode, true, { limit: 100, deadline });
       } catch {
         result.failures++;
       }

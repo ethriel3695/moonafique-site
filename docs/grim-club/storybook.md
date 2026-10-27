@@ -6,6 +6,8 @@ These examples use the current four membership prices and actual application com
 
 ## Start here
 
+- **Prepaid billing and notices:** use the actual signup form, account summary, and email copy to inspect prepaid terms, shipping-only renewals, missing quotes or notices, payment holds, cancellations, and refunds. All actions remain disabled.
+
 - **Cost comparison → All Four Memberships:** compare base price, shipping, monthly subtotal, and package profile. Change **Grimm shipping / month ($)** and **ACEO shipping / month ($)** in Controls.
 - **Cost comparison → Keeper And ACEO Prints:** see two memberships with two shipping charges. The example $6.25 shipping on each subscription produces a $52.50 combined monthly subtotal, before tax.
 - **Signup and monthly totals:** view each membership before shipping and after a quote, plus loading, failed, expired, full, and sales-tax states. Change **Membership**, **Shipping / month ($)**, or **Shipping quote state** in Controls.
@@ -46,6 +48,8 @@ The existing local installation had a missing macOS ARM optional binding for its
 The owner subsequently approved [production deployment](deployment-20261026.md) of the collection pages and copy. Storybook remains local. Paid enrollment and live Shippo remain closed.
 
 ## Verification
+
+The implemented prepaid billing flow adds twelve examples, for **77 membership stories across ten groups**. These use the actual signup, billing summary, and notice formatter. See [the billing implementation record](prepaid-billing-and-notices.md) for financial and delivery checks.
 
 The prepaid pricing review adds five examples, for **65 membership stories across nine groups**. TypeScript, scoped ESLint, and the static Storybook build pass. Browser review confirms the annual Keeper example: $324 prepaid membership plus $6.25 illustrative first-month shipping, followed by $6.95 illustrative shipping only the next month. These examples do not implement or activate prepaid billing.
 

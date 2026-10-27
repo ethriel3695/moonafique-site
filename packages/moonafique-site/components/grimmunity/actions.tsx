@@ -15,6 +15,10 @@ import {
 } from "@/lib/grimmunity/tiers";
 import { useRouter } from "next/navigation";
 import { AvailabilityBadge, useMembershipAvailability } from "./availability";
+import {
+  membershipBilling,
+  type BillingMonths,
+} from "@/lib/grimmunity/billing-options";
 
 export function ClubAction({
   endpoint,
@@ -94,6 +98,7 @@ export function ClubAction({
   );
 }
 export type JoinFormFixtureState = {
+  billingMonths?: BillingMonths;
   tierId?: TierId;
   quote?: {
     id: string;
@@ -118,6 +123,7 @@ export function JoinForm({
   children,
   availability: initialAvailability = {},
   fixtureState,
+  managedBilling = false,
 }: {
   children?: React.ReactNode;
   tiers: Tier[];
@@ -130,6 +136,7 @@ export function JoinForm({
   availability?: TierAvailability;
   /** Presentation data is used only when fixture=true. Never authorizes checkout. */
   fixtureState?: JoinFormFixtureState;
+  managedBilling?: boolean;
 }) {
   const availability = useMembershipAvailability(initialAvailability);
   const displayedTiers = tiers.map(publicTierCopy);
@@ -148,11 +155,19 @@ export function JoinForm({
   const [quoting, setQuoting] = useState(example?.quoting ?? false);
   const [consent, setConsent] = useState(false);
   const tier = tiers.find((t) => t.id === selected)!;
+  const [billingMonths, setBillingMonths] = useState<BillingMonths>(
+    example?.billingMonths ?? 1,
+  );
+  const billing = membershipBilling(tier.amount, billingMonths);
   const full =
     !!availability[tier.id]?.full || availability[tier.id]?.remaining === 0;
   const dynamicShipping = tier.shipping_mode === "shippo";
   const total = dynamicShipping
-    ? (quote?.monthlyTotal ?? null)
+    ? quote
+      ? managedBilling
+        ? billing.amount + quote.rate.amount
+        : quote.monthlyTotal
+      : null
     : monthlyAmount(tier);
   const shippingPending = total === null;
   const key = useRef<string | undefined>(undefined);
@@ -176,6 +191,7 @@ export function JoinForm({
             body: JSON.stringify({
               requestKey: key.current,
               tierId: tier.id,
+              ...(managedBilling ? { billingMonths } : {}),
               ...(dynamicShipping && quote
                 ? { shippingQuoteId: quote.id }
                 : {}),
@@ -277,6 +293,53 @@ export function JoinForm({
           ))}
         </div>
       </fieldset>
+      {managedBilling && (
+        <fieldset disabled={pending} className="rounded-3xl border bg-card p-6">
+          <legend className="px-2 text-lg font-bold">
+            Choose your billing rhythm
+          </legend>
+          <div className="grid gap-3 sm:grid-cols-3">
+            {([1, 6, 12] as const).map((months) => {
+              const option = membershipBilling(tier.amount, months);
+              return (
+                <label
+                  key={months}
+                  className={`cursor-pointer rounded-2xl border-2 p-4 ${billingMonths === months ? "border-primary bg-primary/5" : "border-border"}`}
+                >
+                  <input
+                    type="radio"
+                    name="billingMonths"
+                    value={months}
+                    checked={billingMonths === months}
+                    onChange={() => {
+                      setBillingMonths(months);
+                      setConsent(false);
+                      key.current = undefined;
+                    }}
+                    className="mr-2 accent-primary"
+                  />
+                  <span className="font-bold">
+                    {months === 1 ? "Monthly" : `${months} months`}
+                  </span>
+                  <span className="mt-3 block text-xl font-bold">
+                    {money({ amount: option.amount, currency })}
+                  </span>
+                  <span className="mt-2 block text-sm">
+                    {months === 1
+                      ? "Membership billed monthly"
+                      : `Paid upfront · save ${option.discount}%`}
+                  </span>
+                </label>
+              );
+            })}
+          </div>
+          <p className="mt-4 text-sm leading-6">
+            A new delivery every month. Shipping is additional and billed
+            monthly, including during prepaid membership. The discount applies
+            to membership only.
+          </p>
+        </fieldset>
+      )}
       {tier.id === "grimm_starter" && (
         <fieldset disabled={pending} className="rounded-3xl border bg-card p-6">
           <legend className="px-2 text-lg font-bold">
@@ -342,9 +405,10 @@ export function JoinForm({
             Delivery address & shipping
           </legend>
           <p className="mb-4 text-sm leading-6">
-            Shipping is quoted through Shippo for your address. The shipping
-            amount you accept renews monthly with this subscription. Address
-            changes may need a new shipping review.
+            Shipping is quoted through Shippo for your address. The shipping{" "}
+            {managedBilling
+              ? "price is recalculated each month. We’ll email your itemized total at least seven days before automatic payment. Address changes hold payment for a fresh review."
+              : "amount you accept renews monthly with this subscription. Address changes may need a new shipping review."}
           </p>
           <div className="grid gap-3 sm:grid-cols-2">
             {[
@@ -429,9 +493,11 @@ export function JoinForm({
           </Button>
           {quote && (
             <p className="mt-4 font-semibold" role="status">
-              {money({ amount: quote.rate.amount, currency })} shipping each
-              month. Monthly subtotal:{" "}
-              {money({ amount: quote.monthlyTotal, currency })}
+              {money({ amount: quote.rate.amount, currency })}{" "}
+              {managedBilling
+                ? "first month’s shipping. First invoice subtotal:"
+                : "shipping each month. Monthly subtotal:"}{" "}
+              {money({ amount: total!, currency })}
               {taxAdded ? " plus applicable sales tax" : ""}.
             </p>
           )}
@@ -443,17 +509,26 @@ export function JoinForm({
         )}
         <div className="min-w-0 space-y-4 rounded-3xl border bg-card p-6">
           <p aria-live="polite" className="font-bold">
-            {tier.name} · {money({ amount: tier.amount, currency })} / month
+            {tier.name} ·{" "}
+            {money({
+              amount: managedBilling ? billing.amount : tier.amount,
+              currency,
+            })}{" "}
+            /{" "}
+            {managedBilling && billingMonths !== 1
+              ? `${billingMonths} months`
+              : "month"}
             {tier.shipping !== undefined && " + shipping"}
           </p>
           <p className="text-sm">
             {quote
-              ? `${money({ amount: quote.rate.amount, currency })} shipping per month · ${quote.rate.carrier} ${quote.rate.service}`
+              ? `${money({ amount: quote.rate.amount, currency })} ${managedBilling ? "first month’s shipping" : "shipping per month"} · ${quote.rate.carrier} ${quote.rate.service}`
               : shippingLabel(tier, currency)}
           </p>
           {total !== null && (
             <p className="text-sm font-bold">
-              Monthly {taxAdded ? "subtotal" : "total"}:{" "}
+              {managedBilling ? "First invoice" : "Monthly"}{" "}
+              {taxAdded ? "subtotal" : "total"}:{" "}
               {money({ amount: total, currency })}
               {taxAdded && " plus applicable sales tax"}
             </p>
@@ -485,7 +560,9 @@ export function JoinForm({
             <span>
               {total === null
                 ? "The full monthly total will be available once the shipping fee is set. Checkout is closed."
-                : `I agree to ${money({ amount: total, currency })}${taxAdded ? " plus applicable sales tax" : ""} per month for ${tier.name}${tier.shipping ? ", including the separately listed shipping fee" : ""}, starting today and renewing monthly until I cancel future renewals.`}
+                : managedBilling
+                  ? `I agree to ${money({ amount: billing.amount, currency })} for ${billingMonths} month${billingMonths === 1 ? "" : "s"} of ${tier.name}, renewing at that interval until I cancel renewal. Shipping is charged separately each month at the quoted carrier price, plus applicable tax. Future automatic payments follow an itemized email delivered at least seven days beforehand. I will save my card, then review and pay the first invoice to confirm my membership.`
+                  : `I agree to ${money({ amount: total, currency })}${taxAdded ? " plus applicable sales tax" : ""} per month for ${tier.name}${tier.shipping ? ", including the separately listed shipping fee" : ""}, starting today and renewing monthly until I cancel future renewals.`}
             </span>
           </label>
           <Button
@@ -505,9 +582,11 @@ export function JoinForm({
                   ? "Fixture preview · checkout disabled"
                   : pending
                     ? "Opening secure checkout…"
-                    : sandbox
-                      ? "Join in Stripe sandbox"
-                      : `Join ${tier.name}`}
+                    : managedBilling
+                      ? "Save card and review first invoice"
+                      : sandbox
+                        ? "Join in Stripe sandbox"
+                        : `Join ${tier.name}`}
           </Button>
           <p className="text-xs leading-5 text-muted-foreground">
             Sign in to join. Pay securely with Stripe, then manage your

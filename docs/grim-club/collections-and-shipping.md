@@ -4,7 +4,7 @@ Updated October 25, 2026. This document records the offer agreed during the busi
 
 **Current state, October 26:** the collection pages and updated membership copy are live. The approved recovery snapshot and migrations 009/010 are complete. Four live monthly Stripe Prices now exist with inactive membership products and a disabled program. Paid enrollment remains closed; live Shippo remains disconnected. No customer subscriptions, charges, or shipping labels were created. See [the deployment record](deployment-20261026.md) and [the latest setup record](live-setup-and-prepaid-proposal.md).
 
-The owner approved recalculating shipping monthly with seven days’ itemized notice before automatic payment. The deployed billing flow still repeats the initial shipping quote, so it must remain closed until the replacement passes testing. The owner approved 5% off six months and 10% off twelve months, on membership only, paid upfront. Prepaid checkout remains closed during implementation and testing.
+The owner approved recalculating shipping monthly with seven days’ itemized notice before automatic payment. The former billing flow repeated the initial shipping quote. Its replacement is implemented for closed review and verified in the Stripe sandbox; see [prepaid billing and notices](prepaid-billing-and-notices.md). The owner approved 5% off six months and 10% off twelve months, on membership only, paid upfront. Prepaid checkout remains closed during implementation and testing.
 
 ## Collection pages
 
@@ -49,7 +49,9 @@ The server reads the business return address from `lib/grimmunity/shipping-profi
 
 Weigh and measure the sealed parcel before buying postage. If a monthly design exceeds a profile, correct the profile and review its effect on shipping costs. A bubble mailer is quoted as a tracked parcel. This implementation does not use stamped-letter or untracked flat rates. A smaller mailer does not guarantee a lower postage price.
 
-## Signup and recurring shipping
+## Original signup and recurring shipping
+
+The following describes the historical monthly Checkout flow. New enrollment uses [prepaid membership and notified monthly shipping](prepaid-billing-and-notices.md); historical snapshots are preserved.
 
 1. The customer selects one tier and enters a delivery address. Starter also collects six preferred colors and optional avoided colors.
 2. The authenticated quote endpoint obtains a USPS Ground Advantage rate through Shippo. It does not purchase a label.

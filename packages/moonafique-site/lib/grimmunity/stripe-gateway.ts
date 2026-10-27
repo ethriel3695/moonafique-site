@@ -13,6 +13,7 @@ import {
 
 import { tiersSchema, type Tier } from "./tiers";
 import { membershipPage } from "./collections";
+import { ManagedStripe, managedPriceMatches } from "./managed-stripe";
 
 export const STRIPE_API_VERSION = "2026-04-22.dahlia" as const;
 export function stripeId(
@@ -55,6 +56,7 @@ function normalizeSession(s: Stripe.Checkout.Session): Session {
     state: s.status,
     url: s.url,
     livemode: s.livemode,
+    setupIntent: stripeId(s.setup_intent) || null,
   };
 }
 function planMatches(
@@ -79,7 +81,10 @@ function planMatches(
   );
 }
 export class StripeGateway implements BillingGateway {
-  constructor(public stripe: Stripe) {}
+  managed: ManagedStripe;
+  constructor(public stripe: Stripe) {
+    this.managed = new ManagedStripe(stripe, (id, p) => this.invoice(id, p));
+  }
   async checkConfiguration(p: Program) {
     const tiers = tiersSchema.safeParse(p.tiers);
     if (
@@ -88,6 +93,25 @@ export class StripeGateway implements BillingGateway {
     )
       throw new ClubError("tiers_not_ready", 503);
     for (const tier of p.tiers) {
+      if (p.billing_policy === "notice_shipping_v1") {
+        if (!tier.billing_options) throw new ClubError("tiers_not_ready", 503);
+        for (const option of tier.billing_options) {
+          const price = await this.stripe.prices.retrieve(option.price_id, {
+            expand: ["product"],
+          });
+          const product = price.product;
+          if (
+            !managedPriceMatches(price, p, { ...tier, billing: option }) ||
+            !price.active ||
+            typeof product === "string" ||
+            product.deleted ||
+            !product.active ||
+            product.metadata.grim_subscription !== "true"
+          )
+            throw new ClubError("invalid_price", 503);
+        }
+        continue;
+      }
       if (tier.shipping === null && tier.shipping_mode !== "shippo")
         throw new ClubError("shipping_not_ready", 503);
       const charges = [
@@ -112,11 +136,13 @@ export class StripeGateway implements BillingGateway {
           throw new ClubError("invalid_price", 503);
       }
     }
-    await this.checkPortal(p);
+    await this.checkPortal(p, p.billing_policy === "notice_shipping_v1");
   }
-  async checkPortal(p: Program) {
+  async checkPortal(p: Program, managed = false) {
     const portal = await this.stripe.billingPortal.configurations.retrieve(
-      p.portal_configuration_id,
+      managed
+        ? (p.managed_portal_configuration_id ?? "")
+        : p.portal_configuration_id,
     );
     const f = portal.features;
     if (
@@ -127,9 +153,11 @@ export class StripeGateway implements BillingGateway {
       !f.customer_update.enabled ||
       !f.customer_update.allowed_updates.includes("shipping") ||
       f.subscription_update.enabled ||
-      !f.subscription_cancel.enabled ||
-      f.subscription_cancel.mode !== "at_period_end" ||
-      f.subscription_cancel.proration_behavior !== "none"
+      (managed
+        ? f.subscription_cancel.enabled
+        : !f.subscription_cancel.enabled ||
+          f.subscription_cancel.mode !== "at_period_end" ||
+          f.subscription_cancel.proration_behavior !== "none")
     )
       throw new ClubError("invalid_portal", 503);
   }
@@ -253,6 +281,38 @@ export class StripeGateway implements BillingGateway {
         { idempotencyKey: `grim:delivery:${r.id}` },
       );
     }
+    if (tier.billing) {
+      const s = await this.stripe.checkout.sessions.create(
+        {
+          mode: "setup",
+          currency: p.currency,
+          customer: m.customer_id,
+          client_reference_id: r.id,
+          metadata: {
+            grim_reservation: r.id,
+            grim_program: p.id,
+            grim_tier: tier.id,
+          },
+          setup_intent_data: {
+            metadata: { grim_reservation: r.id, grim_program: p.id },
+          },
+          payment_method_types: ["card"],
+          billing_address_collection: "required",
+          customer_update: { address: "auto", name: "auto" },
+          expires_at: Math.floor(r.expires_at.getTime() / 1000),
+          success_url: `${appOrigin()}/grimmunity/confirmation?session_id={CHECKOUT_SESSION_ID}`,
+          cancel_url: `${appOrigin()}${membershipPage(tier)}?checkout=unfinished`,
+          custom_text: {
+            submit: {
+              message:
+                "Save your card, then review and pay your itemized first invoice. Future shipping is quoted monthly, with an itemized email at least seven days before automatic payment. Membership renews at your selected interval until you cancel renewal.",
+            },
+          },
+        },
+        { idempotencyKey: `grim:checkout:${r.id}` },
+      );
+      return normalizeSession(s);
+    }
     const s = await this.stripe.checkout.sessions.create(
       {
         mode: "subscription",
@@ -337,9 +397,57 @@ export class StripeGateway implements BillingGateway {
   async subscription(id: string, p: Program, savedTier?: Tier) {
     const s = await this.stripe.subscriptions.retrieve(id);
     const tier = (savedTier ? [savedTier] : p.tiers).find((tier) =>
-      s.items.data.some((item) => item.price.id === tier.price_id),
+      s.items.data.some(
+        (item) => item.price.id === (tier.billing?.price_id ?? tier.price_id),
+      ),
     );
-    const item = s.items.data.find((item) => item.price.id === tier?.price_id);
+    const item = s.items.data.find(
+      (item) => item.price.id === (tier?.billing?.price_id ?? tier?.price_id),
+    );
+    if (tier?.billing) {
+      const delivery = s.items.data.find(
+        (other) =>
+          stripeId(other.price.product) === this.managed.deliveryProduct(p.id),
+      );
+      return {
+        id: s.id,
+        customer: stripeId(s.customer),
+        reservation: s.metadata.grim_reservation ?? null,
+        status: s.status,
+        livemode: s.livemode,
+        cancelAtPeriodEnd: !!s.cancel_at || s.cancel_at_period_end,
+        start: delivery?.current_period_start ?? 0,
+        end: delivery?.current_period_end ?? 0,
+        priceId: item?.price.id ?? null,
+        validPlan:
+          !!item &&
+          !!delivery &&
+          s.items.data.length === 2 &&
+          !s.items.has_more &&
+          item.quantity === 1 &&
+          managedPriceMatches(item.price, p, tier) &&
+          delivery.quantity === 1 &&
+          delivery.price.unit_amount === 0 &&
+          delivery.price.billing_scheme === "per_unit" &&
+          !delivery.price.custom_unit_amount &&
+          delivery.price.currency === p.currency &&
+          delivery.price.type === "recurring" &&
+          delivery.price.recurring?.interval === "month" &&
+          delivery.price.recurring.interval_count === 1 &&
+          delivery.price.recurring.usage_type === "licensed" &&
+          delivery.price.livemode === (p.id === "live") &&
+          !delivery.price.transform_quantity &&
+          s.billing_mode.type === "flexible" &&
+          s.collection_method === "send_invoice" &&
+          s.pause_collection?.behavior === "keep_as_draft" &&
+          !s.pause_collection.resumes_at &&
+          s.metadata.grim_billing === "notice_shipping_v1" &&
+          s.discounts.length === 0 &&
+          !s.trial_start &&
+          !s.trial_end &&
+          !s.schedule,
+      };
+    }
     const expected = tier
       ? [tier, ...(tier.shipping ? [tier.shipping] : [])]
       : [];
@@ -415,6 +523,8 @@ export class StripeGateway implements BillingGateway {
       // Inspect the historic invoice's own price, not a mutable current subscription item.
       const price = priceId ? await this.stripe.prices.retrieve(priceId) : null;
       lines.push({
+        id: line.id,
+        metadata: line.metadata ?? {},
         invoice: line.invoice,
         price: priceId || null,
         product: stripeId(line.pricing?.price_details?.product) || null,
@@ -428,11 +538,11 @@ export class StripeGateway implements BillingGateway {
           // This classifies an authoritative recurring line. The service then
           // checks its exact price, product, quantity, and amount against the
           // member's saved offer, including historical or destination-rated prices.
-          planMatches(price, p, {
-            price_id: price.id,
-            product_id: stripeId(price.product),
-            amount: price.unit_amount ?? -1,
-          }),
+          price.type === "recurring" &&
+          price.billing_scheme === "per_unit" &&
+          !price.transform_quantity &&
+          !price.custom_unit_amount &&
+          price.livemode === (p.id === "live"),
         proration:
           parent?.proration ??
           line.parent?.invoice_item_details?.proration ??
@@ -482,6 +592,10 @@ export class StripeGateway implements BillingGateway {
         verifiedAmount += payment.amount_paid ?? 0;
     }
     return {
+      autoAdvance: i.auto_advance,
+      hostedUrl: i.hosted_invoice_url,
+      collectionMethod: i.collection_method,
+      metadata: i.metadata ?? {},
       id: i.id,
       customer: stripeId(i.customer),
       subscription:
@@ -539,12 +653,14 @@ export class StripeGateway implements BillingGateway {
       ids.add(stripeId(p.invoice));
     return [...ids];
   }
-  async portal(p: Program, customer: string) {
-    await this.checkPortal(p);
+  async portal(p: Program, customer: string, managed = false) {
+    await this.checkPortal(p, managed);
     return (
       await this.stripe.billingPortal.sessions.create({
         customer,
-        configuration: p.portal_configuration_id,
+        configuration: managed
+          ? p.managed_portal_configuration_id!
+          : p.portal_configuration_id,
         return_url: `${appOrigin()}/account/grimmunity`,
       })
     ).url;
