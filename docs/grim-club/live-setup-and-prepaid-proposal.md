@@ -47,3 +47,24 @@ Review [the annual Keeper example](screenshots/prepaid-billing-proposal-20261026
 The owner signed in to Shippo. Its API settings show no live token and offer a **Request Live Token** button. Automatic approval review blocked clicking that button because it may submit an external request or initiate commercial contact. The owner was asked to authorize that request or complete it themselves. No live key has been connected or extracted. Never request credentials in chat.
 
 Do not activate products, enable the program, set live enrollment approval, send customer renewal notices, or purchase postage during setup and testing.
+
+## Approved prepaid catalog receipt
+
+All eight prepaid Prices were created successfully in live Stripe. The existing four monthly Prices were reused. The guarded setup committed all twelve Prices to the disabled program configuration. All membership products remain inactive, `enabled=false`, and `approved=false`. No customer subscriptions, live payments, emails, or labels were created.
+
+The unpromoted Production candidate is `dpl_5XrCEjHrkUtXCVAfS3J8Co82MskT`, `moonafique-site-l5mf79f7d-ethriel3695s-projects.vercel.app`, source `445258d9`. Vercel reports **READY**. The public domain still points to `dpl_9XahLquzAqzQNDBsjWtZqoXuoNdA`. No new database migration was needed.
+
+| Membership | Six-month Stripe Price | Annual Stripe Price |
+| --- | --- | --- |
+| `grimm_starter` | `price_1UV0zNDuU4RwQbePpKzSVQX3` | `price_1UV0zNDuU4RwQbePixHCqzXV` |
+| `grimm_keeper` | `price_1UV0zODuU4RwQbePmuS4yDPF` | `price_1UV0zODuU4RwQbePUI4e25BE` |
+| `aceo_prints` | `price_1UV0zPDuU4RwQbePo7Wktsd9` | `price_1UV0zPDuU4RwQbePG8K1SQag` |
+| `aceo_originals` | `price_1UV0zPDuU4RwQbePYAsR0PdA` | `price_1UV0zQDuU4RwQbePiWmwMbWS` |
+
+All 159 membership regression tests pass against the disposable local PostgreSQL database. TypeScript, scoped ESLint, and the static Storybook build pass. The approved pricing code and tests were pushed to the existing checkpoint branch.
+
+A disposable Stripe sandbox test clock also verified an annual membership with a zero-cost monthly delivery schedule: the initial test invoice was $162 plus $6.25 shipping; the following monthly invoice remained a draft with `auto_advance=false`; a fresh $6.95 shipping invoice item could then be added without a charge. The test clock/customer/subscription were removed and its sandbox product archived. No email address was supplied. This probe validates the Stripe API approach; it does not verify an integrated seven-day notice or prepaid fulfillment workflow.
+
+The probe confirmed that Stripe does not allow changing the price or amount of an existing subscription invoice line. The replacement must add a separately quoted shipping invoice item instead. It must keep renewal drafts and finalized invoices from automatic advancement until the delivered notice has aged seven days. Missing quotes, failed notices, changed addresses, or mismatched totals must block collection. Initial payment consent, cancellation across prepaid coverage, refunds/disputes, and remaining monthly deliveries still need integrated implementation and testing.
+
+Shippo access remains pending: [live token required](screenshots/shippo-live-token-required-20261026.jpg). The signed-in account has no live API token; the owner has been asked to authorize the external live-token request.
