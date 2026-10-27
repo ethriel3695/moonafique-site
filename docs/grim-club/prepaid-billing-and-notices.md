@@ -56,8 +56,22 @@ These are sandbox results, not advertised rates or tax advice. No live subscript
 
 Screenshots: [first invoice](screenshots/prepaid-first-invoice-sandbox-20261026.jpg), [shipping-only sandbox payment](screenshots/prepaid-shipping-renewal-sandbox-20261026.jpg).
 
-The owner authorized exactly one clearly marked test notice to `hello@moonafique.com`, with sample amounts and no subscription or charge. Record its delivery and webhook result after deployment. Shippo approval and the final launch decision remain separate.
+The owner authorized exactly one clearly marked test notice to `hello@moonafique.com`, with sample amounts and no subscription or charge. Its delivery and webhook were verified below. Shippo approval and the final launch decision remain separate.
 
 Review [the prepaid account examples](http://localhost:6006/?path=/story/memberships-prepaid-billing-and-notices--annual-keeper-shipping-only) and [the notice copy](http://localhost:6006/?path=/story/memberships-prepaid-billing-and-notices--seven-day-email). Stories use application components and the actual email formatter; actions are disabled.
 
 The reusable verifier is `scripts/grimmunity/verify-prepaid-billing.ts`. It requires sandbox mode, a local database named `grim_test`, and `GRIM_PREPAID_VERIFY=approved`. It truncates that disposable database and refuses production. It sends no real email.
+
+## Closed production deployment and delivery receipt
+
+- Source commit: `0017410a` on `codex/site-checkpoint-2026-10-26`, pushed to GitHub. Deployment `dpl_CzTQ9bSm98WCmz9MSfVoqVWSKqMi` was promoted to `www.moonafique.com` on October 26, 2026 (America/Boise).
+- Migrations 011 and 012 applied successfully using the existing recovery snapshot. Draft preparation verified `enabled=false`, `approved=false`, twelve approved Prices, and inactive Products. No live membership, payment, or label was created.
+- The first candidate was rejected by Vercel because this project's Hobby configuration allows at most sixty seconds per function. The final candidate uses supported limits and keeps the current plan. The worker queue fairness regression passes.
+- Public `/grimmunity` and `/aceos` return HTTP 200 and offer the interest list without checkout. `/api/grimmunity/availability` returns HTTP 200 with no open edition. An unsigned notice callback returns HTTP 400, `invalid_webhook`.
+- Production `GRIM_LIVE_ENROLLMENT`, `GRIM_MANAGED_COLLECTION`, and `GRIM_SEND_EMAILS` remain `disabled`. Live Shippo remains disconnected. The dedicated Resend receipt webhook is enabled; its signing secret remains sensitive and server-only.
+- Exactly one direct preview email was sent with subject **TEST ONLY — Moonafique billing notice preview** to `hello@moonafique.com`. Provider ID: `01a17bac-ffae-7f15-beda-9b3db125fe85`. Resend shows **Delivered** at `2026-10-27T04:44:59.015Z` (October 26 locally).
+- Delivery event `msg_3LGNAON1xgungGltkZi1JiTMgd5` reached the production receiver at `2026-10-27T04:45:00.092Z` and received **HTTP 200** with `{"received":true}` on attempt 1. Its `preview` tag intentionally prevents a production billing record or notice clock from being created. Outbox binding and seven-day collection timing were tested separately in the regression suite and Stripe sandbox.
+
+Proof: [delivered email](screenshots/prepaid-notice-delivered-20261026.jpg) and [successful signed webhook](screenshots/prepaid-notice-webhook-20261026.jpg). No signing secret is visible in either screenshot.
+
+Before opening checkout: connect the approved live Shippo key, verify live carrier quotes and packing profiles, complete full-capacity worker testing, prepare the actual first edition, and make the separate launch decision. Keep email, collection, catalog activation, program approval, and enrollment gates closed until those checks pass.
