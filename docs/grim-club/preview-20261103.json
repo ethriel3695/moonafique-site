@@ -1,0 +1,119 @@
+{
+  "deployedOn": "2026-11-03",
+  "sourceBranch": "codex/brand-first-release",
+  "sourceCommit": "84f13616c85f120b5b94187316582efc4e3a883b",
+  "target": "preview",
+  "deploymentId": "dpl_9i24ZX6SjsNFAJRHcriCE8zYY5YG",
+  "immutableUrl": "https://moonafique-site-g181ktf3a-ethriel3695s-projects.vercel.app",
+  "reviewUrl": "https://moonafique-brand-review-20261103.vercel.app",
+  "storybookUrl": "https://moonafique-brand-review-20261103.vercel.app/storybook/",
+  "status": "READY",
+  "protection": "Existing Vercel Authentication retained; no public access or share bypass created",
+  "existingAliasesUnchanged": true,
+  "productionDeploymentUnchanged": true,
+  "productionDeploymentId": "dpl_CzTQ9bSm98WCmz9MSfVoqVWSKqMi",
+  "reviewConfiguration": {
+    "mode": "sandbox",
+    "databaseConnected": false,
+    "operationalBillingCredentials": false,
+    "operationalShippingCredentials": false,
+    "emailDelivery": "disabled",
+    "enrollment": "closed",
+    "legacyPublicStripeSecretCleared": true
+  },
+  "httpChecks": [
+    {
+      "path": "/",
+      "status": 200
+    },
+    {
+      "path": "/grimmunity",
+      "status": 200
+    },
+    {
+      "path": "/aceos",
+      "status": 200
+    },
+    {
+      "path": "/about",
+      "status": 200
+    },
+    {
+      "path": "/contact",
+      "status": 200
+    },
+    {
+      "path": "/communities",
+      "status": 200
+    },
+    {
+      "path": "/storybook/",
+      "status": 200
+    }
+  ],
+  "availability": {
+    "availability": {},
+    "editionId": null
+  },
+  "anonymousMembershipCheckoutStatus": 401,
+  "contactDeliveryStatus": 503,
+  "anonymousWorkerStatus": 401,
+  "storybookEntries": 165,
+  "storybookRequiredExamplesVerified": true,
+  "artifactChecks": [
+    {
+      "file": "index.json",
+      "matchesLocal": true
+    },
+    {
+      "file": "account.stories-D6j7oedc.js",
+      "matchesLocal": true
+    },
+    {
+      "file": "views-DZ4IfzQs.js",
+      "matchesLocal": true
+    },
+    {
+      "file": "first-release.stories-BjDWzjcU.js",
+      "matchesLocal": true
+    }
+  ],
+  "clientScriptsScanned": 14,
+  "clientCredentialAndPrivateOriginScanPassed": true,
+  "labelsPurchased": 0,
+  "chargesCreated": 0,
+  "emailsSent": 0,
+  "anonymousProtectionChecks": [
+    {
+      "host": "moonafique-brand-review-20261103.vercel.app",
+      "status": 302,
+      "redirectHost": "vercel.com"
+    },
+    {
+      "host": "moonafique-site-g181ktf3a-ethriel3695s-projects.vercel.app",
+      "status": 302,
+      "redirectHost": "vercel.com"
+    }
+  ],
+  "browserVerification": {
+    "homepage": true,
+    "grimmunityEnrollmentClosed": true,
+    "aceoEnrollmentClosed": true,
+    "aboutCopy": true,
+    "cartDrawer": true,
+    "hostedManagedBillingStory": true,
+    "storybookEntryRedirectPreservesQuery": true
+  },
+  "buildChecks": {
+    "remoteNextBuildPassed": true,
+    "sourceEnvironmentFilesExcluded": true,
+    "storybookClientFilesScanned": 114,
+    "storybookCredentialAndPrivateOriginScanPassed": true
+  },
+  "reviewLimitations": [
+    "Visual review only; no connected database or live product catalog",
+    "Operational signup, checkout, shipping, and email delivery disabled",
+    "Use hosted Storybook sample states for cart, contact, signup, and member account review",
+    "No auth redirect allowlists or staff permissions changed"
+  ]
+}

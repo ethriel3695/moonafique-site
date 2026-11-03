@@ -21,7 +21,7 @@ The current application's live shipping gateway returned USPS Ground Advantage r
 
 These are November 3 sample quotes using the current profiles: Grimm **8 × 8 × 8 inches, 8 oz**; ACEO **7 × 5 × 1 inches, 6 oz**. Actual carrier prices vary. This checks rating availability, not recipient-address deliverability or guaranteed transit. Carrier transit follows dispatch; the separate seven-day dispatch policy starts after successful payment. Confirm the sealed production packages before accepting these measurements as final.
 
-Production remains on deployment `dpl_CzTQ9bSm98WCmz9MSfVoqVWSKqMi`, with status `READY`. No deployment was triggered. The saved key must be included in the next reviewed Production release before the deployed application can use it; see Vercel's [environment-variable guidance](https://vercel.com/docs/environment-variables). Its current launch controls are:
+Production remains on deployment `dpl_CzTQ9bSm98WCmz9MSfVoqVWSKqMi`, with status `READY`. No Production deployment was triggered. The later review deployment below targets Preview only. The saved key must be included in the next reviewed Production release before the deployed application can use it; see Vercel's [environment-variable guidance](https://vercel.com/docs/environment-variables). Its current launch controls are:
 
 | Setting | Current value |
 | --- | --- |
@@ -149,6 +149,12 @@ The follow-up passed 11 route checks, 13 member-account Storybook checks, TypeSc
 
 ## Brand review
 
+The owner authorized a Preview deployment for Jess and Reuben to review, with enrollment closed and no Production release. The [website Preview](https://moonafique-brand-review-20261103.vercel.app) and [hosted Storybook](https://moonafique-brand-review-20261103.vercel.app/storybook/?path=/story/memberships-member-account--managed-billing-portal-guidance) are ready. Existing Vercel Authentication remains in place; a Vercel sign-in may be required. No public-access bypass or review invitation was created.
+
+The deployed application source is `84f13616c85f120b5b94187316582efc4e3a883b` on `codex/brand-first-release`, deployment `dpl_9i24ZX6SjsNFAJRHcriCE8zYY5YG`. The [sanitized Preview receipt](preview-20261103.json) records the checks. The remote Next.js build passed. The deployed homepage, membership pages, About, navigation, cart drawer, and hosted account story were checked in the browser. Both membership pages show paid enrollment closed. All eight preexisting aliases, including the Production domains and older membership sandbox, remain unchanged.
+
+This Preview is for visual review. It has no database connection or operational Stripe, Shippo, or email credentials. Its shop has no connected product catalog, and signup, checkout, and contact delivery are disabled. Use Storybook's sample cart, contact, signup, and member-account states to review those experiences. All 165 Storybook entries are hosted with the Preview; the required brand and account artifacts match the verified local build. No payments, postage labels, emails, or customer records were created by this deployment.
+
 About was already rewritten in the first release. This readiness pass also updated the membership overview, Grimmunity, ACEOs, tier descriptions, and page metadata to match that voice. Prices, limits, included items, and financial terms retain the approved offer. Historical paid snapshots are not rewritten.
 
 Storybook's **First release → Brand pages** contains full desktop pages and mobile examples for Grimmunity, ACEOs, and About. It also includes simulated open enrollment with the current monthly and prepaid choices. Submissions and external navigation are disabled in these review stories. Membership names remain unchanged. The tagline is still undecided.
@@ -159,7 +165,7 @@ Storybook's **First release → Brand pages** contains full desktop pages and mo
 | --- | --- |
 | Jess | Confirm the first Starter Grimm and accessories/pets, Keeper design and worn accessories, two ACEO prints, and original-art collection. Supply final photos or confirm which approved images can represent the opening offer. |
 | Jess and Reuben | Confirm the first dispatch deadline and the number of orders you can make and pack within the promised timing, particularly Starter's uncapped offer. Confirm sealed package dimensions and weights for both collections. |
-| Reuben | Shippo approval, live-key creation, secure Production storage, and eight live rate checks are complete. Review the branch in Storybook before the agreed deployment workflow. |
+| Reuben | Shippo approval, live-key creation, secure Production storage, and eight live rate checks are complete. Review the deployed website Preview and hosted Storybook before approving a Production release. |
 | Jess and Reuben | Use the existing Jess and Reuben Google login for staff tools, and choose who monitors shipping/payment/email exceptions and packing during launch and Grimmfest. Review the updated membership Storybook pages and final customer billing/cancellation wording. |
 
 The first-edition designs, final photos, and dispatch deadline remain unconfirmed in this chat. The owner's November 3 copy approval does not resolve those production details.
@@ -168,9 +174,9 @@ The first-edition designs, final photos, and dispatch deadline remain unconfirme
 
 1. Live Shippo setup and eight rate checks are complete, including Alaska and Hawaii. Confirm the sealed package measurements and repeat quotes if those profiles change. Include the saved Production key in the reviewed release and verify the deployed staff readiness view while enrollment stays closed.
 2. The Neon, live Stripe configuration, internal shipping-product preparation, and connected sandbox customer checks are complete. Configure the November draft for the agreed November 5 opening time and actual first edition. Keep the program disabled and unapproved while preparing these changes.
-3. Review and release the branch through the agreed preview workflow. Check the deployed billing credential and callback configuration, then perform the final staff packing check against the actual first-edition setup. The connected local test used an existing WorkOS test identity and granted no staff access.
+3. The branch is deployed to Preview and ready for Jess and Reuben's review. After review and separate authorization, prepare the Production candidate, check its deployed billing credential and callback configuration, and perform the final staff packing check against the actual first-edition setup. The visual Preview does not run live billing or signup. The connected local test used an existing WorkOS test identity and granted no staff access.
 4. Measure provider-backed worker throughput for the expected launch queue and confirm the recovery/alert owner. Confirm database recovery arrangements.
-5. Real signup email delivery and a fresh production Resend callback are verified. Confirm the reviewed release retains the correct server-only configuration and repeat its closed-enrollment smoke check after deployment. The current local branch has not been deployed.
+5. Real signup email delivery and a fresh production Resend callback are verified. Confirm the reviewed release retains the correct server-only configuration and repeat its closed-enrollment smoke check after an authorized Production deployment. The branch has been deployed only to Preview; Production remains unchanged.
 6. After these checks pass, obtain the separate launch instruction before activating live products, program approval, customer notification delivery, automatic collection, and enrollment. Prepare the launch-list announcement and Grimmfest link/QR destination separately; this check sent no announcements.
 
 Thursday is the target, contingent on the remaining release checks. Shippo approval is resolved. Keep the working interest-list destination available for Grimmfest and describe enrollment as upcoming until the reviewed release and first edition are ready to open.
