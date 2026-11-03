@@ -20,7 +20,7 @@ A read-only Vercel metadata check confirmed the current production deployment is
 
 Database, Stripe, Stripe webhook, Resend receipt webhook, and cron secrets have sensitive configuration records. Their values were not retrieved or decrypted. These records confirm configuration presence, not provider connectivity or current catalog/edition state.
 
-The public membership overview and Grimmunity page loaded. Grimmunity still offers the launch-interest form with paid enrollment closed. Existing-owner Google sign-in through WorkOS returned successfully to the production member account, which showed no memberships. The public callback is correct. The `hello@moonafique.com` login received a 404 from the staff dashboard, consistent with its exact-account access restriction; the existing authorized staff login needs confirmation before checking production editions and fulfillment. No staff permissions changed.
+The public membership overview and Grimmunity page loaded. Grimmunity still offers the launch-interest form with paid enrollment closed. Existing-owner Google sign-in through WorkOS returned successfully to the production member account, which showed no memberships. The public callback is correct. The `hello@moonafique.com` login received a 404 from the staff dashboard, consistent with its exact-account access restriction. The subsequent staff check below resolved which existing login works. No staff permissions changed.
 
 A complete new-customer signup through authentication, application checkout, confirmation, and account display remains a release check on the reviewed sandbox candidate. The provider-backed billing walkthrough below used the verifier's synthetic local owner.
 
@@ -47,6 +47,18 @@ New tests used real local PostgreSQL rows and simulated one second of provider w
 
 This verifies queue rotation under the simulated timing. It does not measure real Stripe/Shippo throughput. Starter has no fixed enrollment cap, so there is no single full-capacity number for the whole program. Once live Shippo works, measure the expected launch workload and agree on enough worker runs and staff monitoring. A single daily backup run must not be treated as proof that a busy launch queue will finish in time. The admin **Run billing checks** action is available; no additional production runs or scheduler changes were made here.
 
+## Production staff verification follow-up
+
+After the owner asked to continue, the existing **Jess and Reuben Ellis** Google login, `ellistech0215@gmail.com`, successfully opened the production staff dashboard. This account already had staff access. No allowlist or permissions were changed.
+
+- November 2026, December 2026, and January 2027 all load through the staff edition selector and remain **draft**.
+- Each displays dispatch within seven days of payment and separate tier limits. The dashboard shows Starter without a fixed cap, Keeper with 12 places, ACEO Prints with 24, and ACEO Originals with 12.
+- There are zero memberships, paid fulfillment obligations, pending billing cycles, unresolved exceptions, pending events, or pending notifications. One person is on the launch-interest list; no contact details were exported.
+- The latest completed backup billing check is November 3, with zero memberships checked and zero failures. No manual worker run was triggered during this follow-up.
+- The dashboard still reports **Shippo API key needed**.
+
+These screens do not expose the exact enrollment/cutoff timestamps or all twelve saved price options. Automatic approval review rejected opening the production Neon console because that private database-console access exceeded the staff-dashboard verification scope. No alternate database access was attempted. The [proposed read-only configuration queries](readiness-config-audit.sql) are prepared for owner review and have not run. They select only program, membership-price, and edition configuration; they do not select customers, addresses, credentials, or staff identities.
+
 ## Brand review
 
 About was already rewritten in the first release. This readiness pass also updated the membership overview, Grimmunity, ACEOs, tier descriptions, and page metadata to match that voice. Prices, limits, included items, and financial terms retain the approved offer. Historical paid snapshots are not rewritten.
@@ -60,14 +72,14 @@ Storybook's **First release → Brand pages** contains full desktop pages and mo
 | Jess | Confirm the first Starter Grimm and accessories/pets, Keeper design and worn accessories, two ACEO prints, and original-art collection. Supply final photos or confirm which approved images can represent the opening offer. |
 | Jess and Reuben | Confirm the first dispatch deadline and the number of orders you can make and pack within the promised timing, particularly Starter's uncapped offer. Confirm sealed package dimensions and weights for both collections. |
 | Reuben | Let us know when Shippo approves live access. Store the issued key through the secure production configuration workflow; do not paste it into chat or source. |
-| Jess and Reuben | Confirm the existing authorized staff login and who monitors shipping/payment/email exceptions and packing during launch and Grimmfest. Review the updated membership Storybook pages and final customer billing/cancellation wording. |
+| Jess and Reuben | Use the existing Jess and Reuben Google login for staff tools, and choose who monitors shipping/payment/email exceptions and packing during launch and Grimmfest. Review the updated membership Storybook pages and final customer billing/cancellation wording. |
 
 The first-edition designs, final photos, and dispatch deadline remain unconfirmed in this chat. The owner's November 3 copy approval does not resolve those production details.
 
 ## Remaining technical release checks
 
 1. Connect approved live Shippo access and verify actual rates for both sealed package profiles, including expensive U.S. destinations. Rate checks do not require buying a label.
-2. Read the actual current program, all twelve configured prices, portal restrictions, and first and future editions through authorized staff tools. Replace obsolete November 1 opening assumptions with the approved opening time. Do not publish draft edition dates.
+2. Complete the limited production configuration audit after explicit access approval: exact opening/cutoff times, all twelve configured prices, and portal restrictions. Staff access, the four tier limits, and the November–January draft states are verified. Replace obsolete November 1 opening assumptions with the approved opening time. Do not publish draft edition dates.
 3. Verify fresh authentication, signup, confirmation, account management, and staff visibility together in the isolated sandbox. Do not claim the synthetic verifier proves the complete authenticated browser journey.
 4. Measure provider-backed worker throughput for the expected launch queue and confirm the recovery/alert owner. Confirm database recovery arrangements.
 5. Complete review of the brand branch, then verify the approved release's real email delivery and webhook handling while checkout remains closed.
