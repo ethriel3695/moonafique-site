@@ -1,0 +1,276 @@
+{
+  "auditedOn": "2026-11-03",
+  "method": "Read-only Stripe SDK retrieve/list calls using the existing server connection",
+  "account": {
+    "matchedExpectedAccount": true,
+    "chargesEnabled": true,
+    "payoutsEnabled": true,
+    "detailsSubmitted": true,
+    "cardPayments": "active",
+    "disabledReason": null,
+    "currentlyDueCount": 0,
+    "pastDueCount": 0
+  },
+  "prices": [
+    {
+      "membership": "ACEO Originals",
+      "tierId": "aceo_originals",
+      "months": 1,
+      "amountCents": 2000,
+      "currency": "usd",
+      "interval": "month",
+      "intervalCount": 1,
+      "taxBehavior": "exclusive",
+      "live": true,
+      "active": true,
+      "mismatches": []
+    },
+    {
+      "membership": "ACEO Originals",
+      "tierId": "aceo_originals",
+      "months": 6,
+      "amountCents": 11400,
+      "currency": "usd",
+      "interval": "month",
+      "intervalCount": 6,
+      "taxBehavior": "exclusive",
+      "live": true,
+      "active": true,
+      "mismatches": []
+    },
+    {
+      "membership": "ACEO Originals",
+      "tierId": "aceo_originals",
+      "months": 12,
+      "amountCents": 21600,
+      "currency": "usd",
+      "interval": "year",
+      "intervalCount": 1,
+      "taxBehavior": "exclusive",
+      "live": true,
+      "active": true,
+      "mismatches": []
+    },
+    {
+      "membership": "ACEO Prints",
+      "tierId": "aceo_prints",
+      "months": 1,
+      "amountCents": 1000,
+      "currency": "usd",
+      "interval": "month",
+      "intervalCount": 1,
+      "taxBehavior": "exclusive",
+      "live": true,
+      "active": true,
+      "mismatches": []
+    },
+    {
+      "membership": "ACEO Prints",
+      "tierId": "aceo_prints",
+      "months": 6,
+      "amountCents": 5700,
+      "currency": "usd",
+      "interval": "month",
+      "intervalCount": 6,
+      "taxBehavior": "exclusive",
+      "live": true,
+      "active": true,
+      "mismatches": []
+    },
+    {
+      "membership": "ACEO Prints",
+      "tierId": "aceo_prints",
+      "months": 12,
+      "amountCents": 10800,
+      "currency": "usd",
+      "interval": "year",
+      "intervalCount": 1,
+      "taxBehavior": "exclusive",
+      "live": true,
+      "active": true,
+      "mismatches": []
+    },
+    {
+      "membership": "Grimm Keeper",
+      "tierId": "grimm_keeper",
+      "months": 1,
+      "amountCents": 3000,
+      "currency": "usd",
+      "interval": "month",
+      "intervalCount": 1,
+      "taxBehavior": "exclusive",
+      "live": true,
+      "active": true,
+      "mismatches": []
+    },
+    {
+      "membership": "Grimm Keeper",
+      "tierId": "grimm_keeper",
+      "months": 6,
+      "amountCents": 17100,
+      "currency": "usd",
+      "interval": "month",
+      "intervalCount": 6,
+      "taxBehavior": "exclusive",
+      "live": true,
+      "active": true,
+      "mismatches": []
+    },
+    {
+      "membership": "Grimm Keeper",
+      "tierId": "grimm_keeper",
+      "months": 12,
+      "amountCents": 32400,
+      "currency": "usd",
+      "interval": "year",
+      "intervalCount": 1,
+      "taxBehavior": "exclusive",
+      "live": true,
+      "active": true,
+      "mismatches": []
+    },
+    {
+      "membership": "Grimm Starter",
+      "tierId": "grimm_starter",
+      "months": 1,
+      "amountCents": 1500,
+      "currency": "usd",
+      "interval": "month",
+      "intervalCount": 1,
+      "taxBehavior": "exclusive",
+      "live": true,
+      "active": true,
+      "mismatches": []
+    },
+    {
+      "membership": "Grimm Starter",
+      "tierId": "grimm_starter",
+      "months": 6,
+      "amountCents": 8550,
+      "currency": "usd",
+      "interval": "month",
+      "intervalCount": 6,
+      "taxBehavior": "exclusive",
+      "live": true,
+      "active": true,
+      "mismatches": []
+    },
+    {
+      "membership": "Grimm Starter",
+      "tierId": "grimm_starter",
+      "months": 12,
+      "amountCents": 16200,
+      "currency": "usd",
+      "interval": "year",
+      "intervalCount": 1,
+      "taxBehavior": "exclusive",
+      "live": true,
+      "active": true,
+      "mismatches": []
+    }
+  ],
+  "products": [
+    {
+      "membership": "ACEO Originals",
+      "tierId": "aceo_originals",
+      "live": true,
+      "active": false,
+      "subscriptionMetadataCorrect": true
+    },
+    {
+      "membership": "ACEO Prints",
+      "tierId": "aceo_prints",
+      "live": true,
+      "active": false,
+      "subscriptionMetadataCorrect": true
+    },
+    {
+      "membership": "Grimm Keeper",
+      "tierId": "grimm_keeper",
+      "live": true,
+      "active": false,
+      "subscriptionMetadataCorrect": true
+    },
+    {
+      "membership": "Grimm Starter",
+      "tierId": "grimm_starter",
+      "live": true,
+      "active": false,
+      "subscriptionMetadataCorrect": true
+    }
+  ],
+  "portal": {
+    "live": true,
+    "active": true,
+    "paymentMethodUpdates": true,
+    "invoiceHistory": true,
+    "customerUpdates": true,
+    "shippingAddressUpdates": true,
+    "subscriptionUpdates": false,
+    "stripeSubscriptionCancellation": false,
+    "matchesManagedBillingRequirements": true
+  },
+  "webhooks": [
+    {
+      "url": "https://www.moonafique.com/api/grimmunity/webhook",
+      "status": "enabled",
+      "apiVersion": "2026-04-22.dahlia",
+      "live": true,
+      "missingHandledEvents": []
+    }
+  ],
+  "taxRegistrations": [
+    {
+      "country": "US",
+      "state": "ID",
+      "status": "active",
+      "activeFrom": "2026-11-01T06:00:00.000Z"
+    }
+  ],
+  "errors": [],
+  "changesMade": false,
+  "productionMetadata": {
+    "method": "Read-only Vercel metadata; secret values not retrieved or decrypted",
+    "deploymentReady": true,
+    "mode": "live",
+    "liveEnrollment": "disabled",
+    "managedCollection": "disabled",
+    "sendEmails": "disabled",
+    "reviewUi": "false",
+    "shippoKeyConfigured": false,
+    "billingSecretRecordPresent": true,
+    "webhookSecretRecordPresent": true
+  },
+  "limits": [
+    "No live checkout, invoice, subscription, charge, refund, customer, or portal session created",
+    "Production billing and webhook secret values were not retrieved; deployed credential connectivity was not tested",
+    "Webhook configuration and subscribed events verified; fresh live event delivery and signature validation not exercised",
+    "Missing internal shipping products are provisioned by existing checkout code; production provisioning permissions not exercised"
+  ],
+  "summary": {
+    "pricesChecked": 12,
+    "priceMismatches": 0,
+    "inactivePrices": 0,
+    "productsChecked": 4,
+    "inactiveProducts": [
+      "ACEO Originals",
+      "ACEO Prints",
+      "Grimm Keeper",
+      "Grimm Starter"
+    ],
+    "portalMatches": true,
+    "enabledCompleteWebhooks": 1
+  },
+  "supportProducts": [
+    {
+      "role": "delivery_schedule",
+      "exists": false,
+      "provisionedByExistingCheckoutCode": true
+    },
+    {
+      "role": "monthly_postage",
+      "exists": false,
+      "provisionedByExistingCheckoutCode": true
+    }
+  ]
+}

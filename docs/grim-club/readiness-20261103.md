@@ -2,7 +2,7 @@
 
 Target opening: Thursday, November 5. Grimmfest announcement: Saturday, November 7 at 7:30 p.m. MST. All launch dates and times in this record use America/Boise.
 
-**Paid enrollment is not ready to open yet.** The current sandbox billing checks pass. Live Shippo access, the actual first edition, and the final operating and release checks remain outstanding. No production settings changed, no live payment or postage purchase occurred, and no real email was sent during this check.
+**Paid enrollment is not ready to open yet.** The sandbox billing checks pass, and the live Stripe account, twelve saved prices, managed portal, and webhook configuration now pass a read-only audit. The four membership products remain inactive. Live Shippo access, the actual first edition, and the final operating and release checks remain outstanding. No production settings changed, no live payment or postage purchase occurred, and no real email was sent during this check.
 
 ## Shippo and production status
 
@@ -63,7 +63,7 @@ These screens do not expose the exact enrollment/cutoff timestamps or all twelve
 
 The owner authorized the audit on November 3 and required enrollment to stay closed. The [approved queries](readiness-config-audit.sql) ran in Neon's SQL Editor against **grimmunity-production → main → neondb**, inside `BEGIN TRANSACTION READ ONLY` and `ROLLBACK`. All five statements succeeded. The three result sets contained one program, twelve price options, and three editions. The [sanitized receipt](readiness-neon-audit-20261103.json) omits product/price identifiers and the portal identifier; no credentials or customer records were retrieved.
 
-**Enrollment remains closed:** `enabled=false`, `approved_at=null`, and all three editions are `draft`. The program uses `notice_shipping_v1`, U.S. delivery, USD, exclusive tax, seven-day rolling dispatch, and terms version `moonafique-notified-shipping-v3-2026-10-26`. A managed billing-portal reference is saved; its current Stripe controls were not inspected by this database-only audit.
+**Enrollment remains closed:** `enabled=false`, `approved_at=null`, and all three editions are `draft`. The program uses `notice_shipping_v1`, U.S. delivery, USD, exclusive tax, seven-day rolling dispatch, and terms version `moonafique-notified-shipping-v3-2026-10-26`. A managed billing-portal reference is saved; the subsequent Stripe audit below verified its current controls.
 
 All twelve saved amounts match the approved offer. Six months receive 5% off membership; twelve months receive 10% off membership. Shipping and applicable tax are additional, and shipping remains due for each monthly delivery.
 
@@ -88,6 +88,24 @@ The following are exact saved **draft** dates in America/Boise local time. Every
 
 The stored batch dispatch windows are draft setup defaults. With `fulfillment_lead_days=7`, the service assigns new paid orders a ship-by time seven days after verified payment; the customer and staff pages use that rolling dispatch policy. The batch dates are not an approved first-shipment commitment. Confirm the actual first edition and Jess's packing capacity before finalizing schedules or opening enrollment.
 
+## Read-only live Stripe audit
+
+At the owner's request, the existing server-side Stripe connection was used for retrieve/list calls only. The account identity matched the expected Moonafique live account. The audit used the twelve Price IDs and managed portal reference read from production Neon. The [sanitized receipt](readiness-stripe-audit-20261103.json) contains readiness results without credentials, customer records, or payment details.
+
+| Check | Verified result |
+| --- | --- |
+| Live account | Card payments and payouts enabled; details submitted; no current or past-due account requirements and no disabled reason. |
+| Twelve membership prices | All live and active. Amounts match the table above, with correct monthly, six-month, and annual intervals, USD, exclusive tax, and membership product metadata. No mismatches. |
+| Four membership products | All live but **inactive**, consistent with the prelaunch hold. They must be activated as part of the separately authorized launch. |
+| Managed billing portal | Live and active. Payment method, invoice history, customer details, and shipping address controls enabled. Stripe-side plan changes and subscription cancellation disabled, matching the application's managed billing and prepaid cancellation flow. |
+| Billing webhook | The canonical `/api/grimmunity/webhook` endpoint is live and enabled on API version `2026-04-22.dahlia`. All 21 event types handled by the application are subscribed. |
+| Tax registration | Stripe reports the Idaho registration active from November 1, 2026, at midnight America/Boise. This checks Stripe's registration state, not a customer's final tax calculation. |
+| Internal shipping products | The monthly delivery-schedule and postage products do not exist yet. The existing `ManagedStripe.price()` code creates them and their prices idempotently when the first managed subscription starts. No products or prices were created during this audit. |
+
+A fresh Vercel metadata check confirmed the same production deployment remains ready, `GRIM_MODE=live`, and enrollment, managed collection, and customer emails remain disabled. `SHIPPO_API_KEY` is still missing. The production billing credential's value was not retrieved; this audit establishes the live account's configuration, not an end-to-end connection through the deployed application's credential.
+
+No live customer, checkout session, invoice, subscription, charge, refund, or portal session was created. The webhook check verifies endpoint configuration and event coverage; it does not prove delivery of a fresh live event or validate the deployed signing secret. Before opening, complete a controlled application check that confirms shipping-product provisioning permissions, real email delivery, and webhook processing with the reviewed release. Keep enrollment closed during preparation.
+
 ## Brand review
 
 About was already rewritten in the first release. This readiness pass also updated the membership overview, Grimmunity, ACEOs, tier descriptions, and page metadata to match that voice. Prices, limits, included items, and financial terms retain the approved offer. Historical paid snapshots are not rewritten.
@@ -108,7 +126,7 @@ The first-edition designs, final photos, and dispatch deadline remain unconfirme
 ## Remaining technical release checks
 
 1. Connect approved live Shippo access and verify actual rates for both sealed package profiles, including expensive U.S. destinations. Rate checks do not require buying a label.
-2. The Neon configuration audit is complete: saved prices, allocations, program controls, and exact draft dates are verified. Before launch, verify current Stripe catalog/portal controls and configure the November draft for the agreed November 5 opening time and actual first edition. Keep the program disabled and unapproved while preparing those changes.
+2. The Neon and read-only live Stripe configuration audits are complete: saved prices, allocations, program controls, exact draft dates, live catalog prices, portal controls, and webhook event coverage are verified. Configure the November draft for the agreed November 5 opening time and actual first edition. Confirm the deployed billing credential can provision the internal shipping products during the controlled release check. Keep the program disabled and unapproved while preparing these changes.
 3. Verify fresh authentication, signup, confirmation, account management, and staff visibility together in the isolated sandbox. Do not claim the synthetic verifier proves the complete authenticated browser journey.
 4. Measure provider-backed worker throughput for the expected launch queue and confirm the recovery/alert owner. Confirm database recovery arrangements.
 5. Complete review of the brand branch, then verify the approved release's real email delivery and webhook handling while checkout remains closed.
