@@ -1,10 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { Lora, Manrope } from 'next/font/google';
+import { lora, manrope } from '@/lib/site-fonts';
 import { CreationsShowcase } from './creations-showcase';
 import { printWarsCreations } from '@/lib/creations-showcase';
 
-const lora = Lora({ subsets: ['latin'], variable: '--font-display' });
-const manrope = Manrope({ subsets: ['latin'], variable: '--font-sans' });
 
 const meta = {
   title: 'Organism/Creations Showcase',

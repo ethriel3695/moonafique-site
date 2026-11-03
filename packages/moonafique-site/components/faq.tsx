@@ -37,7 +37,7 @@ const faqs = [
   {
     question: 'How do I care for my 3D printed items?',
     paragraphs: [
-      'Keep your piece away from high heat, avoid long stretches of direct sunlight, and clean it gently with a soft dry cloth. Treat it like a little collectible, not something meant to be tossed in a toy bin.',
+      'Keep your piece away from high heat, avoid long stretches of direct sunlight, and clean it gently with a soft dry cloth. Handle delicate parts carefully.',
     ],
   },
 ];
@@ -57,11 +57,11 @@ export function FAQ() {
             Good to know
           </p>
           <h2 className="mt-4 text-4xl sm:text-5xl">
-            A few practical details before a little magic ships out.
+            A few details before you collect.
           </h2>
           <p className="mt-4 text-lg leading-8 text-muted-foreground">
             We want your piece to arrive safely, make sense when you open it,
-            and stay wonderful once it is home.
+            and stay in good condition once it is home.
           </p>
         </div>
         <div className="mx-auto mt-12 max-w-3xl space-y-4">

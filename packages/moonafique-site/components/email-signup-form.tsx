@@ -5,7 +5,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
 
-export function EmailSignupForm() {
+async function subscribeToNewsletter(email: string) {
+  const response = await fetch('/api/subscribe', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email }) });
+  const data = await response.json();
+  if (!response.ok) throw new Error(data.error || 'Couldn’t subscribe. Please try again.');
+}
+export function EmailSignupForm({ subscribe = subscribeToNewsletter }: { subscribe?: (email: string) => Promise<void> }) {
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
@@ -15,19 +20,7 @@ export function EmailSignupForm() {
     setIsLoading(true);
 
     try {
-      const response = await fetch('/api/subscribe', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Something went wrong');
-      }
+      await subscribe(email);
 
       toast({
         title: 'Success!',
@@ -57,7 +50,7 @@ export function EmailSignupForm() {
       <Input
         id="newsletter-email"
         type="email"
-        placeholder="Enter your email for new releases and market drops"
+        placeholder="Your email address"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         className="h-12 flex-1 border-primary-foreground/15 bg-background text-foreground shadow-none"

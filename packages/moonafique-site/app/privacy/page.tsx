@@ -57,6 +57,8 @@ export default function PrivacyPolicyPage() {
             correction or deletion, email hello@moonafique.com.
           </p>
 
+          <p className="text-muted-foreground">For contact messages, we use your name, email, subject, and message to respond. The message is delivered to the Moonafique inbox through our email provider. This does not add you to a mailing list. We also limit repeated submissions to reduce spam.</p>
+
           <div className="space-y-4">
             <h3 className="text-xl font-medium">
               Automatically Collected Information

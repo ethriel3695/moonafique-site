@@ -14,7 +14,8 @@
     "build-storybook": "storybook build",
     "test:grim": "vitest run --config vitest.grim.config.mts",
     "grim": "tsx scripts/grimmunity/cli.ts",
-    "grim:prepare-preview": "tsx scripts/grimmunity/prepare-preview.ts"
+    "grim:prepare-preview": "tsx scripts/grimmunity/prepare-preview.ts",
+    "test:storefront": "vitest run --config vitest.storefront.config.mts"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "1.1.1",

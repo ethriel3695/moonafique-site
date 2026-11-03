@@ -1,110 +1,91 @@
-import Link from 'next/link';
-
-const categories = [
-  { name: 'Dragons', search: 'dragon' },
-  { name: 'Sea Creatures', search: 'narwhal' },
-  { name: 'Wild Animals', search: 'racoon' },
-  { name: 'Dinosaurs', search: 'dino' },
-  { name: 'Farm Animals', search: 'cow' },
-  { name: 'All Products', search: '' },
+import Link from "next/link";
+import { brandDescription, socialLinks } from "@/lib/site-content";
+const links = [
+  { label: "Collections", href: "/#collections" },
+  { label: "Shop", href: "/#shop" },
+  { label: "The creations showcase", href: "/creations" },
+  { label: "Monthly memberships", href: "/communities" },
+  { label: "Custom requests", href: "/customs" },
+  { label: "About Moonafique", href: "/about" },
+  { label: "Contact", href: "/contact" },
 ];
-
-const legalLinks = [
-  { label: 'Privacy Policy', href: '/privacy' },
-  { label: 'Terms of Service', href: '/terms' },
-  { label: 'Cookie Policy', href: '/cookies' },
-  { label: 'Refund Policy', href: '/refund' },
-  { label: 'Shipping Policy', href: '/shipping' },
-  { label: 'Quality Policy', href: '/quality' },
+const policies = [
+  "Privacy",
+  "Terms",
+  "Cookies",
+  "Refund",
+  "Shipping",
+  "Quality",
 ];
-
-export const Footer = () => {
+export function Footer() {
   return (
-    <footer className="border-t border-primary/20 bg-[linear-gradient(180deg,_hsl(263_43%_27%)_0%,_hsl(263_36%_18%)_100%)] text-primary-foreground">
-      <div className="mx-auto grid max-w-screen-xl gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)_minmax(0,0.9fr)] lg:px-8">
-        <div className="space-y-5">
-          <Link href="/" className="inline-flex items-center gap-3">
-            <div className="rounded-full border border-primary-foreground/25 bg-primary-foreground/10 px-4 py-2 shadow-soft">
-              <h2 className="font-display text-3xl text-primary-foreground">
-                Moonafique
-              </h2>
-            </div>
+    <footer className="border-t border-primary/20 bg-[#2b2035] text-[#f8f0fc]">
+      <div className="mx-auto grid max-w-screen-xl gap-10 px-5 py-12 sm:px-8 lg:grid-cols-[1.3fr_1fr_0.7fr]">
+        <div>
+          <Link href="/" className="font-display text-3xl">
+            Moonafique
           </Link>
-          <p className="max-w-md text-base leading-7 text-primary-foreground/90">
-            Small-batch 3D-printed creatures, fossils, and curious desk pieces
-            made to feel playful, polished, and easy to gift.
+          <p className="mt-5 max-w-md leading-7 text-[#e3d6ec]">
+            {brandDescription}
           </p>
-          <div className="flex flex-wrap gap-3">
-            <a
-              href="https://www.whatnot.com/user/moonafique"
-              target="_blank"
-              rel="noreferrer noopener"
-              className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/25 bg-primary-foreground/10 px-4 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary-foreground/18"
-            >
-              Whatnot
-            </a>
-          </div>
-        </div>
-        <div className="grid gap-4">
-          <div>
-            <h3 className="text-sm font-semibold uppercase tracking-[0.24em] text-accent">
-              Shop by mood
-            </h3>
-            <div className="mt-4 grid gap-2">
-              {categories.map((category) => (
-                <Link
-                  key={category.name}
-                  href={`/?search=${encodeURIComponent(category.search)}`}
-                  className="text-base text-primary-foreground/90 transition-colors hover:text-accent"
-                >
-                  {category.name}
-                </Link>
-              ))}
-            </div>
-          </div>
-        </div>
-        <div className="grid gap-4">
-          <div>
-            <h3 className="text-sm font-semibold uppercase tracking-[0.24em] text-accent">
-              Policies and contact
-            </h3>
-            <div className="mt-4 grid gap-2">
-              <Link href="/communities" className="text-base text-primary-foreground/90 transition-colors hover:text-accent">Our communities</Link>
-              <Link href="/grimmunity" className="text-base text-primary-foreground/90 transition-colors hover:text-accent">Grimmunity memberships</Link>
-              <Link href="/aceos" className="text-base text-primary-foreground/90 transition-colors hover:text-accent">ACEO memberships</Link>
-              <Link
-                href="/contact"
-                className="text-base text-primary-foreground/90 transition-colors hover:text-accent"
+          <nav
+            aria-label="Social profiles"
+            className="mt-6 flex flex-wrap gap-3"
+          >
+            {socialLinks.map((link) => (
+              <a
+                key={link.name}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex min-h-11 items-center rounded-full border border-white/25 px-4 text-sm font-semibold hover:bg-white/10"
               >
-                Contact Moonafique
-              </Link>
-              <Link
-                href="/about"
-                className="text-base text-primary-foreground/90 transition-colors hover:text-accent"
-              >
-                About the studio
-              </Link>
-              {legalLinks.map((link) => (
+                {link.name}
+                <span className="sr-only"> (opens in a new tab)</span>
+              </a>
+            ))}
+          </nav>
+        </div>
+        <nav aria-label="Explore Moonafique">
+          <h2 className="text-sm font-bold uppercase tracking-[0.18em] text-[#d6b9eb]">
+            Explore
+          </h2>
+          <ul className="mt-4 grid gap-1">
+            {links.map((link) => (
+              <li key={link.href}>
                 <Link
-                  key={link.label}
                   href={link.href}
-                  className="text-base text-primary-foreground/90 transition-colors hover:text-accent"
+                  className="inline-flex min-h-11 items-center text-[#e3d6ec] underline-offset-4 hover:underline"
                 >
                   {link.label}
                 </Link>
-              ))}
-            </div>
-          </div>
-        </div>
+              </li>
+            ))}
+          </ul>
+        </nav>
+        <nav aria-label="Policies">
+          <h2 className="text-sm font-bold uppercase tracking-[0.18em] text-[#d6b9eb]">
+            Good to know
+          </h2>
+          <ul className="mt-4 grid gap-1">
+            {policies.map((label) => (
+              <li key={label}>
+                <Link
+                  href={`/${label.toLowerCase()}`}
+                  className="inline-flex min-h-11 items-center text-sm text-[#e3d6ec] underline-offset-4 hover:underline"
+                >
+                  {label === "Terms" ? "Terms of service" : `${label} policy`}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
       </div>
-      <div className="border-t border-primary-foreground/15">
-        <div className="mx-auto flex max-w-screen-xl flex-col gap-3 px-4 py-5 text-sm text-primary-foreground/80 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
-          <p>
-            © {new Date().getFullYear()} Moonafique LLC. All rights reserved.
-          </p>
-          <p>Made for shelves, gift tables, and curious little moments.</p>
-        </div>
+      <div className="border-t border-white/15 px-5 py-5 sm:px-8">
+        <p className="mx-auto max-w-screen-xl text-sm text-[#e3d6ec]">
+          © {new Date().getFullYear()} Moonafique LLC. All rights reserved.
+        </p>
       </div>
     </footer>
   );
-};
+}

@@ -1,11 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { expect, waitFor, within } from 'storybook/test';
-import { Lora, Manrope } from 'next/font/google';
+import { lora, manrope } from '@/lib/site-fonts';
 import { MadeAtMoonafique } from './made-at-moonafique';
 import { showcaseFeatures } from '@/lib/showcase';
 
-const lora = Lora({ subsets: ['latin'], variable: '--font-display' });
-const manrope = Manrope({ subsets: ['latin'], variable: '--font-sans' });
 
 const meta = {
   title: 'Organism/Made at Moonafique',
@@ -55,7 +53,7 @@ export const MissingMediaStaysLocal: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await expect(canvas.queryByRole('region', { name: 'Come a little closer.' })).not.toBeInTheDocument();
+    await expect(canvas.queryByRole('region', { name: 'Selected work.' })).not.toBeInTheDocument();
     await expect(canvas.queryByText(/local draft/i)).not.toBeInTheDocument();
   },
 };

@@ -17,8 +17,23 @@ export async function POST(req: NextRequest) {
   try {
     const { items } = cartSchema.parse(await req.json());
     if (!items.length) return NextResponse.json({ url: null });
+    const combined = new Map<string, number>();
+    for (const item of items)
+      combined.set(
+        item.priceId,
+        (combined.get(item.priceId) ?? 0) + item.quantity,
+      );
+    if ([...combined.values()].some((quantity) => quantity > 100))
+      return NextResponse.json(
+        { error: "Please keep quantities between 1 and 100." },
+        { status: 400 },
+      );
+    const checkoutItems = [...combined].map(([priceId, quantity]) => ({
+      priceId,
+      quantity,
+    }));
     let cartTotal = 0;
-    for (const item of items) {
+    for (const item of checkoutItems) {
       const price = await stripe.prices.retrieve(item.priceId, {
         expand: ["product"],
       });
@@ -27,10 +42,32 @@ export async function POST(req: NextRequest) {
           { error: "This item is not available for one-time checkout." },
           { status: 400 },
         );
+      const product = price.product as import("stripe").Stripe.Product;
+      const stock =
+        product.metadata.stock === undefined || product.metadata.stock === ""
+          ? undefined
+          : Number(product.metadata.stock);
+      const madeToOrder =
+        product.metadata.status === "madeToOrder" ||
+        (stock === 0 && product.metadata.madeToOrder === "true");
+      if (
+        product.metadata.status === "comingSoon" ||
+        product.metadata.status === "soldOut" ||
+        (!madeToOrder &&
+          stock !== undefined &&
+          (!Number.isFinite(stock) || item.quantity > stock))
+      )
+        return NextResponse.json(
+          {
+            error:
+              "An item is no longer available in that quantity. Please review your cart.",
+          },
+          { status: 400 },
+        );
       cartTotal += price.unit_amount! * item.quantity;
     }
     return NextResponse.json({
-      url: await createCheckoutSession(items, cartTotal),
+      url: await createCheckoutSession(checkoutItems, cartTotal),
     });
   } catch (error) {
     return NextResponse.json(

@@ -1,192 +1,137 @@
-'use client';
-import { useId } from 'react';
-import { useSearchParams } from 'next/navigation';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { cn } from '@/lib/utils';
+"use client";
+import { useId } from "react";
+import { useSearchParams } from "next/navigation";
+import Link from "next/link";
+import { Menu, Search } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Sheet,
   SheetTitle,
   SheetContent,
   SheetClose,
   SheetTrigger,
-} from '@/components/ui/sheet';
-import {
-  Tooltip,
-  TooltipPortal,
-  TooltipContent,
-  TooltipTrigger,
-  TooltipProvider,
-} from '@/components/ui/tooltip';
-import { Menu, Search, Sparkles } from 'lucide-react';
-import Link from 'next/link';
-import { Cart } from '@/components/cart';
-import { Logo } from '@/components/logo';
-// import { User } from '@workos-inc/node';
-// import { SignInButton } from '@/components/signInButton';
-// import { UserMenu } from '@/components/userMenu';
-
-const navigation = [
-  { label: 'Dragons', href: '/?search=dragon' },
-  { label: 'Creatures', href: '/?search=creature' },
-  { label: 'Fossils', href: '/?search=fossil' },
-  { label: 'Curiosities', href: '/?search=misc' },
-  { label: 'Communities', href: '/communities' },
-  { label: 'About', href: '/about' },
-  { label: 'Contact', href: '/contact' },
-];
+} from "@/components/ui/sheet";
+import { Cart } from "@/components/cart";
+import { Logo } from "@/components/logo";
+import { siteNavigation } from "@/lib/site-content";
+import { cn } from "@/lib/utils";
 
 export function SiteHeader() {
-  //   {
-  //   signInUrl,
-  //   user,
-  // }: {
-  //   signInUrl: string;
-  //   user: User | null;
-  //     }
   return (
-    <header className="sticky top-0 z-20 w-full border-b border-border/60 bg-background/85 backdrop-blur-xl supports-[backdrop-filter]:bg-background/70">
-      <div className="mx-auto flex min-h-20 max-w-screen-xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-20 border-b border-border/70 bg-background/95 backdrop-blur-xl">
+      <div className="mx-auto flex min-h-20 max-w-screen-xl items-center justify-between gap-4 px-5 py-3 sm:px-8">
         <div className="flex items-center gap-3">
           <Sidebar />
           <Link
             href="/"
-            className="group flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-full border border-border/70 bg-[#f2f2f2] shadow-soft transition-colors hover:border-primary/30"
             aria-label="Moonafique home"
+            className="flex shrink-0 items-center gap-2"
           >
-            <Logo className="size-10" />
+            <Logo className="size-11" />
+            <span className="hidden font-display text-2xl text-primary min-[360px]:inline sm:text-3xl">
+              Moonafique
+            </span>
           </Link>
         </div>
-        <nav className="hidden items-center gap-1 rounded-full border border-border/70 bg-surface/85 p-1 xl:flex">
-          {navigation.map((item) => (
+        <nav
+          aria-label="Main navigation"
+          className="hidden items-center gap-1 xl:flex"
+        >
+          {siteNavigation.map((item) => (
             <Link
-              key={item.label}
+              key={item.href}
               href={item.href}
-              className="rounded-full px-4 py-2 text-sm font-bold text-foreground/85 transition-colors hover:bg-background hover:text-foreground"
+              className="rounded-full px-3 py-3 text-sm font-semibold hover:bg-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
             >
               {item.label}
             </Link>
           ))}
-          <Link
-            href="/#shop"
-            className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-accent/35 px-3.5 py-2 text-sm font-semibold text-accent-foreground transition-colors hover:bg-accent/50"
-          >
-            <Sparkles className="size-3.5" />
-            New Drops
-          </Link>
         </nav>
-        <div className="flex items-center gap-2 sm:gap-3">
-          <SearchBar className="hidden sm:block" />
+        <div className="flex items-center gap-3">
+          <SearchBar className="hidden md:block" />
           <Cart />
-          {/* {user ? (
-            <UserMenu user={user} />
-          ) : (
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <SignInButton
-                  user={user}
-                  signInUrl={signInUrl}
-                  variant="ghost"
-                  iconOnly
-                />
-              </TooltipTrigger>
-              <TooltipPortal>
-                <TooltipContent>Sign in</TooltipContent>
-              </TooltipPortal>
-            </Tooltip>
-          )} */}
         </div>
       </div>
     </header>
   );
 }
-
 function SearchBar({ className }: { className?: string }) {
   const id = useId();
   const searchParams = useSearchParams();
   return (
     <form
-      className={cn('relative max-w-lg lg:max-w-sm', className)}
+      role="search"
+      className={cn("relative", className)}
       method="GET"
-      action="/"
+      action="/#shop"
     >
       <label htmlFor={id} className="sr-only">
-        Search products
+        Search the shop
       </label>
-      <Search className="absolute left-4 top-1/2 size-4 -translate-y-1/2 text-foreground/75" />
+      <Search
+        className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+        aria-hidden="true"
+      />
       <Input
         type="search"
         name="search"
         id={id}
-        defaultValue={searchParams.get('search') ?? ''}
-        placeholder="Search dragons, fossils, and more"
-        className="h-11 w-full rounded-full border-border/70 bg-background/90 pl-11 pr-4 text-sm font-semibold text-foreground shadow-none placeholder:text-muted-foreground sm:w-[220px] lg:w-[270px]"
+        defaultValue={searchParams.get("search") ?? ""}
+        placeholder="Search the shop"
+        className="h-11 w-full rounded-full pl-9 md:w-44"
       />
     </form>
   );
 }
-
 function Sidebar() {
   return (
     <Sheet>
-      <TooltipProvider>
-        <Tooltip>
-          <SheetTrigger asChild>
-            <TooltipTrigger asChild>
-              <Button
-                variant="outline"
-                size="icon"
-                className="size-10 shrink-0 rounded-full border-border/70 bg-background/90 xl:hidden"
+      <SheetTrigger asChild>
+        <Button
+          variant="outline"
+          size="icon"
+          className="shrink-0 xl:hidden"
+          aria-label="Open menu"
+        >
+          <Menu aria-hidden="true" />
+        </Button>
+      </SheetTrigger>
+      <SheetContent
+        side="left"
+        className="flex w-[min(90vw,380px)] flex-col gap-6 overflow-y-auto bg-background p-6 pt-14"
+      >
+        <SheetTitle className="text-2xl">Explore Moonafique</SheetTitle>
+        <SearchBar />
+        <nav aria-label="Mobile navigation" className="grid gap-2">
+          {siteNavigation.map((item) => (
+            <SheetClose key={item.href} asChild>
+              <Link
+                href={item.href}
+                className="rounded-xl px-3 py-3 text-lg font-semibold hover:bg-secondary"
               >
-                <Menu className="size-4" />
-                <span className="sr-only">Menu</span>
-              </Button>
-            </TooltipTrigger>
-          </SheetTrigger>
-          <TooltipPortal>
-            <TooltipContent align="start">Menu</TooltipContent>
-          </TooltipPortal>
-          <SheetTitle className="sr-only">Main navigation</SheetTitle>
-          <SheetContent
-            side="left"
-            className="flex w-full flex-col gap-6 bg-background p-5 pt-14 md:w-3/4"
-          >
-            <div className="space-y-2">
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-muted-foreground">
-                Explore Moonafique
-              </p>
-              <div className="rounded-[1.75rem] border border-border/70 bg-surface p-4 shadow-soft">
-                <SearchBar className="w-full sm:hidden" />
-              </div>
-            </div>
-            <div className="grid gap-2">
-              {navigation.map((item) => (
-                <SheetClose key={item.label} asChild>
-                  <Button
-                    asChild
-                    className="justify-start rounded-2xl"
-                    variant="ghost"
-                  >
-                    <Link href={item.href}>{item.label}</Link>
-                  </Button>
-                </SheetClose>
-              ))}
-              <SheetClose asChild>
-                <Button
-                  asChild
-                  className="justify-start rounded-2xl bg-accent/35 text-accent-foreground hover:bg-accent/50"
-                  variant="ghost"
-                >
-                  <Link href="/#shop">
-                    <Sparkles className="size-4" />
-                    New Drops
-                  </Link>
-                </Button>
-              </SheetClose>
-            </div>
-          </SheetContent>
-        </Tooltip>
-      </TooltipProvider>
+                {item.label}
+              </Link>
+            </SheetClose>
+          ))}
+          <SheetClose asChild>
+            <Link
+              href="/customs"
+              className="rounded-xl px-3 py-3 font-semibold text-primary hover:bg-secondary"
+            >
+              Request a custom creation
+            </Link>
+          </SheetClose>
+          <SheetClose asChild>
+            <Link
+              href="/#follow"
+              className="rounded-xl px-3 py-3 font-semibold text-primary hover:bg-secondary"
+            >
+              Follow the work
+            </Link>
+          </SheetClose>
+        </nav>
+      </SheetContent>
     </Sheet>
   );
 }

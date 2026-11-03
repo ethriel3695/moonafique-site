@@ -11,7 +11,7 @@ export function CommunitiesView() {
     <ClubShell active="communities">
       <header className="max-w-3xl pb-10 sm:pb-14">
         <p className="mb-5 text-xs font-bold uppercase tracking-[.2em] text-primary">
-          Moonafique communities
+          Moonafique memberships
         </p>
         <h1 className="text-5xl leading-[1.08] sm:text-6xl">
           Find your kind

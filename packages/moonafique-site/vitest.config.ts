@@ -1,10 +1,11 @@
-import { coverageConfigDefaults, defineConfig } from 'vitest/config';
-import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import type {} from '@vitest/browser/providers/playwright';
+import { coverageConfigDefaults, defineConfig } from "vitest/config";
+import { storybookTest } from "@storybook/addon-vitest/vitest-plugin";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 const dirname =
-  typeof __dirname !== 'undefined'
+  typeof __dirname !== "undefined"
     ? __dirname
     : path.dirname(fileURLToPath(import.meta.url));
 
@@ -13,32 +14,39 @@ export default defineConfig({
   plugins: [
     // The plugin will run tests for the stories defined in your Storybook config
     // See options at: https://storybook.js.org/docs/writing-tests/test-addon#storybooktest
-    storybookTest({ configDir: path.join(dirname, '.storybook') }),
+    storybookTest({ configDir: path.join(dirname, ".storybook") }),
   ],
   test: {
-    name: 'storybook',
+    name: "storybook",
     browser: {
       enabled: true,
       headless: true,
-      name: 'chromium',
-      provider: 'playwright',
+      provider: "playwright",
+      instances: [
+        {
+          browser: "chromium",
+          launch: {
+            channel: process.env.STORYBOOK_BROWSER_CHANNEL ?? "chromium",
+          },
+        },
+      ],
     },
-    setupFiles: ['.storybook/vitest.setup.ts'],
+    setupFiles: [".storybook/vitest.setup.ts"],
     coverage: {
       // 👇 Add this
       exclude: [
         ...coverageConfigDefaults.exclude,
-        '**/.storybook/**',
+        "**/.storybook/**",
         // 👇 This pattern must align with the `stories` property of your `.storybook/main.ts` config
-        '**/*.stories.*',
+        "**/*.stories.*",
         // 👇 This pattern must align with the output directory of `storybook build`
-        '**/storybook-static/**',
-        '**/node_modules/**',
-        '**/*.mjs',
-        '**/*.cjs',
-        '**/middleware.ts',
-        '**/tailwind.config.ts',
-        '**/prisma/**',
+        "**/storybook-static/**",
+        "**/node_modules/**",
+        "**/*.mjs",
+        "**/*.cjs",
+        "**/middleware.ts",
+        "**/tailwind.config.ts",
+        "**/prisma/**",
       ],
     },
   },

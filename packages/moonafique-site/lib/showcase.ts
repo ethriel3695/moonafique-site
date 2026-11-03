@@ -79,7 +79,7 @@ export const showcaseFeatures: ShowcaseFeature[] = [
     category: 'Original art, up close',
     title: 'Art that fits in your hand',
     description:
-      'Small enough to hold in one hand, with plenty to look at. Our original ACEOs measure just 2.5 by 3.5 inches—a little space for a closer look.',
+      'Small enough to hold in one hand, with plenty to look at. Our original ACEOs measure just 2.5 by 3.5 inches—space for a closer look.',
     detail: 'ACEO · 2.5 × 3.5 inches',
     missingImage: 'A photograph or scan of the original ACEO collection',
     images: [{

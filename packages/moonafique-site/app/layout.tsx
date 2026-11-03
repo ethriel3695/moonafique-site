@@ -1,26 +1,31 @@
 // import { AuthKitProvider } from '@workos-inc/authkit-nextjs/components';
 // import { withAuth } from '@workos-inc/authkit-nextjs';
-import { cn } from '@/lib/utils';
-import { SiteHeader } from '@/components/siteHeader';
-import { TooltipProvider } from '@/components/ui/tooltip';
-import { Lora, Manrope } from 'next/font/google';
-import { CartProvider } from '@/lib/cart-context';
-import { Toaster } from '@/components/ui/toaster';
-import { Footer } from '@/components/Footer';
-const manrope = Manrope({
-  subsets: ['latin'],
-  variable: '--font-sans',
-});
-const lora = Lora({
-  subsets: ['latin'],
-  variable: '--font-display',
-});
-import './globals.css';
+import { cn } from "@/lib/utils";
+import { SiteHeader } from "@/components/siteHeader";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { lora, manrope } from "@/lib/site-fonts";
+import { CartProvider } from "@/lib/cart-context";
+import { Toaster } from "@/components/ui/toaster";
+import { Footer } from "@/components/Footer";
+import { brandDescription } from "@/lib/site-content";
+import "./globals.css";
 
 export const metadata = {
-  title: 'Moonafique',
-  description:
-    'Welcome to Moonafique! High quality 3D prints. We are a small team of 3D printing enthusiasts who love to create and share our work with the world.',
+  metadataBase: new URL("https://www.moonafique.com"),
+  title: "Moonafique | Original art & collectible characters",
+  description: brandDescription,
+  openGraph: {
+    title: "Moonafique",
+    description: brandDescription,
+    type: "website",
+    images: [{ url: "/moonafique-logo.png", alt: "Moonafique" }],
+  },
+  twitter: {
+    card: "summary",
+    title: "Moonafique",
+    description: brandDescription,
+    images: ["/moonafique-logo.png"],
+  },
 };
 
 export default async function Layout({
@@ -44,8 +49,8 @@ export default async function Layout({
   return (
     <html lang="en">
       <head>
-        {(process.env.NODE_ENV === 'development' ||
-          process.env.VERCEL_ENV === 'preview') && (
+        {(process.env.NODE_ENV === "development" ||
+          process.env.VERCEL_ENV === "preview") && (
           // eslint-disable-next-line @next/next/no-sync-scripts
           <script
             data-recording-token="Pj5FKQCNkHQTAcwznr4kOkI3blWjMPZdHEP27xfj"
@@ -56,20 +61,20 @@ export default async function Layout({
       </head>
       <body
         className={cn(
-          'flex min-h-svh flex-col antialiased',
+          "flex min-h-svh flex-col antialiased",
           manrope.className,
           manrope.variable,
-          lora.variable
+          lora.variable,
         )}
       >
         {/* <AuthKitProvider initialAuth={initialAuth}> */}
-          <CartProvider>
-            <TooltipProvider delayDuration={0}>
-              <SiteHeader />
-              <main className="flex-1">{children}</main>
-              <Footer />
-            </TooltipProvider>
-          </CartProvider>
+        <CartProvider>
+          <TooltipProvider delayDuration={0}>
+            <SiteHeader />
+            <main className="flex-1">{children}</main>
+            <Footer />
+          </TooltipProvider>
+        </CartProvider>
         {/* </AuthKitProvider> */}
         <Toaster />
       </body>

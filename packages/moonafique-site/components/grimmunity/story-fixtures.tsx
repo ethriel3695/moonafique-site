@@ -1,6 +1,6 @@
 // Storybook-only presentation data. Do not import this file into application routes.
 import type { ReactNode } from "react";
-import { Lora, Manrope } from "next/font/google";
+import { lora, manrope } from '@/lib/site-fonts';
 import { sandboxTiers, type TierAvailability } from "@/lib/grimmunity/tiers";
 import {
   reviewEdition,
@@ -11,8 +11,6 @@ import { aceoParcel, grimmParcel } from "@/lib/grimmunity/package-profiles";
 import type { AccountView, OrderView } from "@/lib/grimmunity/queries";
 import type { ShippingLabel } from "@/lib/grimmunity/shipping";
 
-const lora = Lora({ subsets: ["latin"], variable: "--font-display" });
-const manrope = Manrope({ subsets: ["latin"], variable: "--font-sans" });
 export const storyTierIds = [
   "grimm_starter",
   "grimm_keeper",

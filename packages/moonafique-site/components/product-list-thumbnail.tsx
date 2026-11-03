@@ -12,7 +12,7 @@ function ImagePlaceholder() {
     <div className="absolute inset-0 flex items-center justify-center bg-muted ">
       <div className="text-center p-4">
         <div className="text-2xl font-semibold text-muted-foreground mb-2 ">
-          Coming Soon
+          Photo unavailable
         </div>
       </div>
     </div>

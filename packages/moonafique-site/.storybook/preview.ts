@@ -1,8 +1,21 @@
-import type { Preview } from '@storybook/nextjs-vite';
-import '@radix-ui/themes/styles.css';
-import '../app/globals.css';
+import { createElement } from "react";
+import { lora, manrope } from "../lib/site-fonts";
+import type { Preview } from "@storybook/nextjs-vite";
+import "@radix-ui/themes/styles.css";
+import "../app/globals.css";
 
 const preview: Preview = {
+  decorators: [
+    (Story) =>
+      createElement(
+        "div",
+        {
+          className: `${manrope.className} ${manrope.variable} ${lora.variable}`,
+          style: { fontFamily: manrope.style.fontFamily },
+        },
+        createElement(Story),
+      ),
+  ],
   parameters: {
     controls: {
       matchers: {
@@ -19,10 +32,10 @@ const preview: Preview = {
       // 'todo' - show a11y violations in the test UI only
       // 'error' - fail CI on a11y violations
       // 'off' - skip a11y checks entirely
-      test: 'todo'
-    }
+      test: "todo",
+    },
   },
-  tags: ['autodocs'],
+  tags: ["autodocs"],
 };
 
 export default preview;

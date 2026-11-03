@@ -46,7 +46,7 @@ export default async function ProductPage({
               />
             ) : (
               <div className="absolute inset-0 flex items-center justify-center">
-                <p className="text-muted-foreground">Coming Soon</p>
+                <p className="text-muted-foreground">Photo unavailable</p>
               </div>
             )}
           </div>

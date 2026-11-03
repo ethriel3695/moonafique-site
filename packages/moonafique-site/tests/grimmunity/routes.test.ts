@@ -187,7 +187,7 @@ describe("route authorization and ordinary storefront regression", () => {
       ).status,
     ).toBe(200);
     expect(state.cart).toHaveBeenCalledWith(
-      [{ priceId: "price_test", quantity: 2, price: 1 }],
+      [{ priceId: "price_test", quantity: 2 }],
       2000,
     );
     expect((await cart(request({ items: [] }))).status).toBe(200);

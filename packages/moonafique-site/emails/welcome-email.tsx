@@ -18,24 +18,22 @@ export const WelcomeEmail = ({ email }: WelcomeEmailProps) => {
   return (
     <Html>
       <Head />
-      <Preview>Welcome to Moonafique - Your Journey Begins Here!</Preview>
+      <Preview>New work, collection stories, and notes from the studio.</Preview>
       <Body style={main}>
         <Container style={container}>
           <Heading style={h1}>Welcome to Moonafique!</Heading>
           <Text style={text}>
-            {`Thank you for subscribing to our newsletter with ${email}. We're excited to share
-            our latest 3D printed creations, exclusive offers, and crafting tips
-            with you.`}
+            {`Thank you for subscribing to our newsletter with ${email}. You’ll receive occasional notes about original artwork, collectible characters, and what’s happening in the Moonafique studio.`}
           </Text>
-          <Text style={text}>{`You'll be the first to know about:`}</Text>
+          <Text style={text}>{`Here’s what we’ll share:`}</Text>
           <ul style={list}>
-            <li>New product launches</li>
-            <li>Special discounts and promotions</li>
-            <li>3D printing tips and tricks</li>
-            <li>Behind-the-scenes content</li>
+            <li>New work and collection releases</li>
+            <li>Stories and details behind the creations</li>
+            <li>Upcoming Whatnot shows</li>
+            <li>Works in progress from the studio</li>
           </ul>
           <Text style={text}>
-            If you have any questions, feel free to reply to this email.
+            Questions? Contact us at hello@moonafique.com. This newsletter signup is separate from membership launch notifications.
           </Text>
           <Text style={footer}>
             <Link href="https://moonafique.com" style={link}>

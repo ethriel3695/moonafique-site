@@ -1,32 +1,32 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { expect, userEvent, within } from 'storybook/test';
+import type { Meta, StoryObj } from "@storybook/nextjs-vite";
+import { expect, userEvent, within } from "storybook/test";
 
-import { Toaster } from '@/components/ui/toaster';
-import { TooltipProvider } from '@/components/ui/tooltip';
-import { CartProvider } from '@/lib/cart-context';
-import { ProductBuyForm } from './product-buy-form';
+import { Toaster } from "@/components/ui/toaster";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { CartProvider } from "@/lib/cart-context";
+import { ProductBuyForm } from "./product-buy-form";
 
 const sampleProduct = {
-  id: 'prod_story_dragon',
-  name: 'Fossil Dragon Hatchling',
-  description: 'A desk-sized articulated dragon print.',
-  images: ['/placeholder.svg'],
+  id: "prod_story_dragon",
+  name: "Fossil Dragon Hatchling",
+  description: "A desk-sized articulated dragon print.",
+  images: ["/placeholder-image.png"],
   price: {
-    id: 'price_story_dragon',
+    id: "price_story_dragon",
     amount: 24,
-    display_amount: '$24.00',
+    display_amount: "$24.00",
   },
   metadata: {
-    status: 'available' as const,
-    category: 'dragon',
+    status: "available" as const,
+    category: "dragon",
     stock: 6,
   },
 };
 
 const meta = {
-  title: 'Molecule/Product Buy Form',
+  title: "Molecule/Product Buy Form",
   component: ProductBuyForm,
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   decorators: [
     (Story) => (
       <CartProvider>
@@ -40,7 +40,7 @@ const meta = {
     ),
   ],
   parameters: {
-    layout: 'centered',
+    layout: "centered",
   },
   args: {
     product: sampleProduct,
@@ -58,7 +58,7 @@ export const MadeToOrder: Story = {
       ...sampleProduct,
       metadata: {
         ...sampleProduct.metadata,
-        status: 'madeToOrder',
+        status: "madeToOrder",
         stock: 0,
         madeToOrder: true,
       },
@@ -72,7 +72,7 @@ export const ComingSoon: Story = {
       ...sampleProduct,
       metadata: {
         ...sampleProduct.metadata,
-        status: 'comingSoon',
+        status: "comingSoon",
       },
     },
   },
@@ -81,11 +81,23 @@ export const ComingSoon: Story = {
 export const AdjustQuantity: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const numberField = canvas.getByRole('spinbutton');
-    const buttons = canvas.getAllByRole('button');
+    const numberField = canvas.getByRole("spinbutton");
+    const buttons = canvas.getAllByRole("button");
 
     await userEvent.click(buttons[1]);
 
     await expect(numberField).toHaveValue(2);
   },
+};
+
+export const SoldOut: Story = {
+  args: {
+    product: {
+      ...sampleProduct,
+      metadata: { ...sampleProduct.metadata, status: "soldOut", stock: 0 },
+    },
+  },
+};
+export const WithoutPhoto: Story = {
+  args: { product: { ...sampleProduct, images: [] } },
 };

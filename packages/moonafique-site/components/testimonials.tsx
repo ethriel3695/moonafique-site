@@ -53,12 +53,10 @@ export function Testimonials() {
             Why people trust Moonafique
           </p>
           <h2 className="mt-4 text-4xl sm:text-5xl">
-            Every print leaves our hands before it reaches yours.
+            The care is in the details.
           </h2>
           <p className="mt-4 text-lg font-medium leading-8 text-muted-foreground">
-            This is not a warehouse catalog. It is a family-run print table:
-            small batches, careful checks, honest expectations, and pieces we
-            are proud to hand to someone in person.
+            Original artwork and collectible characters, checked and packed by the people behind the studio. Here are a few words from our customers.
           </p>
         </div>
 
@@ -69,24 +67,21 @@ export function Testimonials() {
               iconClassName="bg-primary/12 text-primary"
               title="Made by the people behind the shop"
             >
-              We print, inspect, pack, and answer questions ourselves, so the
-              care does not disappear after checkout.
+              We paint, print, inspect, and pack our work ourselves. You can ask us about the piece you’re collecting.
             </TrustPoint>
             <TrustPoint
               icon={<ShieldCheck className="size-5" />}
               iconClassName="bg-warning/20 text-warning-foreground"
               title="Clear about what these pieces are"
             >
-              Moonafique prints are collectible display pieces made for wonder,
-              gifting, classrooms, and careful hands.
+              Listings explain what you receive, including the size, finish, and care a piece needs.
             </TrustPoint>
             <TrustPoint
               icon={<PackageCheck className="size-5" />}
               iconClassName="bg-success/15 text-success"
               title="Packed like we care what happens next"
             >
-              The goal is simple: open the box, smile immediately, and feel like
-              the piece was meant for you.
+              We pack each piece with attention to its shape and delicate details, ready for the trip to your collection.
             </TrustPoint>
           </div>
 

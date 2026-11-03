@@ -34,7 +34,7 @@ export function MadeAtMoonafique({
               Made at Moonafique
             </p>
             <h2 id="made-at-moonafique-title" className="mt-4 text-4xl sm:text-5xl">
-              Come a little closer.
+              Selected work.
             </h2>
             <p className="mt-4 text-lg leading-8 text-muted-foreground">
               Collectibles, original art, and the worlds behind them. Here are a

@@ -45,11 +45,11 @@ export function ClubShell({
   return (
     <div className="grimmunity mx-auto max-w-screen-xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
       <nav
-        aria-label="Moonafique communities"
+        aria-label="Moonafique memberships"
         className="mb-9 flex flex-wrap gap-x-6 gap-y-3 text-sm font-bold"
       >
         {[
-          { id: "communities", name: "Communities", href: "/communities" },
+          { id: "communities", name: "Memberships", href: "/communities" },
           ...Object.entries(collectionPages).map(([id, page]) => ({
             id,
             ...page,
