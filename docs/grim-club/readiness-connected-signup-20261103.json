@@ -1,0 +1,138 @@
+{
+  "verifiedOn": "2026-11-03",
+  "environment": {
+    "application": "Isolated copy of codex/brand-first-release",
+    "database": "Disposable local grim_signup_check",
+    "stripe": "sandbox",
+    "shippo": "sandbox",
+    "productionEnrollmentChanged": false
+  },
+  "authentication": {
+    "method": "Existing WorkOS test login through registered localhost:3000/callback; authenticated cookie then used by isolated app on localhost:3200",
+    "newWorkOsIdentityCreated": false,
+    "existingLocalAccessControlsUnchanged": true,
+    "memberStaffPageRejected": true
+  },
+  "signup": {
+    "newStripeCustomer": true,
+    "cardSetup": "complete; no payment at setup",
+    "billingMonths": 12,
+    "membershipCents": 32400,
+    "shippingCents": 628,
+    "taxCents": 1944,
+    "totalCents": 34972,
+    "invoice": "paid in Stripe sandbox",
+    "confirmation": "Your first edition is confirmed.",
+    "account": "Active Keeper, paid through November 3, 2027, one paid November delivery, ship-by November 10",
+    "portalOpenedAndReturned": true
+  },
+  "webhooks": {
+    "providerOriginatedStripeEventsAccepted": [
+      "checkout.session.completed",
+      "customer.updated",
+      "customer.subscription.updated",
+      "customer.subscription.created",
+      "customer.updated",
+      "invoice.paid",
+      "customer.updated"
+    ],
+    "paidInvoiceEventProcessed": true,
+    "paidInvoiceServiceReplays": 2,
+    "countsBeforeReplay": {
+      "paid": 1,
+      "fulfillments": 1,
+      "messages": 1,
+      "exceptions": 0
+    },
+    "countsAfterReplay": {
+      "paid": 1,
+      "fulfillments": 1,
+      "messages": 1,
+      "exceptions": 0
+    },
+    "unsignedLocalCallbacks": [
+      {
+        "path": "/api/grimmunity/webhook",
+        "status": 400
+      },
+      {
+        "path": "/api/grimmunity/notice-delivery",
+        "status": 503
+      }
+    ],
+    "unsignedProductionResendStatus": 400
+  },
+  "email": {
+    "recipient": "hello@moonafique.com",
+    "subject": "[SANDBOX] Your Grimmunity edition is paid",
+    "providerId": "01a1a387-bbbb-7381-8f59-f4a52e4205c2",
+    "accepted": true,
+    "inboxArrivalVerified": true,
+    "resendDeliveredAt": "2026-11-03T22:29:05.609Z",
+    "productionReceiptAt": "2026-11-03T22:29:06.308Z",
+    "productionReceiptStatus": 200,
+    "productionReceiptAttempts": 1,
+    "outboxTagMatched": true,
+    "retrySent": 0,
+    "scope": "Production receiver verifies the signed provider callback, then ignores sandbox mode; no live notice clock or billing record created"
+  },
+  "shippingProducts": [
+    {
+      "role": "monthly_postage",
+      "amountCents": 628,
+      "monthly": false,
+      "taxBehavior": "exclusive"
+    },
+    {
+      "role": "delivery_schedule",
+      "amountCents": 0,
+      "monthly": true,
+      "taxBehavior": "exclusive"
+    }
+  ],
+  "limits": [
+    "Current branch exercised locally; no preview or production deployment performed",
+    "Uses an existing WorkOS test identity with no prior membership in the disposable database; no new WorkOS identity registration tested",
+    "Production sensitive billing credential was not retrieved or exercised by this local flow",
+    "Local Resend receipt route has no production signing secret; actual signed callback was verified at the existing production receiver",
+    "Production notice-clock database binding retains regression coverage; sandbox-tagged delivery does not update production notices"
+  ],
+  "cleanupComplete": true,
+  "providerCleanup": {
+    "temporaryStripeWebhookRemoved": true,
+    "testSubscriptionCanceled": true,
+    "testCustomerRemoved": true,
+    "testMembershipProductsArchived": 4,
+    "testMembershipPricesArchived": 12,
+    "testPortalArchived": true,
+    "sharedSandboxShippingProductsRetained": true,
+    "liveShippingProductsRetained": true
+  },
+  "localCleanup": {
+    "disposableDatabaseRemoved": true,
+    "testAppStopped": true,
+    "webhookProxyStopped": true,
+    "temporaryTunnelStopped": true,
+    "temporaryPostgresInstancesStopped": true,
+    "originalDevServerRetained": true,
+    "storybookReviewRetained": true
+  },
+  "productionFinalCheck": {
+    "deploymentUnchanged": true,
+    "mode": "live",
+    "liveEnrollment": "disabled",
+    "managedCollection": "disabled",
+    "customerEmails": "disabled",
+    "reviewUi": false,
+    "publicEditionId": null,
+    "publicAvailabilityEmpty": true,
+    "shippoKeyConfigured": false
+  },
+  "validation": {
+    "routeChecksPassed": 11,
+    "accountStoryChecksPassed": 13,
+    "typeScriptPassed": true,
+    "scopedLintPassed": true,
+    "storybookBuildPassed": true
+  }
+}

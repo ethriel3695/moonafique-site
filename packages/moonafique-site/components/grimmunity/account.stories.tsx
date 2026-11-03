@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { AccountContent } from "./views";
+import { membershipBilling } from "@/lib/grimmunity/billing-options";
 import {
   StoryFrame,
   storyAccount,
@@ -34,6 +35,34 @@ export const NoMembershipYet: Story = {
 };
 export const Starter: Story = {};
 export const Keeper: Story = { args: { view: storyAccount("grimm_keeper") } };
+const managedKeeper = storyMember("grimm_keeper");
+const managedOptions = ([1, 6, 12] as const).map((months) => {
+  const plan = membershipBilling(managedKeeper.tier_snapshot.amount, months);
+  return {
+    months,
+    amount: plan.amount,
+    discount: plan.discount,
+    price_id:
+      months === 1
+        ? managedKeeper.tier_snapshot.price_id
+        : `price_story_keeper_${months}`,
+  };
+});
+export const ManagedBillingPortalGuidance: Story = {
+  args: {
+    view: {
+      ...storyAccount("grimm_keeper"),
+      membership: {
+        ...managedKeeper,
+        tier_snapshot: {
+          ...managedKeeper.tier_snapshot,
+          billing_options: managedOptions,
+          billing: managedOptions[0],
+        },
+      },
+    },
+  },
+};
 export const ACEOPrints: Story = {
   args: { view: storyAccount("aceo_prints") },
 };

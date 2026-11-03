@@ -192,6 +192,29 @@ describe("route authorization and ordinary storefront regression", () => {
     );
     expect((await cart(request({ items: [] }))).status).toBe(200);
   });
+  it("rejects internal monthly postage from ordinary cart checkout", async () => {
+    state.price.mockResolvedValue({
+      type: "one_time",
+      active: true,
+      unit_amount: 628,
+      currency: "usd",
+      product: { active: true, metadata: { grim_managed_shipping: "true" } },
+    });
+    expect(
+      (await cart(request({ items: [{ priceId: "price_postage", quantity: 1 }] })))
+        .status,
+    ).toBe(400);
+    expect(state.cart).not.toHaveBeenCalled();
+  });
+  it("excludes internal shipping products even if a one-time default price is assigned", () => {
+    expect(
+      isOneTimeProduct({
+        active: true,
+        metadata: { grim_managed_shipping: "true" },
+        default_price: { active: true, type: "one_time" },
+      } as unknown as Stripe.Product),
+    ).toBe(false);
+  });
   it("filters subscription products from catalog listings and direct product lookup", () => {
     expect(
       isOneTimeProduct({

@@ -2,7 +2,7 @@
 
 Target opening: Thursday, November 5. Grimmfest announcement: Saturday, November 7 at 7:30 p.m. MST. All launch dates and times in this record use America/Boise.
 
-**Paid enrollment is not ready to open yet.** The sandbox billing checks pass, and the live Stripe account, twelve saved prices, managed portal, and webhook configuration now pass a read-only audit. The four membership products remain inactive. Live Shippo access, the actual first edition, and the final operating and release checks remain outstanding. No production settings changed, no live payment or postage purchase occurred, and no real email was sent during this check.
+**Paid enrollment is not ready to open yet.** The connected sandbox signup, payment, confirmation, account, portal, and email checks now pass. The live Stripe account, twelve saved prices, managed portal, and webhook configuration also pass their audit. The two internal live shipping products and a $0 monthly delivery-schedule price are prepared; the four membership products remain inactive. Production enrollment, automatic collection, and customer email flags remain disabled. No live payment or postage purchase occurred. One clearly labeled sandbox confirmation went only to the owner inbox. Live Shippo access, the actual first edition, and the final operating and release checks remain outstanding.
 
 ## Shippo and production status
 
@@ -22,7 +22,7 @@ Database, Stripe, Stripe webhook, Resend receipt webhook, and cron secrets have 
 
 The public membership overview and Grimmunity page loaded. Grimmunity still offers the launch-interest form with paid enrollment closed. Existing-owner Google sign-in through WorkOS returned successfully to the production member account, which showed no memberships. The public callback is correct. The `hello@moonafique.com` login received a 404 from the staff dashboard, consistent with its exact-account access restriction. The subsequent staff check below resolved which existing login works. No staff permissions changed.
 
-A complete new-customer signup through authentication, application checkout, confirmation, and account display remains a release check on the reviewed sandbox candidate. The provider-backed billing walkthrough below used the verifier's synthetic local owner.
+The first provider-backed billing walkthrough below used the verifier's synthetic local owner. The later connected signup check exercised the current branch through a real WorkOS test session, a new Stripe test customer, the browser form, hosted payment, confirmation, account, and portal. Its environment and limits are recorded below.
 
 ## Checks completed now
 
@@ -100,11 +100,39 @@ At the owner's request, the existing server-side Stripe connection was used for 
 | Managed billing portal | Live and active. Payment method, invoice history, customer details, and shipping address controls enabled. Stripe-side plan changes and subscription cancellation disabled, matching the application's managed billing and prepaid cancellation flow. |
 | Billing webhook | The canonical `/api/grimmunity/webhook` endpoint is live and enabled on API version `2026-04-22.dahlia`. All 21 event types handled by the application are subscribed. |
 | Tax registration | Stripe reports the Idaho registration active from November 1, 2026, at midnight America/Boise. This checks Stripe's registration state, not a customer's final tax calculation. |
-| Internal shipping products | The monthly delivery-schedule and postage products do not exist yet. The existing `ManagedStripe.price()` code creates them and their prices idempotently when the first managed subscription starts. No products or prices were created during this audit. |
+| Internal shipping products | Absent at this initial read-only audit. They were subsequently prepared and verified in the separate closed-enrollment check below. |
 
 A fresh Vercel metadata check confirmed the same production deployment remains ready, `GRIM_MODE=live`, and enrollment, managed collection, and customer emails remain disabled. `SHIPPO_API_KEY` is still missing. The production billing credential's value was not retrieved; this audit establishes the live account's configuration, not an end-to-end connection through the deployed application's credential.
 
-No live customer, checkout session, invoice, subscription, charge, refund, or portal session was created. The webhook check verifies endpoint configuration and event coverage; it does not prove delivery of a fresh live event or validate the deployed signing secret. Before opening, complete a controlled application check that confirms shipping-product provisioning permissions, real email delivery, and webhook processing with the reviewed release. Keep enrollment closed during preparation.
+No live customer, checkout session, invoice, subscription, charge, refund, or portal session was created. This Stripe configuration audit did not send a fresh live billing event. The later check exercised actual Stripe sandbox event delivery and a real Resend callback to the existing production receiver. The deployed sensitive Stripe credential remains a separate final-release check; its value was not retrieved.
+
+## Connected signup, email, and shipping follow-up
+
+The owner authorized completing these checks while keeping enrollment closed. An isolated copy of the current branch ran against a new local `grim_signup_check` database, Stripe sandbox, and Shippo sandbox. No hosted preview or production deployment was made. The [connected-check receipt](readiness-connected-signup-20261103.json) records results without customer identifiers, addresses, or credentials.
+
+| Check | Result |
+| --- | --- |
+| Authentication | The existing WorkOS test login used the registered `localhost:3000/callback`. The authenticated session then opened the isolated app at port 3200. Port 3200 is not an authorized WorkOS callback; no redirect allowlist was changed. This tests a first membership for an existing test identity, not new WorkOS identity registration. |
+| Browser signup | Selected annual Keeper, entered the sandbox delivery address, received a real Shippo test quote, reviewed consent, and opened hosted Stripe card setup. A new Stripe test customer and one reservation were created through the application. |
+| Card setup and first payment | Saved Stripe's test Visa with Link unchecked. Card setup took no payment. The separate hosted invoice was paid for $324 membership, $6.28 shipping, and $19.44 tax: $349.72 total. These are sandbox shipping/tax results. |
+| Confirmation and account | Confirmation showed “Your first edition is confirmed.” The account showed Active Keeper, membership paid through November 3, 2027, one paid November edition, and dispatch by November 10 under the seven-day policy. There was no stale-data or unresolved-exception warning. |
+| Stripe webhook | Stripe-originated checkout, subscription, customer, and paid-invoice callbacks reached the isolated application through a temporary webhook-only tunnel. The paid-invoice callback returned HTTP 200 and its event reached `done`. Reprocessing the same paid event did not duplicate the paid edition, fulfillment, or email. An unsigned Stripe callback returned HTTP 400. |
+| Email | The application's outbox sent exactly one `[SANDBOX] Your Grimmunity edition is paid` message to `hello@moonafique.com`. Its content and account link were checked in that inbox. Retrying the sent outbox delivered zero additional messages. |
+| Resend webhook | Resend recorded delivery at `2026-11-03T22:29:05.609Z`. The existing production receiver accepted its signed callback at `22:29:06.308Z` with HTTP 200 on attempt 1. The email ID and outbox tag matched this signup. A fresh unsigned production callback returned HTTP 400. Sandbox tags intentionally prevent any live notice clock or billing record from being updated. |
+| Billing portal | Opened from the authenticated account, showed the saved test card, shipping information, and paid invoice, and returned to the account. No portal details were changed. The member login correctly received 404 from the staff page; no staff access was granted. |
+| Actual shipping billing items | The sandbox first invoice used the active $0 monthly delivery schedule and $6.28 one-time postage item, with managed-shipping metadata, the shipping tax code, and exclusive tax behavior. No postage label was purchased. |
+
+Stripe's portal displays “Your service is paused” for the application's deliberately paused Stripe collection schedule. The Moonafique membership remains Active and its own account shows the billing schedule. The account now explains this difference. Storybook includes **Memberships → Member account → Managed billing portal guidance**, with actions disabled.
+
+The shipping review also found that an internal one-time postage price could pass the ordinary cart's product filter if submitted directly. The branch now excludes `grim_managed_shipping=true` products from both catalog display and cart checkout. Two regression cases cover direct postage checkout rejection and exclusion even if a one-time default price is assigned.
+
+The [live shipping-product receipt](readiness-shipping-products-20261103.json) confirms preparation of the internal monthly delivery-schedule and postage products on the expected live account. Both are active, use the expected metadata and shipping tax code, and are excluded from the ordinary catalog. The delivery schedule has an active $0 USD monthly Price with exclusive tax. No fixed live postage price was invented: each postage amount still comes from the actual carrier quote. This used the existing server connection, not a retrieved production secret. All four membership products stayed inactive; no live customer, subscription, invoice, charge, or enrollment change was made.
+
+This follow-up verifies the current branch locally and the already-deployed production Resend receiver. It does not deploy the branch, exercise a new live payment, or test a production notice clock using a live customer. Notice-to-clock binding and the seven-day collection guard retain the regression and sandbox billing evidence above. Final staff packing and the deployed release's credential checks remain part of release preparation.
+
+The temporary Stripe webhook was removed, the test subscription canceled, and its customer removed. The four unique test membership products, twelve test prices, and test portal were archived. Shared sandbox shipping products and the prepared live internal shipping products were retained. The disposable local database was removed; the test app, webhook proxy, tunnel, and temporary PostgreSQL servers were stopped. The original dev server and Storybook review remain available.
+
+The follow-up passed 11 route checks, 13 member-account Storybook checks, TypeScript, scoped ESLint, and the static Storybook build. The [managed billing account example](http://localhost:6007/?path=/story/memberships-member-account--managed-billing-portal-guidance) was also checked in the browser. A final production metadata check found the deployment unchanged and enrollment, collection, and customer emails still disabled. Public availability returned `editionId=null` and an empty availability map. The production Shippo key is still missing.
 
 ## Brand review
 
@@ -126,10 +154,10 @@ The first-edition designs, final photos, and dispatch deadline remain unconfirme
 ## Remaining technical release checks
 
 1. Connect approved live Shippo access and verify actual rates for both sealed package profiles, including expensive U.S. destinations. Rate checks do not require buying a label.
-2. The Neon and read-only live Stripe configuration audits are complete: saved prices, allocations, program controls, exact draft dates, live catalog prices, portal controls, and webhook event coverage are verified. Configure the November draft for the agreed November 5 opening time and actual first edition. Confirm the deployed billing credential can provision the internal shipping products during the controlled release check. Keep the program disabled and unapproved while preparing these changes.
-3. Verify fresh authentication, signup, confirmation, account management, and staff visibility together in the isolated sandbox. Do not claim the synthetic verifier proves the complete authenticated browser journey.
+2. The Neon, live Stripe configuration, internal shipping-product preparation, and connected sandbox customer checks are complete. Configure the November draft for the agreed November 5 opening time and actual first edition. Keep the program disabled and unapproved while preparing these changes.
+3. Review and release the branch through the agreed preview workflow. Check the deployed billing credential and callback configuration, then perform the final staff packing check against the actual first-edition setup. The connected local test used an existing WorkOS test identity and granted no staff access.
 4. Measure provider-backed worker throughput for the expected launch queue and confirm the recovery/alert owner. Confirm database recovery arrangements.
-5. Complete review of the brand branch, then verify the approved release's real email delivery and webhook handling while checkout remains closed.
+5. Real signup email delivery and a fresh production Resend callback are verified. Confirm the reviewed release retains the correct server-only configuration and repeat its closed-enrollment smoke check after deployment. The current local branch has not been deployed.
 6. After these checks pass, obtain the separate launch instruction before activating live products, program approval, customer notification delivery, automatic collection, and enrollment. Prepare the launch-list announcement and Grimmfest link/QR destination separately; this check sent no announcements.
 
 Thursday is the target, contingent on these checks. If Shippo has not approved access, keep the working interest-list destination available for Grimmfest and describe enrollment as upcoming until checkout can be verified.

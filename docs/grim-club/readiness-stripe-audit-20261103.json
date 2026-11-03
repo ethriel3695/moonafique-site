@@ -229,6 +229,10 @@
   ],
   "errors": [],
   "changesMade": false,
+  "followUp": {
+    "receipt": "readiness-shipping-products-20261103.json",
+    "internalShippingProductsPreparedAfterThisReadOnlyAudit": true
+  },
   "productionMetadata": {
     "method": "Read-only Vercel metadata; secret values not retrieved or decrypted",
     "deploymentReady": true,

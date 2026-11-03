@@ -4,6 +4,7 @@ export function isOneTimeProduct(product: Stripe.Product): boolean {
   return (
     product.active &&
     product.metadata.grim_subscription !== "true" &&
+    product.metadata.grim_managed_shipping !== "true" &&
     !!price &&
     typeof price !== "string" &&
     price.active &&
@@ -20,6 +21,7 @@ export function isOneTimePrice(price: Stripe.Price): boolean {
     typeof product !== "string" &&
     !product.deleted &&
     product.active &&
-    product.metadata.grim_subscription !== "true"
+    product.metadata.grim_subscription !== "true" &&
+    product.metadata.grim_managed_shipping !== "true"
   );
 }

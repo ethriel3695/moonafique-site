@@ -552,6 +552,13 @@ function SingleAccountContent({
           </ClubAction>
         )}
       </div>
+      {m?.tier_snapshot.billing && (
+        <p className="mb-8 rounded-2xl border bg-surface p-5 text-sm leading-6">
+          Stripe may show “Your service is paused” because Moonafique schedules
+          your invoices. Your membership status and upcoming payments are shown
+          here.
+        </p>
+      )}
       {!m ? (
         <div className="rounded-3xl border bg-card p-8">
           <h2 className="text-2xl">Your collection starts here.</h2>

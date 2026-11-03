@@ -1,0 +1,41 @@
+{
+  "verifiedOn": "2026-11-03",
+  "accountMatched": true,
+  "products": [
+    {
+      "role": "delivery_schedule",
+      "live": true,
+      "active": true,
+      "managedShippingMetadata": true,
+      "shippingTaxCodeCorrect": true,
+      "ordinaryCatalogEligible": false,
+      "createdDuringCheck": true
+    },
+    {
+      "role": "monthly_postage",
+      "live": true,
+      "active": true,
+      "managedShippingMetadata": true,
+      "shippingTaxCodeCorrect": true,
+      "ordinaryCatalogEligible": false,
+      "createdDuringCheck": true
+    }
+  ],
+  "deliverySchedulePrice": {
+    "live": true,
+    "active": true,
+    "amountCents": 0,
+    "currency": "usd",
+    "interval": "month",
+    "intervalCount": 1,
+    "taxBehavior": "exclusive"
+  },
+  "postageAmount": "Created from actual carrier quote for each monthly delivery; no fixed live postage price created during this check",
+  "membershipProductsKeptInactive": true,
+  "customersCreated": 0,
+  "subscriptionsCreated": 0,
+  "invoicesCreated": 0,
+  "chargesCreated": 0,
+  "productionEnrollmentChanged": false,
+  "credential": "Existing server connection; deployed sensitive credential not retrieved"
+}
