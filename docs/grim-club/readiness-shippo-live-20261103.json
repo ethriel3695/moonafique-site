@@ -1,0 +1,162 @@
+{
+  "verifiedOn": "2026-11-03",
+  "approvalConfirmed": true,
+  "businessType": "Direct shipper",
+  "keyCreated": true,
+  "configuration": {
+    "project": "moonafique-site",
+    "name": "SHIPPO_API_KEY",
+    "target": [
+      "production"
+    ],
+    "type": "sensitive",
+    "visibility": "secret",
+    "stored": true,
+    "deploymentTriggered": false,
+    "deploymentUnchanged": true
+  },
+  "profiles": {
+    "Grimm": {
+      "length": 8,
+      "width": 8,
+      "height": 8,
+      "weight": 8
+    },
+    "ACEO": {
+      "length": 7,
+      "width": 5,
+      "height": 1,
+      "weight": 6
+    }
+  },
+  "quotes": [
+    {
+      "profile": "Grimm",
+      "destination": "California",
+      "state": "CA",
+      "postalCode": "94105",
+      "mode": "live",
+      "amountCents": 645,
+      "currency": "usd",
+      "carrier": "USPS",
+      "service": "Ground Advantage",
+      "estimatedDays": 4,
+      "labelPurchased": false
+    },
+    {
+      "profile": "ACEO",
+      "destination": "California",
+      "state": "CA",
+      "postalCode": "94105",
+      "mode": "live",
+      "amountCents": 645,
+      "currency": "usd",
+      "carrier": "USPS",
+      "service": "Ground Advantage",
+      "estimatedDays": 4,
+      "labelPurchased": false
+    },
+    {
+      "profile": "Grimm",
+      "destination": "New York",
+      "state": "NY",
+      "postalCode": "10118",
+      "mode": "live",
+      "amountCents": 708,
+      "currency": "usd",
+      "carrier": "USPS",
+      "service": "Ground Advantage",
+      "estimatedDays": 5,
+      "labelPurchased": false
+    },
+    {
+      "profile": "ACEO",
+      "destination": "New York",
+      "state": "NY",
+      "postalCode": "10118",
+      "mode": "live",
+      "amountCents": 708,
+      "currency": "usd",
+      "carrier": "USPS",
+      "service": "Ground Advantage",
+      "estimatedDays": 5,
+      "labelPurchased": false
+    },
+    {
+      "profile": "Grimm",
+      "destination": "Alaska",
+      "state": "AK",
+      "postalCode": "99503",
+      "mode": "live",
+      "amountCents": 895,
+      "currency": "usd",
+      "carrier": "USPS",
+      "service": "Ground Advantage",
+      "estimatedDays": 13,
+      "labelPurchased": false
+    },
+    {
+      "profile": "ACEO",
+      "destination": "Alaska",
+      "state": "AK",
+      "postalCode": "99503",
+      "mode": "live",
+      "amountCents": 895,
+      "currency": "usd",
+      "carrier": "USPS",
+      "service": "Ground Advantage",
+      "estimatedDays": 13,
+      "labelPurchased": false
+    },
+    {
+      "profile": "Grimm",
+      "destination": "Hawaii",
+      "state": "HI",
+      "postalCode": "96813",
+      "mode": "live",
+      "amountCents": 895,
+      "currency": "usd",
+      "carrier": "USPS",
+      "service": "Ground Advantage",
+      "estimatedDays": 14,
+      "labelPurchased": false
+    },
+    {
+      "profile": "ACEO",
+      "destination": "Hawaii",
+      "state": "HI",
+      "postalCode": "96813",
+      "mode": "live",
+      "amountCents": 895,
+      "currency": "usd",
+      "carrier": "USPS",
+      "service": "Ground Advantage",
+      "estimatedDays": 14,
+      "labelPurchased": false
+    }
+  ],
+  "errors": [],
+  "labelsPurchased": 0,
+  "productionEnrollmentChanged": false,
+  "limitations": [
+    "Rates checked directly through the current application shipping gateway using the new live credential; the deployed application was not redeployed",
+    "Package dimensions and weights are the current application profiles; confirm sealed production samples before launch",
+    "Representative quote results are not guaranteed customer rates or recipient-address validation"
+  ],
+  "productionControls": {
+    "liveEnrollment": "disabled",
+    "managedCollection": "disabled",
+    "customerEmails": "disabled"
+  },
+  "allQuotesPassed": true,
+  "temporaryTransferRemoved": true,
+  "representativeDestinationSources": {
+    "Alaska": "https://www.anchoragelibrary.org/about/using-the-library/hours-locations/zj-loussac-library/",
+    "Hawaii": "https://lrb.hawaii.gov/par/"
+  },
+  "deploymentNote": "Saved Production configuration awaits the next reviewed deployment; the current deployment was not changed.",
+  "publicAvailabilityAfterSetup": {
+    "editionId": null,
+    "availability": {}
+  }
+}

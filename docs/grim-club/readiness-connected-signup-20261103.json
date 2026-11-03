@@ -1,5 +1,9 @@
 {
   "verifiedOn": "2026-11-03",
+  "followUp": {
+    "receipt": "readiness-shippo-live-20261103.json",
+    "shippoKeyConfiguredAndLiveQuotesVerifiedAfterThisSignupCheck": true
+  },
   "environment": {
     "application": "Isolated copy of codex/brand-first-release",
     "database": "Disposable local grim_signup_check",

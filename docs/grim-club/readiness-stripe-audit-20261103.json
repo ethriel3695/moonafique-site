@@ -231,7 +231,9 @@
   "changesMade": false,
   "followUp": {
     "receipt": "readiness-shipping-products-20261103.json",
-    "internalShippingProductsPreparedAfterThisReadOnlyAudit": true
+    "internalShippingProductsPreparedAfterThisReadOnlyAudit": true,
+    "shippoReceipt": "readiness-shippo-live-20261103.json",
+    "shippoKeyConfiguredAfterThisReadOnlyAudit": true
   },
   "productionMetadata": {
     "method": "Read-only Vercel metadata; secret values not retrieved or decrypted",

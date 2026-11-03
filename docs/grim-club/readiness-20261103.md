@@ -2,13 +2,26 @@
 
 Target opening: Thursday, November 5. Grimmfest announcement: Saturday, November 7 at 7:30 p.m. MST. All launch dates and times in this record use America/Boise.
 
-**Paid enrollment is not ready to open yet.** The connected sandbox signup, payment, confirmation, account, portal, and email checks now pass. The live Stripe account, twelve saved prices, managed portal, and webhook configuration also pass their audit. The two internal live shipping products and a $0 monthly delivery-schedule price are prepared; the four membership products remain inactive. Production enrollment, automatic collection, and customer email flags remain disabled. No live payment or postage purchase occurred. One clearly labeled sandbox confirmation went only to the owner inbox. Live Shippo access, the actual first edition, and the final operating and release checks remain outstanding.
+**Paid enrollment is not ready to open yet.** The connected sandbox signup, payment, confirmation, account, portal, and email checks now pass. The live Stripe account, twelve saved prices, managed portal, and webhook configuration also pass their audit. The two internal live shipping products and a $0 monthly delivery-schedule price are prepared; the four membership products remain inactive. Shippo's live key is now securely configured for the next Production deployment, and eight direct live quote checks passed. Production enrollment, automatic collection, and customer email flags remain disabled. No live payment or postage purchase occurred. One clearly labeled sandbox confirmation went only to the owner inbox. The actual first edition, sealed package confirmation, and final operating and reviewed-release checks remain outstanding.
 
 ## Shippo and production status
 
-The owner submitted a follow-up to Shippo explaining the business and signed back in for this check. The signed-in [Shippo API settings](https://apps.goshippo.com/settings/api) still show **Request Live Token**. No live token is available on that screen. Do not submit another request while the owner's follow-up is pending.
+Shippo approved live API access on November 3. The owner explicitly authorized creating one live key, storing it securely in Vercel Production, and checking live shipping rates while keeping enrollment closed and buying no labels. The key was created in the [Shippo API portal](https://portal.goshippo.com/api-config/api), with Moonafique correctly classified as a **Direct shipper**.
 
-A read-only Vercel metadata check confirmed the current production deployment is `dpl_CzTQ9bSm98WCmz9MSfVoqVWSKqMi`, with status `READY`. Production has no `SHIPPO_API_KEY` configuration record. Its current launch controls are:
+`SHIPPO_API_KEY` is saved as a sensitive, Secret variable scoped only to Production in the existing `moonafique-site` Vercel project. Its value was not printed, committed, or added to local development or Preview configuration. The private transfer file was removed after secure storage; the one-time key display was closed. The [sanitized Shippo receipt](readiness-shippo-live-20261103.json) records configuration and quote results without the key or street addresses.
+
+The current application's live shipping gateway returned USPS Ground Advantage rates for both package profiles at all four representative destinations:
+
+| Destination | Grimm quote | ACEO quote | Carrier's estimated transit |
+| --- | ---: | ---: | --- |
+| California, 94105 | $6.45 | $6.45 | 4 days |
+| New York, 10118 | $7.08 | $7.08 | 5 days |
+| Alaska, 99503 | $8.95 | $8.95 | 13 days |
+| Hawaii, 96813 | $8.95 | $8.95 | 14 days |
+
+These are November 3 sample quotes using the current profiles: Grimm **8 × 8 × 8 inches, 8 oz**; ACEO **7 × 5 × 1 inches, 6 oz**. Actual carrier prices vary. This checks rating availability, not recipient-address deliverability or guaranteed transit. Carrier transit follows dispatch; the separate seven-day dispatch policy starts after successful payment. Confirm the sealed production packages before accepting these measurements as final.
+
+Production remains on deployment `dpl_CzTQ9bSm98WCmz9MSfVoqVWSKqMi`, with status `READY`. No deployment was triggered. The saved key must be included in the next reviewed Production release before the deployed application can use it; see Vercel's [environment-variable guidance](https://vercel.com/docs/environment-variables). Its current launch controls are:
 
 | Setting | Current value |
 | --- | --- |
@@ -45,7 +58,7 @@ TypeScript, scoped ESLint, whitespace checks, the local production webpack build
 
 New tests used real local PostgreSQL rows and simulated one second of provider work per member. The existing forty-second worker budget, including reserved email time, checked at most 32 members per pass. Sixty queued members required two passes; 120 required four. Waiting members were processed before already-checked members repeated.
 
-This verifies queue rotation under the simulated timing. It does not measure real Stripe/Shippo throughput. Starter has no fixed enrollment cap, so there is no single full-capacity number for the whole program. Once live Shippo works, measure the expected launch workload and agree on enough worker runs and staff monitoring. A single daily backup run must not be treated as proof that a busy launch queue will finish in time. The admin **Run billing checks** action is available; no additional production runs or scheduler changes were made here.
+This verifies queue rotation under the simulated timing. It does not measure real Stripe/Shippo worker throughput. Starter has no fixed enrollment cap, so there is no single full-capacity number for the whole program. Live Shippo quote checks now work; measure the expected launch workload and agree on enough worker runs and staff monitoring. A single daily backup run must not be treated as proof that a busy launch queue will finish in time. The admin **Run billing checks** action is available; no additional production runs or scheduler changes were made here.
 
 ## Production staff verification follow-up
 
@@ -55,7 +68,7 @@ After the owner asked to continue, the existing **Jess and Reuben Ellis** Google
 - Each displays dispatch within seven days of payment and separate tier limits. The dashboard shows Starter without a fixed cap, Keeper with 12 places, ACEO Prints with 24, and ACEO Originals with 12.
 - There are zero memberships, paid fulfillment obligations, pending billing cycles, unresolved exceptions, pending events, or pending notifications. One person is on the launch-interest list; no contact details were exported.
 - The latest completed backup billing check is November 3, with zero memberships checked and zero failures. No manual worker run was triggered during this follow-up.
-- The dashboard still reports **Shippo API key needed**.
+- At this earlier staff check, the dashboard reported **Shippo API key needed**. The later Shippo setup is saved for the next reviewed deployment.
 
 These screens do not expose the exact enrollment/cutoff timestamps or all twelve saved price options. Automatic approval review initially rejected opening the production Neon console because that access exceeded the staff-dashboard verification scope. The owner then explicitly authorized the limited read-only Neon audit below. It selected only program, membership-price, and edition configuration, excluding customers, addresses, credentials, and staff identities.
 
@@ -102,7 +115,7 @@ At the owner's request, the existing server-side Stripe connection was used for 
 | Tax registration | Stripe reports the Idaho registration active from November 1, 2026, at midnight America/Boise. This checks Stripe's registration state, not a customer's final tax calculation. |
 | Internal shipping products | Absent at this initial read-only audit. They were subsequently prepared and verified in the separate closed-enrollment check below. |
 
-A fresh Vercel metadata check confirmed the same production deployment remains ready, `GRIM_MODE=live`, and enrollment, managed collection, and customer emails remain disabled. `SHIPPO_API_KEY` is still missing. The production billing credential's value was not retrieved; this audit establishes the live account's configuration, not an end-to-end connection through the deployed application's credential.
+At this initial billing audit, Vercel metadata confirmed the same production deployment ready, `GRIM_MODE=live`, and enrollment, managed collection, and customer emails disabled. `SHIPPO_API_KEY` was missing at that checkpoint and was subsequently configured as recorded above. The production billing credential's value was not retrieved; this audit establishes the live account's configuration, not an end-to-end connection through the deployed application's credential.
 
 No live customer, checkout session, invoice, subscription, charge, refund, or portal session was created. This Stripe configuration audit did not send a fresh live billing event. The later check exercised actual Stripe sandbox event delivery and a real Resend callback to the existing production receiver. The deployed sensitive Stripe credential remains a separate final-release check; its value was not retrieved.
 
@@ -132,7 +145,7 @@ This follow-up verifies the current branch locally and the already-deployed prod
 
 The temporary Stripe webhook was removed, the test subscription canceled, and its customer removed. The four unique test membership products, twelve test prices, and test portal were archived. Shared sandbox shipping products and the prepared live internal shipping products were retained. The disposable local database was removed; the test app, webhook proxy, tunnel, and temporary PostgreSQL servers were stopped. The original dev server and Storybook review remain available.
 
-The follow-up passed 11 route checks, 13 member-account Storybook checks, TypeScript, scoped ESLint, and the static Storybook build. The [managed billing account example](http://localhost:6007/?path=/story/memberships-member-account--managed-billing-portal-guidance) was also checked in the browser. A final production metadata check found the deployment unchanged and enrollment, collection, and customer emails still disabled. Public availability returned `editionId=null` and an empty availability map. The production Shippo key is still missing.
+The follow-up passed 11 route checks, 13 member-account Storybook checks, TypeScript, scoped ESLint, and the static Storybook build. The [managed billing account example](http://localhost:6007/?path=/story/memberships-member-account--managed-billing-portal-guidance) was also checked in the browser. Production metadata confirmed the deployment unchanged and enrollment, collection, and customer emails disabled. Public availability returned `editionId=null` and an empty availability map. Shippo was subsequently approved and configured as recorded at the top of this report; the connected-signup receipt preserves the earlier missing-key checkpoint.
 
 ## Brand review
 
@@ -146,18 +159,18 @@ Storybook's **First release → Brand pages** contains full desktop pages and mo
 | --- | --- |
 | Jess | Confirm the first Starter Grimm and accessories/pets, Keeper design and worn accessories, two ACEO prints, and original-art collection. Supply final photos or confirm which approved images can represent the opening offer. |
 | Jess and Reuben | Confirm the first dispatch deadline and the number of orders you can make and pack within the promised timing, particularly Starter's uncapped offer. Confirm sealed package dimensions and weights for both collections. |
-| Reuben | Let us know when Shippo approves live access. Store the issued key through the secure production configuration workflow; do not paste it into chat or source. |
+| Reuben | Shippo approval, live-key creation, secure Production storage, and eight live rate checks are complete. Review the branch in Storybook before the agreed deployment workflow. |
 | Jess and Reuben | Use the existing Jess and Reuben Google login for staff tools, and choose who monitors shipping/payment/email exceptions and packing during launch and Grimmfest. Review the updated membership Storybook pages and final customer billing/cancellation wording. |
 
 The first-edition designs, final photos, and dispatch deadline remain unconfirmed in this chat. The owner's November 3 copy approval does not resolve those production details.
 
 ## Remaining technical release checks
 
-1. Connect approved live Shippo access and verify actual rates for both sealed package profiles, including expensive U.S. destinations. Rate checks do not require buying a label.
+1. Live Shippo setup and eight rate checks are complete, including Alaska and Hawaii. Confirm the sealed package measurements and repeat quotes if those profiles change. Include the saved Production key in the reviewed release and verify the deployed staff readiness view while enrollment stays closed.
 2. The Neon, live Stripe configuration, internal shipping-product preparation, and connected sandbox customer checks are complete. Configure the November draft for the agreed November 5 opening time and actual first edition. Keep the program disabled and unapproved while preparing these changes.
 3. Review and release the branch through the agreed preview workflow. Check the deployed billing credential and callback configuration, then perform the final staff packing check against the actual first-edition setup. The connected local test used an existing WorkOS test identity and granted no staff access.
 4. Measure provider-backed worker throughput for the expected launch queue and confirm the recovery/alert owner. Confirm database recovery arrangements.
 5. Real signup email delivery and a fresh production Resend callback are verified. Confirm the reviewed release retains the correct server-only configuration and repeat its closed-enrollment smoke check after deployment. The current local branch has not been deployed.
 6. After these checks pass, obtain the separate launch instruction before activating live products, program approval, customer notification delivery, automatic collection, and enrollment. Prepare the launch-list announcement and Grimmfest link/QR destination separately; this check sent no announcements.
 
-Thursday is the target, contingent on these checks. If Shippo has not approved access, keep the working interest-list destination available for Grimmfest and describe enrollment as upcoming until checkout can be verified.
+Thursday is the target, contingent on the remaining release checks. Shippo approval is resolved. Keep the working interest-list destination available for Grimmfest and describe enrollment as upcoming until the reviewed release and first edition are ready to open.
