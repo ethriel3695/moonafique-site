@@ -4,6 +4,9 @@ import { migrate } from "../../lib/grimmunity/migrations";
 import { runWorker, workerAuthorized } from "../../lib/grimmunity/worker";
 import type { Grimmunity } from "../../lib/grimmunity/service";
 import * as outbox from "../../lib/grimmunity/outbox";
+import { seedSandbox } from "../../lib/grimmunity/fixtures";
+import { sandboxTiers } from "../../lib/grimmunity/tiers";
+import { randomUUID } from "node:crypto";
 
 const url = new URL(process.env.GRIM_TEST_DATABASE_URL ?? "http://invalid");
 if (!["127.0.0.1", "localhost"].includes(url.hostname) || url.pathname !== "/grim_test") throw new Error("Use a local grim_test database.");
@@ -62,5 +65,45 @@ it("delivers queued notices and reserves time for new ones when reconciliation e
   } finally {
     vi.restoreAllMocks();
     vi.unstubAllEnvs();
+  }
+});
+
+it.each([60, 120])("rotates a %i-member queue across bounded runs without starving waiting members", async (count) => {
+  await pool.query("TRUNCATE grim.program CASCADE");
+  await seedSandbox(pool);
+  const owners = Array.from({ length: count }, (_, n) => `queue-owner-${n}`);
+  for (const owner of owners)
+    await pool.query(
+      "INSERT INTO grim.memberships(id,program_id,owner_id,email,customer_id,tier_snapshot) VALUES($1,'sandbox',$2,$3,$4,$5)",
+      [randomUUID(), owner, `${owner}@example.invalid`, `cus_${owner}`, sandboxTiers[0]],
+    );
+  let clock = 0;
+  const visited = new Set<string>();
+  vi.spyOn(Date, "now").mockImplementation(() => clock);
+  vi.stubEnv("GRIM_SEND_EMAILS", "disabled");
+  vi.stubEnv("GRIM_SEND_INTEREST_EMAILS", "disabled");
+  const service = {
+    expireReservations: async () => {},
+    refreshMember: async (owner: string) => {
+      // Simulate one second of provider work per member without network I/O.
+      clock += 1_000;
+      if (visited.size < count) expect(visited.has(owner)).toBe(false);
+      visited.add(owner);
+    },
+  } as unknown as Grimmunity;
+  let passes = 0;
+  try {
+    while (visited.size < count && passes < 5) {
+      const result = await runWorker(pool, "sandbox", service, async () => [], 40_000);
+      expect(result).toMatchObject({ failures: 0 });
+      expect("members" in result && result.members).toBeLessThanOrEqual(32);
+      passes++;
+    }
+    expect(visited).toEqual(new Set(owners));
+    expect(passes).toBe(Math.ceil(count / 32));
+  } finally {
+    vi.restoreAllMocks();
+    vi.unstubAllEnvs();
+    await pool.query("TRUNCATE grim.program CASCADE");
   }
 });

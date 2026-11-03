@@ -4,7 +4,7 @@ export const dynamic = "force-dynamic";
 export const metadata = {
   title: "Grimmunity | Moonafique",
   description:
-    "Meet your next little obsession. Unbox a mystery Grimm with Starter or collect an exclusive painted Keeper. Monthly magic from $15, plus shipping.",
+    "Collect a new Grimm each month: mystery characters with Starter or exclusive painted finishes with Keeper. Memberships from $15, plus shipping.",
 };
 export default async function GrimmunityPage() {
   return <OfferView {...await publicOfferProps()} club="grimm" />;

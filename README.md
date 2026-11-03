@@ -52,6 +52,8 @@ The release is on `codex/brand-first-release`. Review it locally before authoriz
 
 Run `pnpm --filter moonafique-site storybook`, then open the **First release** group. It contains the full homepage, an iPhone-sized view, contact delivery states, and cart quantity and checkout recovery examples. Catalog names and prices in these stories are labeled samples. Contact and newsletter delivery are simulated.
 
+**First release → Brand pages** adds the complete membership overview, Grimmunity, ACEOs, and About, including mobile views. These stories show the current brand copy with enrollment and form submission disabled. Subscription launch evidence and remaining owner decisions are in [the November 3 readiness record](docs/grim-club/readiness-20261103.md).
+
 Run `pnpm --filter moonafique-site test:storefront` for cart and API regressions. Run `pnpm --filter moonafique-site exec vitest run --config vitest.config.ts components/first-release.stories.tsx components/contact-form.stories.tsx components/cart.stories.tsx components/product-buy-form.stories.tsx` for browser interactions. Set `STORYBOOK_BROWSER_CHANNEL=chrome` to use an existing Chrome installation instead of downloaded Chromium.
 
 The contact form uses the existing Resend sender and always delivers to `hello@moonafique.com`, with the visitor as the reply address. Set `CONTACT_SEND_EMAILS=approved` only for the reviewed Production release; Vercel Preview delivery remains blocked. Provider acceptance is tested with a stub. A real inbox delivery check remains a launch task. No automatic customer email or newsletter subscription is created by this form.

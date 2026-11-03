@@ -19,8 +19,8 @@ export function CommunitiesView() {
           of collection.
         </h1>
         <p className="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground">
-          A little creature with a big personality. A tiny artwork to treasure.
-          Pick the monthly collection that feels like you.
+          Collectible characters and original art, with something new each
+          month. Choose the collection you want to spend more time with.
         </p>
       </header>
       <div className="grid gap-7 lg:grid-cols-2">
@@ -39,8 +39,8 @@ export function CommunitiesView() {
                 <div>
                   <p className="text-xs font-bold uppercase tracking-[.18em]">
                     {grimm
-                      ? "Meet your next mystery"
-                      : "Make room for tiny art"}
+                      ? "A growing cast of characters"
+                      : "Original art on a smaller scale"}
                   </p>
                   <h2 className="mt-3 text-4xl sm:text-5xl">{name}</h2>
                 </div>
@@ -53,8 +53,8 @@ export function CommunitiesView() {
               <div className="flex flex-1 flex-col p-7 sm:p-9">
                 <p className="max-w-md leading-7 text-muted-foreground">
                   {grimm
-                    ? "A mystery friend, a splash of color, and a little magic for your shelf. Find your next favorite Grimm."
-                    : "Happy mail for your inner art collector. Discover tiny prints and originals, with something new to love every month."}
+                    ? "Mystery Grimms with accessories and matching pets, or Keepers with exclusive painted finishes. Meet the next addition to your collection."
+                    : "Two prints or one original artwork each month. ACEOs measure just 2.5 by 3.5 inches: small enough to collect, with plenty to look at."}
                 </p>
                 <dl className="my-7 divide-y divide-border border-y border-border">
                   {membershipTiers
@@ -97,16 +97,16 @@ export function CommunitiesView() {
         <PackageCheck aria-hidden className="size-6 shrink-0 text-primary" />
         <div>
           <h2 id="collect-together" className="text-2xl">
-            Love a little of both?
+            Room for both?
           </h2>
           <p className="mt-3 max-w-3xl leading-7 text-muted-foreground">
             You can join one Grimm membership and one ACEO membership. Each has
-            its own monthly payment, shipment, and shipping charge. Manage both
-            in your account.
+            its own billing schedule, monthly shipment, and shipping charge.
+            Manage both in your account.
           </p>
           <p className="mt-3 text-sm leading-6 text-muted-foreground">
-            Meet the memberships, find your favorites, and see what’s waiting
-            for your collection.
+            Choose monthly billing or pay for six or twelve months upfront.
+            Shipping is charged for each monthly delivery.
           </p>
         </div>
       </section>

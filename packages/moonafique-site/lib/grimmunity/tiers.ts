@@ -112,7 +112,7 @@ export const membershipTiers: Omit<Tier, "price_id" | "product_id">[] = [
     id: "grimm_starter",
     name: "Grimm Starter",
     description:
-      "A new little personality to love every month. Unbox a mystery Grimm in playful colors, with fresh ears and tiny companions to match.",
+      "A mystery Grimm in a gradient or two-color finish, with a new ear style, accessories, and matching pets each month.",
     amount: 1500,
     member_cap: null,
     retained_copies: 0,
@@ -120,10 +120,10 @@ export const membershipTiers: Omit<Tier, "price_id" | "product_id">[] = [
     shipping_mode: "shippo",
     perks: [
       "A mystery Grimm in a colorful finish, with a new ear style each month",
-      "All six emotion faces for every little mood",
+      "All six emotion faces",
       "Two pairs of pants and two boots to dress for the monthly theme",
-      "Two tiny pets to join the adventure",
-      "At least $24 of Grimm goodness for $15",
+      "Two matching pets",
+      "At least $24 in value for $15",
       "Pick six favorite colors and tell us any you’d rather skip",
     ],
     benefits_confirmed: true,
@@ -132,7 +132,7 @@ export const membershipTiers: Omit<Tier, "price_id" | "product_id">[] = [
     id: "grimm_keeper",
     name: "Grimm Keeper",
     description:
-      "A little character, a lot of magic. Add a Grimm with an exclusive painted finish to your collection each month.",
+      "A custom-painted Grimm each month, with a finish exclusive to Keeper members and coordinated accessories worn by the character.",
     amount: 3000,
     member_cap: 12,
     retained_copies: 1,
@@ -149,7 +149,7 @@ export const membershipTiers: Omit<Tier, "price_id" | "product_id">[] = [
     id: "aceo_prints",
     name: "ACEO Prints",
     description:
-      "Make your mailbox the happiest part of the month. Collect two tiny art prints and a fresh little world to fall in love with.",
+      "Two physical prints of original Moonafique ACEO artwork each month. Start a collection, add to a gallery, or share a print.",
     amount: 1000,
     member_cap: 24,
     retained_copies: 0,
@@ -158,7 +158,7 @@ export const membershipTiers: Omit<Tier, "price_id" | "product_id">[] = [
     perks: [
       "Two ACEO prints delivered each month",
       "Artwork from our original ACEO collections",
-      "Tiny treasures to display, collect, or share",
+      "Small-format art to display, collect, or share",
     ],
     benefits_confirmed: true,
   },
@@ -166,7 +166,7 @@ export const membershipTiers: Omit<Tier, "price_id" | "product_id">[] = [
     id: "aceo_originals",
     name: "ACEO Originals",
     description:
-      "A tiny original with a story all its own. Bring home a piece from our new monthly collection and grow a little gallery of your own.",
+      "One original ACEO artwork from the new monthly collection. A small format with room for an individual piece in every collection.",
     amount: 2000,
     member_cap: 12,
     retained_copies: 0,
@@ -174,8 +174,8 @@ export const membershipTiers: Omit<Tier, "price_id" | "product_id">[] = [
     shipping_mode: "shippo",
     perks: [
       "One original ACEO artwork each month",
-      "A piece from our brand-new monthly collection",
-      "Original art to make your little gallery feel like you",
+      "A piece from our new monthly collection",
+      "Original art for your own collection",
     ],
     benefits_confirmed: true,
   },

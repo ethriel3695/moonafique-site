@@ -1,4 +1,6 @@
-# Grimmunity copy for Jess’s final review
+# Historical Collector copy review
+
+This draft predates the approved Starter, Keeper, ACEO Prints, and ACEO Originals offer. Use the [current offer](collections-and-shipping.md) and [November 3 readiness record](readiness-20261103.md) for the Thursday launch and outstanding owner decisions. The single-plan prices and dates below are historical.
 
 The [public page](https://www.moonafique.com/grimmunity) currently collects launch interest. It does not charge people or reserve a place.
 

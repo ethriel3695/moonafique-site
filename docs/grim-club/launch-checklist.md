@@ -1,4 +1,6 @@
-# Grimmunity launch status — October 24, 2026
+# Historical Collector launch status — October 24, 2026
+
+This records the former single Collector offer. Use the [November 3 subscription readiness check](readiness-20261103.md) and [current four-membership offer](collections-and-shipping.md) for the Thursday launch. The prices, flat shipping, and November 1 opening below are historical.
 
 [The public interest page](https://www.moonafique.com/grimmunity) is live. Visitors can leave an email without making an account. Paid enrollment remains closed while Jess reviews the offer and the operator completes launch verification.
 

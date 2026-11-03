@@ -1,5 +1,7 @@
 # Grimmunity implementation and review
 
+For the Thursday, November 5 opening target and November 7 Grimmfest announcement, start with the [November 3 readiness check](readiness-20261103.md). It distinguishes newly verified sandbox behavior, current production controls, and remaining launch dependencies.
+
 Updated October 26, 2026. The approved two Grimm tiers and two ACEO tiers are now described on separate production pages, with shipping charged separately when billing opens. The owner approved the [production deployment and migrations](deployment-20261026.md). Paid enrollment remains closed and live Shippo remains disconnected. See [the current offer and Shippo setup](collections-and-shipping.md) and [the operating guide](operations.md).
 
 All twelve monthly, six-month, and annual Stripe Prices are prepared with inactive products. The owner approved 5% off six months and 10% off twelve months, on membership only. The prepaid and monthly shipping notice workflow is implemented for closed review; see [billing and notice setup](prepaid-billing-and-notices.md) for its safeguards and verification. The earlier [catalog setup receipt](live-setup-and-prepaid-proposal.md) remains historical evidence.

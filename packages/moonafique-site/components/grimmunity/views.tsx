@@ -250,30 +250,30 @@ export function OfferView({
               {grimm ? "The Moonafique Grimmunity" : "ACEOs by Moonafique"}
             </p>
             <h1 className="max-w-2xl text-5xl leading-[1.08] sm:text-6xl">
-              {grimm ? "A little mystery." : "Tiny artwork."}
+              {grimm ? "A growing cast" : "Original art."}
               <br />
               <span className="text-primary">
                 {grimm
-                  ? "A collection of your own."
-                  : "A collection to treasure."}
+                  ? "of characters."
+                  : "A smaller scale."}
               </span>
             </h1>
             <p className="mt-6 max-w-xl text-lg leading-8 text-muted-foreground">
               {grimm
-                ? "Your next little obsession is waiting. Meet a colorful mystery Grimm, dress it for the adventure, or fall for a painted Keeper made just for our members."
-                : "More happy mail. More tiny treasures. Discover a fresh pair of prints or a new original artwork, and watch your little gallery grow each month."}
+                ? "Choose a mystery Grimm with accessories and matching pets, or a Keeper with an exclusive painted finish. A new character joins your collection each month."
+                : "Collect artwork that measures just 2.5 by 3.5 inches. Choose two prints or one original from each month’s collection, with plenty of detail in very little space."}
             </p>
             <div className="my-8 rounded-[2rem] border border-primary/20 bg-gradient-to-br from-accent/35 to-surface p-7 sm:p-9">
               <Sparkles aria-hidden className="mb-5 size-8 text-primary" />
               <h2 className="text-2xl">
                 {grimm
-                  ? "Two ways to meet your next Grimm."
+                  ? "Two ways to collect Grimms."
                   : "Prints to collect. Originals to keep."}
               </h2>
               <p className="mt-3 leading-7">
                 {grimm
-                  ? "Start a colorful adventure with Grimm Starter for $15 a month, complete with accessories and two tiny pets. Or welcome an exclusive painted Keeper into your collection for $30."
-                  : "Two prints, twice the little joy: join ACEO Prints for $10 a month. Want an original for your collection? ACEO Originals brings you one new piece each month for $20."}
+                  ? "Grimm Starter is $15 a month and includes accessories and two matching pets. Grimm Keeper is $30 a month, with an exclusive painted finish and coordinated accessories worn by the Grimm."
+                  : "ACEO Prints includes two physical prints of original Moonafique artwork for $10 a month. ACEO Originals includes one original piece from the new monthly collection for $20."}
               </p>
               <p className="mt-4 text-sm leading-6 text-muted-foreground">
                 Shipping is additional and calculated for your delivery address.
@@ -288,12 +288,12 @@ export function OfferView({
                 <h2 className="text-xl">
                   {grimm
                     ? "Made for your collection"
-                    : "Little pieces. Endless possibilities."}
+                    : "Small enough to make room for"}
                 </h2>
                 <p className="mt-2 text-sm leading-6">
                   {grimm
-                    ? "Pick your favorite colors for Starter and let the mystery unfold. Every month brings a fresh personality, a new look, and plenty of little details to love."
-                    : "Small art, big personality. Tuck your favorites into a little gallery, brighten a cozy corner, or share a print with someone you love."}
+                    ? "Tell us six preferred colors for Starter and any colors to avoid. They guide the monthly mystery; the finished character is still a surprise."
+                    : "Build a small gallery, keep a collection in an album, or give a print to someone who would appreciate it. The format leaves the choice to you."}
                 </p>
               </div>
               <div>
@@ -301,10 +301,10 @@ export function OfferView({
                   aria-hidden
                   className="mb-3 size-5 text-primary"
                 />
-                <h2 className="text-xl">A little joy to look forward to</h2>
+                <h2 className="text-xl">Something new each month</h2>
                 <p className="mt-2 text-sm leading-6">
-                  A new month means something new to fall for. Keep your
-                  collection growing, and manage your membership anytime in your
+                  Each month adds a new piece to the collection. Review your
+                  payments, delivery details, and renewal settings in your
                   account.
                 </p>
               </div>
@@ -314,21 +314,21 @@ export function OfferView({
             className="rounded-[2rem] border border-border bg-card p-6 shadow-soft sm:p-8"
             aria-label="Membership offer"
           >
-            <Status>{open ? "Come on in" : "Coming soon"}</Status>
+            <Status>{open ? "Enrollment open" : "Coming soon"}</Status>
             <h2 className="mt-5 text-3xl">
               {open
-                ? "Choose your next little obsession."
-                : "Your next collection starts here."}
+                ? "Choose your membership."
+                : "The next collection is taking shape."}
             </h2>
             <p className="mt-5 leading-7">
               {grimm
-                ? "A colorful surprise or a painted treasure? Find your favorite way to collect below."
-                : "Make a little room for something lovely. Choose your prints or originals below and start your next collection."}
+                ? "Explore Starter and Keeper below, then choose the Grimm membership that fits your collection."
+                : "Explore the prints and originals below, then choose how you want to collect."}
             </p>
             <p className="mt-4 text-sm leading-6">
               {grimm
-                ? "Keeper spots are special: when the last one is claimed, that Grimm goes into the vault."
-                : "Every month is a new chance to discover a favorite. Your next tiny treasure could be just around the corner."}
+                ? "Keeper has limited places. When they’re filled, Keeper is “Vaulted for now” and closed to new members. Existing memberships continue."
+                : "Prints and Originals each have limited places. Check the availability shown with each membership."}
             </p>
             {open ? (
               <Button asChild className="mt-6 w-full">
@@ -369,7 +369,8 @@ export function OfferView({
               : "Choose your ACEO membership."}
           </h2>
           <p className="mb-7 mt-4 max-w-3xl leading-7 text-muted-foreground">
-            Pick your monthly dose of happy mail. Shipping is added at checkout.
+            Compare what’s included each month. Shipping is calculated for your
+            delivery address and charged separately.
           </p>
           {open && program && edition ? (
             <JoinForm
@@ -388,8 +389,8 @@ export function OfferView({
           ) : (
             <>
               <p className="mb-5 text-sm font-semibold">
-                We’re putting the finishing touches on our first collection.
-                Take a peek below and find your favorite.
+                Paid enrollment is currently closed. Explore the memberships
+                below and join the launch list for the opening announcement.
               </p>
               <div className="grid gap-5 md:grid-cols-2">
                 {displayedTiers.map((tier) => (
@@ -434,8 +435,8 @@ export function OfferView({
         >
           <h2 id="delivery-heading" className="text-2xl">
             {grimm
-              ? "A little Grimm, carefully boxed."
-              : "Tiny art, carefully packed."}
+              ? "Your Grimm, carefully boxed."
+              : "Your artwork, carefully packed."}
           </h2>
           <p className="mt-3 max-w-3xl leading-7 text-muted-foreground">
             {grimm
@@ -456,7 +457,7 @@ export function OfferView({
             <h2 className="text-2xl">
               {grimm
                 ? "More of an art collector?"
-                : "Curious about our little creatures?"}
+                : "Collect characters too?"}
             </h2>
             <p className="mt-3 text-muted-foreground">
               {grimm
