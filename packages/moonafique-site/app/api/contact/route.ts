@@ -9,10 +9,29 @@ const failure = (status: number, error: string) =>
     { status, headers: { "Cache-Control": "no-store" } },
   );
 export async function POST(request: Request) {
-  if (
-    request.headers.get("origin") &&
-    request.headers.get("origin") !== new URL(request.url).origin
-  )
+  const origin = request.headers.get("origin");
+  const url = new URL(request.url);
+  // Next can use an internal hostname in request.url. Compare the browser's
+  // origin with the public Host and the proxy-provided protocol instead.
+  const host = request.headers.get("host") ?? url.host;
+  const forwardedProtocol = request.headers
+    .get("x-forwarded-proto")
+    ?.split(",")[0]
+    ?.trim();
+  const protocol =
+    forwardedProtocol === "https" || forwardedProtocol === "http"
+      ? forwardedProtocol
+      : url.protocol.slice(0, -1);
+  let expectedOrigin: string;
+  try {
+    expectedOrigin = new URL(`${protocol}://${host}`).origin;
+  } catch {
+    return failure(
+      403,
+      "Please send your message from the Moonafique website.",
+    );
+  }
+  if (origin && origin !== expectedOrigin)
     return failure(
       403,
       "Please send your message from the Moonafique website.",

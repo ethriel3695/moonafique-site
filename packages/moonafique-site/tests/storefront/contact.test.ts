@@ -35,6 +35,29 @@ beforeEach(() => {
 });
 afterEach(() => vi.unstubAllEnvs());
 describe("contact message delivery", () => {
+  it.each([
+    ["http://127.0.0.1:3052", "127.0.0.1:3052", "http"],
+    ["https://www.moonafique.com", "www.moonafique.com", "https"],
+  ])(
+    "accepts the public origin %s when Next uses an internal host",
+    async (origin, host, protocol) => {
+      const response = await POST(
+        new Request("http://localhost:3052/api/contact", {
+          method: "POST",
+          headers: {
+            origin,
+            host,
+            "x-forwarded-proto": protocol,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        }),
+      );
+      expect(response.status).toBe(200);
+      expect(mocks.send).toHaveBeenCalledTimes(1);
+    },
+  );
+
   it("sends to the fixed studio inbox with a reply address and retry key", async () => {
     const response = await POST(request());
     expect(response.status).toBe(200);
