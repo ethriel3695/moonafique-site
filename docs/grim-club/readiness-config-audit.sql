@@ -1,4 +1,5 @@
--- Proposed production configuration audit. Not executed.
+-- Production configuration audit, executed with owner approval November 3, 2026.
+-- Receipt: readiness-neon-audit-20261103.json; grimmunity-production/main/neondb.
 -- Read only the live program, its membership prices, and edition schedules.
 -- Do not select customer records, addresses, credentials, or staff identities.
 BEGIN TRANSACTION READ ONLY;

@@ -1,0 +1,267 @@
+{
+  "auditedOn": "2026-11-03",
+  "project": "grimmunity-production",
+  "branch": "main",
+  "database": "neondb",
+  "method": "Neon SQL Editor: BEGIN TRANSACTION READ ONLY, three SELECT statements, ROLLBACK",
+  "program": {
+    "enabled": false,
+    "approved_at": null,
+    "billing_policy": "notice_shipping_v1",
+    "currency": "usd",
+    "countries": "{US}",
+    "tax_mode": "exclusive",
+    "terms_version": "moonafique-notified-shipping-v3-2026-10-26",
+    "fulfillment_lead_days": 7,
+    "managedPortalReferencePresent": true
+  },
+  "prices": [
+    {
+      "tier_id": "aceo_originals",
+      "membership": "ACEO Originals",
+      "monthly_amount_cents": 2000,
+      "member_cap": 12,
+      "retained_copies": 0,
+      "benefits_confirmed": true,
+      "shipping_mode": "shippo",
+      "billing_months": 1,
+      "amount_cents": 2000,
+      "discount_percent": 0
+    },
+    {
+      "tier_id": "aceo_originals",
+      "membership": "ACEO Originals",
+      "monthly_amount_cents": 2000,
+      "member_cap": 12,
+      "retained_copies": 0,
+      "benefits_confirmed": true,
+      "shipping_mode": "shippo",
+      "billing_months": 6,
+      "amount_cents": 11400,
+      "discount_percent": 5
+    },
+    {
+      "tier_id": "aceo_originals",
+      "membership": "ACEO Originals",
+      "monthly_amount_cents": 2000,
+      "member_cap": 12,
+      "retained_copies": 0,
+      "benefits_confirmed": true,
+      "shipping_mode": "shippo",
+      "billing_months": 12,
+      "amount_cents": 21600,
+      "discount_percent": 10
+    },
+    {
+      "tier_id": "aceo_prints",
+      "membership": "ACEO Prints",
+      "monthly_amount_cents": 1000,
+      "member_cap": 24,
+      "retained_copies": 0,
+      "benefits_confirmed": true,
+      "shipping_mode": "shippo",
+      "billing_months": 1,
+      "amount_cents": 1000,
+      "discount_percent": 0
+    },
+    {
+      "tier_id": "aceo_prints",
+      "membership": "ACEO Prints",
+      "monthly_amount_cents": 1000,
+      "member_cap": 24,
+      "retained_copies": 0,
+      "benefits_confirmed": true,
+      "shipping_mode": "shippo",
+      "billing_months": 6,
+      "amount_cents": 5700,
+      "discount_percent": 5
+    },
+    {
+      "tier_id": "aceo_prints",
+      "membership": "ACEO Prints",
+      "monthly_amount_cents": 1000,
+      "member_cap": 24,
+      "retained_copies": 0,
+      "benefits_confirmed": true,
+      "shipping_mode": "shippo",
+      "billing_months": 12,
+      "amount_cents": 10800,
+      "discount_percent": 10
+    },
+    {
+      "tier_id": "grimm_keeper",
+      "membership": "Grimm Keeper",
+      "monthly_amount_cents": 3000,
+      "member_cap": 12,
+      "retained_copies": 1,
+      "benefits_confirmed": true,
+      "shipping_mode": "shippo",
+      "billing_months": 1,
+      "amount_cents": 3000,
+      "discount_percent": 0
+    },
+    {
+      "tier_id": "grimm_keeper",
+      "membership": "Grimm Keeper",
+      "monthly_amount_cents": 3000,
+      "member_cap": 12,
+      "retained_copies": 1,
+      "benefits_confirmed": true,
+      "shipping_mode": "shippo",
+      "billing_months": 6,
+      "amount_cents": 17100,
+      "discount_percent": 5
+    },
+    {
+      "tier_id": "grimm_keeper",
+      "membership": "Grimm Keeper",
+      "monthly_amount_cents": 3000,
+      "member_cap": 12,
+      "retained_copies": 1,
+      "benefits_confirmed": true,
+      "shipping_mode": "shippo",
+      "billing_months": 12,
+      "amount_cents": 32400,
+      "discount_percent": 10
+    },
+    {
+      "tier_id": "grimm_starter",
+      "membership": "Grimm Starter",
+      "monthly_amount_cents": 1500,
+      "member_cap": null,
+      "retained_copies": 0,
+      "benefits_confirmed": true,
+      "shipping_mode": "shippo",
+      "billing_months": 1,
+      "amount_cents": 1500,
+      "discount_percent": 0
+    },
+    {
+      "tier_id": "grimm_starter",
+      "membership": "Grimm Starter",
+      "monthly_amount_cents": 1500,
+      "member_cap": null,
+      "retained_copies": 0,
+      "benefits_confirmed": true,
+      "shipping_mode": "shippo",
+      "billing_months": 6,
+      "amount_cents": 8550,
+      "discount_percent": 5
+    },
+    {
+      "tier_id": "grimm_starter",
+      "membership": "Grimm Starter",
+      "monthly_amount_cents": 1500,
+      "member_cap": null,
+      "retained_copies": 0,
+      "benefits_confirmed": true,
+      "shipping_mode": "shippo",
+      "billing_months": 12,
+      "amount_cents": 16200,
+      "discount_percent": 10
+    }
+  ],
+  "validation": {
+    "priceRows": 12,
+    "uniquePriceIds": 12,
+    "uniqueProductIds": 4,
+    "priceMismatches": 0,
+    "editionAllocationMismatches": 0
+  },
+  "editions": [
+    {
+      "month": "2026-11",
+      "title": "Moonafique collections · 2026-11",
+      "state": "draft",
+      "enrollment_open_boise": "2026-11-01 00:00:00",
+      "enrollment_close_boise": "2026-12-01 00:00:00",
+      "period_open_boise": "2026-11-01 00:00:00",
+      "period_close_boise": "2026-12-01 00:00:00",
+      "payment_cutoff_boise": "2026-12-08 00:00:00",
+      "address_cutoff_boise": "2026-12-08 00:00:00",
+      "dispatch_start_boise": "2026-12-08 00:00:00",
+      "dispatch_end_boise": "2026-12-15 00:00:00",
+      "tier_allocations": {
+        "aceo_prints": {
+          "capacity": 24,
+          "retained_copies": 0
+        },
+        "grimm_keeper": {
+          "capacity": 12,
+          "retained_copies": 1
+        },
+        "grimm_starter": {
+          "capacity": null,
+          "retained_copies": 0
+        },
+        "aceo_originals": {
+          "capacity": 12,
+          "retained_copies": 0
+        }
+      }
+    },
+    {
+      "month": "2026-12",
+      "title": "Moonafique collections · 2026-12",
+      "state": "draft",
+      "enrollment_open_boise": "2026-12-01 00:00:00",
+      "enrollment_close_boise": "2027-01-01 00:00:00",
+      "period_open_boise": "2026-12-01 00:00:00",
+      "period_close_boise": "2027-01-01 00:00:00",
+      "payment_cutoff_boise": "2027-01-08 00:00:00",
+      "address_cutoff_boise": "2027-01-08 00:00:00",
+      "dispatch_start_boise": "2027-01-08 00:00:00",
+      "dispatch_end_boise": "2027-01-15 00:00:00",
+      "tier_allocations": {
+        "aceo_prints": {
+          "capacity": 24,
+          "retained_copies": 0
+        },
+        "grimm_keeper": {
+          "capacity": 12,
+          "retained_copies": 1
+        },
+        "grimm_starter": {
+          "capacity": null,
+          "retained_copies": 0
+        },
+        "aceo_originals": {
+          "capacity": 12,
+          "retained_copies": 0
+        }
+      }
+    },
+    {
+      "month": "2027-01",
+      "title": "Moonafique collections · 2027-01",
+      "state": "draft",
+      "enrollment_open_boise": "2027-01-01 00:00:00",
+      "enrollment_close_boise": "2027-02-01 00:00:00",
+      "period_open_boise": "2027-01-01 00:00:00",
+      "period_close_boise": "2027-02-01 00:00:00",
+      "payment_cutoff_boise": "2027-02-08 00:00:00",
+      "address_cutoff_boise": "2027-02-08 00:00:00",
+      "dispatch_start_boise": "2027-02-08 00:00:00",
+      "dispatch_end_boise": "2027-02-15 00:00:00",
+      "tier_allocations": {
+        "aceo_prints": {
+          "capacity": 24,
+          "retained_copies": 0
+        },
+        "grimm_keeper": {
+          "capacity": 12,
+          "retained_copies": 1
+        },
+        "grimm_starter": {
+          "capacity": null,
+          "retained_copies": 0
+        },
+        "aceo_originals": {
+          "capacity": 12,
+          "retained_copies": 0
+        }
+      }
+    }
+  ],
+  "transactionRolledBack": true
+}
