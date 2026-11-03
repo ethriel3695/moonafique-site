@@ -3,6 +3,9 @@ import type { NextConfig } from 'next';
 const nextConfig: NextConfig = {
   async redirects() {
     return [
+      ...(process.env.VERCEL_ENV === 'preview'
+        ? [{ source: '/storybook', destination: '/storybook/index.html', permanent: false }]
+        : []),
       { source: '/grim-club/:path*', destination: '/grimmunity/:path*', permanent: true },
       { source: '/account/grim-club/:path*', destination: '/account/grimmunity/:path*', permanent: true },
       { source: '/admin/grim-club/:path*', destination: '/admin/grimmunity/:path*', permanent: true },
