@@ -10,7 +10,7 @@ export async function POST(request: Request) {
       email: z.string().trim().toLowerCase().max(254).email(),
       confirmed: z.literal("yes"),
     }).parse(await request.json());
-    if (confirmed) await database().query("DELETE FROM grim.interest WHERE mode=$1 AND email=$2", [grimMode(), email]);
+    if (confirmed) await database().query("DELETE FROM grim.interest WHERE mode=$1 AND purpose='launch' AND email=$2", [grimMode(), email]);
     return { ok: true };
   });
 }

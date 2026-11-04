@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createCheckoutSession, stripe } from "@/lib/stripe";
 import { isOneTimePrice } from "@/lib/catalog-policy";
+import { failure, sameOrigin } from "@/lib/grimmunity/http";
+import { ClubError } from "@/lib/grimmunity/model";
+import { guardProviderRequest } from "@/lib/grimmunity/provider-request-guard";
 import { z } from "zod";
 const cartSchema = z.object({
   items: z
@@ -15,8 +18,10 @@ const cartSchema = z.object({
 });
 export async function POST(req: NextRequest) {
   try {
+    sameOrigin(req);
     const { items } = cartSchema.parse(await req.json());
     if (!items.length) return NextResponse.json({ url: null });
+    await guardProviderRequest(req, "storefront");
     const combined = new Map<string, number>();
     for (const item of items)
       combined.set(
@@ -70,9 +75,10 @@ export async function POST(req: NextRequest) {
       url: await createCheckoutSession(checkoutItems, cartTotal),
     });
   } catch (error) {
+    if (error instanceof ClubError) return failure(error);
     return NextResponse.json(
       { error: "Unable to create checkout. Check your cart and try again." },
-      { status: error instanceof z.ZodError ? 400 : 503 },
+      { status: error instanceof z.ZodError || error instanceof SyntaxError ? 400 : 503 },
     );
   }
 }

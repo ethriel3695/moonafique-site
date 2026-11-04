@@ -1,11 +1,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { NextRequest } from "next/server";
-const mocks = vi.hoisted(() => ({ retrieve: vi.fn(), checkout: vi.fn() }));
+const mocks = vi.hoisted(() => ({ retrieve: vi.fn(), checkout: vi.fn(), guard: vi.fn() }));
 vi.mock("@/lib/stripe", () => ({
   stripe: { prices: { retrieve: mocks.retrieve } },
   createCheckoutSession: mocks.checkout,
 }));
+vi.mock("@/lib/grimmunity/provider-request-guard", () => ({ guardProviderRequest: mocks.guard }));
+vi.mock("@workos-inc/authkit-nextjs", () => ({ withAuth: async () => ({ user: null }) }));
 import { POST } from "@/app/api/checkout/route";
+import { ClubError } from "@/lib/grimmunity/model";
 const price = {
   active: true,
   type: "one_time",
@@ -13,19 +16,29 @@ const price = {
   currency: "usd",
   product: { id: "prod_test", active: true, metadata: { stock: "8" } },
 };
-const request = (items: unknown) =>
+const request = (items: unknown, origin = "https://www.moonafique.com") =>
   new NextRequest("https://www.moonafique.com/api/checkout", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", origin },
     body: JSON.stringify({ items }),
   });
 beforeEach(() => {
   vi.clearAllMocks();
+  vi.stubEnv("GRIM_SITE_URL", "https://www.moonafique.com");
+  mocks.guard.mockResolvedValue(undefined);
   mocks.retrieve.mockResolvedValue(price);
   mocks.checkout.mockResolvedValue("https://checkout.stripe.com/test");
 });
 afterEach(() => vi.unstubAllEnvs());
 describe("checkout availability and authoritative totals", () => {
+  it("rejects foreign origins and throttled requests before reaching Stripe", async () => {
+    const items = [{ priceId: "price_test", quantity: 1 }];
+    expect((await POST(request(items, "https://other.example.invalid"))).status).toBe(403);
+    mocks.guard.mockRejectedValueOnce(new ClubError("checkout_rate_limited", 429));
+    expect((await POST(request(items))).status).toBe(429);
+    expect(mocks.retrieve).not.toHaveBeenCalled();
+    expect(mocks.checkout).not.toHaveBeenCalled();
+  });
   it("uses the selected quantity and provider price instead of a submitted amount", async () => {
     const response = await POST(
       request([{ priceId: "price_test", quantity: 3, price: 0.01 }]),

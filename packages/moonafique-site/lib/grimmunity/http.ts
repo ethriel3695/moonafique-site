@@ -7,7 +7,7 @@ import { appOrigin } from "./stripe-gateway";
 export async function requireMember() {
   const { user } = await withAuth();
   if (!user) throw new ClubError("sign_in_required", 401);
-  return { id: user.id, email: user.email };
+  return { id: user.id, email: user.email, emailVerified: user.emailVerified };
 }
 export function assertStaff(id: string) {
   const allowed = (process.env.GRIM_STAFF_USER_IDS ?? "")
@@ -55,7 +55,11 @@ const messages: Record<string, string> = {
   interest_unavailable:
     "The interest list is temporarily unavailable. Please try again shortly.",
   interest_rate_limited: "Too many attempts. Please try again in an hour.",
+  invalid_email_confirmation: "This confirmation link is invalid or has expired. Request a new email from the signup form.",
+  newsletter_opted_out: "This address previously opted out. Contact hello@moonafique.com if you’d like to rejoin the newsletter.",
   sign_in_required: "Sign in to manage your Grimmunity membership.",
+  verified_email_required: "Verify your account email before starting membership checkout.",
+  checkout_rate_limited: "Too many requests. Wait a few minutes and try again.",
   staff_only: "This page is for Moonafique staff.",
   enrollment_closed:
     "Enrollment is closed. Check the next opening on the Grimmunity page.",
@@ -108,7 +112,7 @@ export function failure(error: unknown) {
 export async function jsonAction(
   request: Request,
   staff: boolean,
-  work: (user: { id: string; email: string }) => Promise<unknown>,
+  work: (user: { id: string; email: string; emailVerified: boolean }) => Promise<unknown>,
 ) {
   try {
     sameOrigin(request);

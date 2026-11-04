@@ -44,15 +44,14 @@ export function InterestForm() {
           role="status"
           className="rounded-xl border border-primary/30 bg-primary/5 p-5"
         >
-          <p className="font-bold">You’re on the interest list.</p>
+          <p className="font-bold">Check your inbox to confirm.</p>
           <p className="mt-2 text-sm leading-6">
-            We’ll email you when Moonafique membership enrollment opens. No
-            payment was taken, and no membership is reserved.
+            Confirm your email to get a notice when Moonafique membership
+            enrollment opens. This won’t charge you or reserve a membership.
           </p>
           <p className="mt-2 text-sm leading-6">
-            New signups receive a confirmation email. If it doesn’t arrive in a
-            few minutes, check your spam folder or contact us. Signing up again
-            won’t send another confirmation.
+            If you don’t see the confirmation email, check your spam folder.
+            The link expires in 24 hours.
           </p>
         </div>
       ) : (

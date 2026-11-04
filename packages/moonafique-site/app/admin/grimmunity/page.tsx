@@ -64,7 +64,7 @@ export default async function AdminPage({
             ? "Shippo connected"
             : "Shippo API key needed"}
         </Status>
-        <Status>{data.interestCount} on the interest list</Status>
+        <Status>{data.interestCount} confirmed on the interest list</Status>
         <Status>
           {data.interestMail?.pending ?? 0} waiting-list confirmations pending
         </Status>

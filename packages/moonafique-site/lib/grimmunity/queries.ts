@@ -189,14 +189,15 @@ export async function adminView(month?: string) {
     interestCount: Number(
       (await one<{ count: string }>(
         db,
-        "SELECT count(*) FROM grim.interest WHERE mode=$1",
+        "SELECT count(*) FROM grim.interest WHERE mode=$1 AND purpose='launch' AND confirmed_at IS NOT NULL",
         [mode],
       ))!.count,
     ),
     interestMail: await one<{ pending: string; review: string }>(
       db,
       `SELECT count(*) FILTER (WHERE n.state='pending') AS pending,count(*) FILTER (WHERE n.state='review') AS review
-       FROM grim.interest_notifications n JOIN grim.interest i ON i.id=n.interest_id WHERE i.mode=$1`,
+       FROM grim.interest_notifications n JOIN grim.interest i ON i.id=n.interest_id
+       WHERE i.mode=$1 AND i.purpose='launch' AND i.confirmation_expires_at>now() AND i.confirmed_at IS NULL`,
       [mode],
     ),
     worker: await one<{

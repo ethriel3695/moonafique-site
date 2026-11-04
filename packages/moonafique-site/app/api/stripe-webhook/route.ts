@@ -19,9 +19,9 @@ export async function POST(req: NextRequest) {
       sig!,
       process.env.STRIPE_WEBHOOK_SECRET!
     );
-  } catch (err) {
+  } catch {
     return NextResponse.json(
-      { error: `Webhook signature verification failed. ${err}` },
+      { error: 'Invalid webhook signature' },
       { status: 400 }
     );
   }
@@ -34,7 +34,8 @@ export async function POST(req: NextRequest) {
 
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object as Stripe.Checkout.Session;
-    if (session.mode === 'subscription') return NextResponse.json({ received: true });
+    if (session.mode !== 'payment' || session.payment_status !== 'paid')
+      return NextResponse.json({ received: true });
     // 1. Get shipping address from session
     const shippingAddress = session?.collected_information?.shipping_details;
     if (!shippingAddress) {

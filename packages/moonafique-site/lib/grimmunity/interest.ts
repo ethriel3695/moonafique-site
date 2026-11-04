@@ -1,11 +1,14 @@
-import { createHmac } from "node:crypto";
+import { createHmac, timingSafeEqual } from "node:crypto";
 import type { Pool } from "pg";
 import { z } from "zod";
 import { one, transaction } from "./db";
 import { ClubError, type Mode } from "./model";
-import { interestMessage } from "../../emails/grimmunity-interest-email";
+import { appOrigin } from "./stripe-gateway";
+import { cleanRequestLimits, limitRequest } from "./request-limits";
 
-export const interestConsentVersion = "grimmunity-confirmation-and-launch-v2";
+export type EmailPurpose = "launch" | "newsletter";
+export const interestConsentVersion = "grimmunity-confirmed-launch-v3";
+const hour = 3_600_000;
 export const interestInput = z.object({
   email: z.string().trim().toLowerCase().max(254).email(),
   consent: z.literal(true),
@@ -19,42 +22,84 @@ export async function registerInterest(
   ip: string,
   secret: string,
   now = new Date(),
+  purpose: EmailPurpose = "launch",
 ) {
   const data = interestInput.parse(input);
   if (data.website) return; // Quietly discard the hidden bot field.
   if (secret.length < 32) throw new ClubError("interest_unavailable", 503);
-  const hour = Math.floor(now.getTime() / 3_600_000);
-  // Store a short-lived keyed digest, never the visitor's raw IP address.
-  const bucket = createHmac("sha256", secret)
-    .update(`${mode}:${hour}:${ip}`)
-    .digest("hex");
+  const scope = `email:${mode}:${purpose}`;
+  const expiresAt = new Date(now.getTime() + 24 * hour);
   const result = await transaction(pool, async (db) => {
-    await db.query(
-      "DELETE FROM grim.interest_rate_limits WHERE bucket IN (SELECT bucket FROM grim.interest_rate_limits WHERE expires_at<$1 LIMIT 500)",
-      [now],
-    );
-    const rate = await one<{ attempts: number }>(db,
-      `INSERT INTO grim.interest_rate_limits(bucket,attempts,expires_at) VALUES($1,1,$2)
-       ON CONFLICT(bucket) DO UPDATE SET attempts=LEAST(grim.interest_rate_limits.attempts+1,9)
-       RETURNING attempts`,
-      [bucket, new Date((hour + 2) * 3_600_000)],
-    );
-    if (!rate || rate.attempts > 8) return { allowed: false };
+    await cleanRequestLimits(db, now);
+    if (!await limitRequest(db, secret, `${scope}:ip`, ip, 8, hour, now) ||
+        !await limitRequest(db, secret, `${scope}:hour`, "all", 120, hour, now) ||
+        !await limitRequest(db, secret, `${scope}:day`, "all", 400, 24 * hour, now))
+      return { allowed: false };
     const created = await one<{ id: string }>(db,
-      `INSERT INTO grim.interest(mode,email,consent_version) VALUES($1,$2,$3)
-       ON CONFLICT(mode,email) DO NOTHING RETURNING id`,
-      [mode, data.email, interestConsentVersion],
+      `INSERT INTO grim.interest(mode,purpose,email,consent_version,confirmation_expires_at) VALUES($1,$2,$3,$4,$5)
+       ON CONFLICT(mode,purpose,email) DO UPDATE SET consent_version=EXCLUDED.consent_version,
+         confirmation_expires_at=EXCLUDED.confirmation_expires_at
+       WHERE grim.interest.confirmed_at IS NULL AND
+         (grim.interest.confirmation_expires_at IS NULL OR grim.interest.confirmation_expires_at<=$6)
+       RETURNING id`,
+      [mode, purpose, data.email, purpose === "launch" ? interestConsentVersion : "newsletter-confirmed-v1", expiresAt, now],
     );
     if (created) {
-      await db.query("INSERT INTO grim.interest_notifications(interest_id,message) VALUES($1,$2)",
-        [created.id, await interestMessage(mode === "sandbox")]);
+      const token = confirmationToken(secret, mode, created.id, expiresAt.getTime());
+      const url = `${appOrigin()}/confirm-email#${token}`;
+      const list = purpose === "launch" ? "membership launch list" : "newsletter";
+      const subject = `${mode === "sandbox" ? "[TEST] " : ""}Confirm your Moonafique ${list} signup`;
+      const details = purpose === "launch" ? "This doesn’t reserve a membership or charge you." : "You can unsubscribe from the newsletter at any time.";
+      const message = {
+        subject,
+        text: `Confirm your signup for the Moonafique ${list}: ${url}\n\n${details}\n\nIf you didn’t request this, ignore this email. The link expires in 24 hours.`,
+        html: `<p>Confirm your signup for the Moonafique ${list}.</p><p><a href="${url}">Review and confirm your email</a></p><p>${details}</p><p>If you didn’t request this, ignore this email. The link expires in 24 hours.</p>`,
+      };
+      await db.query(
+        `INSERT INTO grim.interest_notifications(interest_id,message) VALUES($1,$2)
+         ON CONFLICT(interest_id) DO UPDATE SET message=EXCLUDED.message, payload=NULL, state='pending',
+           attempts=0, first_attempt_at=NULL, provider_id=NULL, sent_at=NULL, created_at=now()`,
+        [created.id, message],
+      );
     }
     const contact = created ?? await one<{ id: string }>(db,
-      "SELECT id FROM grim.interest WHERE mode=$1 AND email=$2", [mode, data.email]);
+      `SELECT id FROM grim.interest WHERE mode=$1 AND purpose=$2 AND email=$3
+       AND confirmed_at IS NULL AND confirmation_expires_at>$4`, [mode, purpose, data.email, now]);
     return { allowed: true, id: contact?.id };
   });
   if (!result.allowed) throw new ClubError("interest_rate_limited", 429);
   return result.id;
+}
+
+function confirmationToken(secret: string, mode: Mode, id: string, expires: number) {
+  const message = `${id}.${expires}`;
+  const signature = createHmac("sha256", secret).update(`email-confirm:${mode}:${message}`).digest("base64url");
+  return `${message}.${signature}`;
+}
+
+export async function confirmEmail(
+  pool: Pool, mode: Mode, token: string, secret: string,
+  activateNewsletter: (email: string) => Promise<void>, now = new Date(),
+) {
+  if (secret.length < 32) throw new ClubError("interest_unavailable", 503);
+  const invalid = () => new ClubError("invalid_email_confirmation", 400);
+  const match = /^([0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12})\.(\d{13})\.[\w-]{43}$/.exec(token);
+  if (!match) throw invalid();
+  const [, id, expiry] = match;
+  const expires = Number(expiry);
+  if (expires <= now.getTime() || !timingSafeEqual(Buffer.from(token), Buffer.from(confirmationToken(secret, mode, id, expires))))
+    throw invalid();
+  return transaction(pool, async (db) => {
+    const contact = await one<{ email: string; purpose: EmailPurpose; confirmed_at: Date | null }>(db,
+      `SELECT email,purpose,confirmed_at FROM grim.interest WHERE id=$1 AND mode=$2 AND confirmation_expires_at=$3 FOR UPDATE`,
+      [id, mode, new Date(expires)],
+    );
+    if (!contact) throw invalid();
+    if (contact.confirmed_at) return contact.purpose;
+    if (contact.purpose === "newsletter" && mode === "live") await activateNewsletter(contact.email);
+    await db.query("UPDATE grim.interest SET confirmed_at=$2 WHERE id=$1", [id, now]);
+    return contact.purpose;
+  });
 }
 
 export async function readInterestBody(request: Request) {

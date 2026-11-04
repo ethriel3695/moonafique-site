@@ -1055,9 +1055,10 @@ export class Grimmunity {
         await this.applySession(db, p, row, s);
       });
     }
-    const paid = await one(
+    const fulfillment = await one<{ state: string; financial_state: string; allocated: boolean; review_reason: string | null }>(
       this.pool,
-      "SELECT invoice_id FROM grim.fulfillments WHERE membership_id=$1 AND edition_id=$2",
+      `SELECT f.state,e.financial_state,e.allocated,e.review_reason FROM grim.fulfillments f
+       JOIN grim.entitlements e ON e.invoice_id=f.invoice_id WHERE f.membership_id=$1 AND f.edition_id=$2`,
       [row.membership_id, row.edition_id],
     );
     const cycle = row.tier_snapshot.billing
@@ -1067,11 +1068,15 @@ export class Grimmunity {
           [row.membership_id],
         )
       : undefined;
+    const paid = !!fulfillment && fulfillment.allocated && fulfillment.financial_state === "paid" &&
+      !fulfillment.review_reason && fulfillment.state !== "hold";
+    const review = (!!fulfillment && !paid) || cycle?.state === "hold";
     return {
       complete: s.state === "complete",
-      paid: !!paid,
+      paid,
+      review,
       invoiceUrl:
-        cycle?.state === "initial" && this.now() < row.expires_at
+        !paid && !review && cycle?.state === "initial" && this.now() < row.expires_at
           ? cycle.invoice_url
           : null,
       managed: !!row.tier_snapshot.billing,

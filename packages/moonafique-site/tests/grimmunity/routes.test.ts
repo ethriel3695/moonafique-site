@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 const state = vi.hoisted(() => ({
-  user: null as null | { id: string; email: string },
+  user: null as null | { id: string; email: string; emailVerified?: boolean },
   checkout: vi.fn(),
   portal: vi.fn(),
   lock: vi.fn(),
@@ -8,8 +8,7 @@ const state = vi.hoisted(() => ({
   save: vi.fn(),
   price: vi.fn(),
   cart: vi.fn(),
-  contacts: vi.fn(),
-  emails: vi.fn(),
+  guard: vi.fn(),
 }));
 vi.mock("@workos-inc/authkit-nextjs", () => ({
   withAuth: async () => ({ user: state.user }),
@@ -28,27 +27,20 @@ vi.mock("@/lib/stripe", () => ({
   stripe: { prices: { retrieve: state.price } },
   createCheckoutSession: state.cart,
 }));
-vi.mock("next/headers", () => ({ headers: async () => new Headers() }));
-vi.mock("@/lib/rate-limit", () => ({ isRateLimited: () => false }));
-vi.mock("resend", () => ({
-  Resend: class {
-    contacts = { create: state.contacts };
-    emails = { send: state.emails };
-  },
-}));
+vi.mock("@/lib/grimmunity/provider-request-guard", () => ({ guardProviderRequest: state.guard }));
 import { POST as checkout } from "@/app/api/grimmunity/checkout/route";
 import { POST as portal } from "@/app/api/grimmunity/portal/route";
 import { POST as admin } from "@/app/api/grimmunity/admin/route";
 import { POST as editions } from "@/app/api/grimmunity/editions/route";
 import { GET as packing } from "@/app/api/grimmunity/packing/route";
 import { POST as cart } from "@/app/api/checkout/route";
-import { POST as newsletter } from "@/app/api/subscribe/route";
 import { POST as shippingQuote } from "@/app/api/grimmunity/shipping-quote/route";
 import { POST as shipping } from "@/app/api/grimmunity/shipping/route";
 import { POST as preferences } from "@/app/api/grimmunity/preferences/route";
 import { POST as cancelRenewal } from "@/app/api/grimmunity/cancel-renewal/route";
 import { NextRequest } from "next/server";
 import { isOneTimeProduct } from "@/lib/catalog-policy";
+import { ClubError } from "@/lib/grimmunity/model";
 import type Stripe from "stripe";
 const request = (body: unknown = {}, origin = "http://localhost:3000") =>
   new NextRequest("http://localhost:3000/api/test", {
@@ -59,6 +51,7 @@ const request = (body: unknown = {}, origin = "http://localhost:3000") =>
 beforeEach(() => {
   vi.clearAllMocks();
   state.user = null;
+  state.guard.mockResolvedValue(undefined);
   process.env.SERVER_URL = "http://localhost:3000";
   process.env.GRIM_STAFF_USER_IDS = "user_staff";
   process.env.RESEND_API_KEY = "re_fixture";
@@ -238,21 +231,14 @@ describe("route authorization and ordinary storefront regression", () => {
       } as Stripe.Product),
     ).toBe(true);
   });
-  it("keeps newsletter signup separate, with no billing or real email", async () => {
-    state.contacts.mockResolvedValue({
-      data: { id: "contact_fixture" },
-      error: null,
-    });
-    state.emails.mockResolvedValue({
-      data: { id: "email_fixture" },
-      error: null,
-    });
-    expect(
-      (await newsletter(request({ email: "fixture@example.invalid" }))).status,
-    ).toBe(200);
-    expect(state.contacts).toHaveBeenCalled();
-    expect(state.emails).toHaveBeenCalled();
+  it("does not let unverified or throttled accounts start card setup", async () => {
+    state.user = { id: "user_customer", email: "customer@example.invalid", emailVerified: false };
+    expect((await checkout(request())).status).toBe(403);
+    expect((await shippingQuote(request())).status).toBe(403);
+    expect(state.guard).not.toHaveBeenCalled();
+    state.user.emailVerified = true;
+    state.guard.mockRejectedValueOnce(new ClubError("checkout_rate_limited", 429));
+    expect((await checkout(request())).status).toBe(429);
     expect(state.checkout).not.toHaveBeenCalled();
-    expect((await newsletter(request({ email: "bad" }))).status).toBe(400);
   });
 });

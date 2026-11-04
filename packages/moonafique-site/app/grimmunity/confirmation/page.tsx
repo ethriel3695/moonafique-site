@@ -15,6 +15,7 @@ export default async function Confirmation({
     | {
         complete: boolean;
         paid: boolean;
+        review?: boolean;
         invoiceUrl?: string | null;
         managed?: boolean;
         paymentDeadline?: string | null;
@@ -33,7 +34,9 @@ export default async function Confirmation({
         <h1 className="text-4xl">
           {result?.paid
             ? "Your first edition is confirmed."
-            : result?.invoiceUrl
+            : result?.review
+              ? "Your edition needs review."
+              : result?.invoiceUrl
               ? "Your first collection is almost yours."
               : result?.complete
                 ? "Your payment is being confirmed."
@@ -42,7 +45,9 @@ export default async function Confirmation({
         <p role="status" className="my-6 leading-7">
           {result?.paid
             ? "Your paid edition is saved in your account. You can review dispatch dates and manage delivery details there."
-            : result?.invoiceUrl
+            : result?.review
+              ? "A payment or delivery change needs attention. Check your account or contact Moonafique before paying again."
+              : result?.invoiceUrl
               ? "Your card is saved. Review the membership, first month’s shipping, and tax on your Stripe invoice, then pay to confirm your first delivery. No payment was taken while saving your card."
               : result?.complete
                 ? "Stripe has completed checkout. Your edition will appear when its paid invoice has been verified. You do not need to pay again."
