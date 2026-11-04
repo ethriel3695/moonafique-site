@@ -15,7 +15,7 @@ All twelve monthly, six-month, and annual Stripe Prices are prepared with inacti
 
 Starter includes six preferred colors and colors to avoid. Its stated value is at least $24. Keeper production is 13 copies: 12 for subscribers and one for the Moonafique collection. When all 12 Keeper memberships are taken, its public status is **Vaulted for now**. No stand or separate Keeper accessory pack is promised.
 
-Shipping is quoted through Shippo for the delivery address each month and itemized in a notice delivered at least seven days before automatic payment. Grimm uses an 8 × 8 × 8-inch, 8 oz box; ACEO uses a 7 × 5 × 1-inch, 6 oz bubble mailer. Ship-from ZIP is 83442. The full return address is server-only configuration.
+Shipping is quoted through Shippo for the delivery address each month and itemized in a notice delivered at least seven days before automatic payment. Grimm quotes use a 6 × 6 × 6-inch box at 10 oz. ACEO quotes use a 7 × 5 × 1-inch bubble mailer at 6 oz. Ship-from ZIP is 83442. The full return address is server-only configuration.
 
 The sections below describe the original implementation and historical Collector rollout. Their $25/$9.21 pricing, shared 24-member cap, and two-month public-release policy are historical. Use the current offer document for new configuration. Preserve saved promises on existing paid orders.
 

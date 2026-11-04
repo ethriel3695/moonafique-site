@@ -132,7 +132,7 @@ export const membershipTiers: Omit<Tier, "price_id" | "product_id">[] = [
     id: "grimm_keeper",
     name: "Grimm Keeper",
     description:
-      "A custom-painted Grimm each month, with a finish exclusive to Keeper members and coordinated accessories worn by the character.",
+      "Each month, get a custom-painted Grimm with an exclusive finish, coordinated accessories worn by your Grimm, and one custom-painted pet.",
     amount: 3000,
     member_cap: 12,
     retained_copies: 1,
@@ -142,6 +142,7 @@ export const membershipTiers: Omit<Tier, "price_id" | "product_id">[] = [
       "One custom-painted Grimm each month",
       "A painted finish created exclusively for Keeper members",
       "Coordinated accessories worn by your Grimm",
+      "One custom-painted pet each month",
     ],
     benefits_confirmed: true,
   },

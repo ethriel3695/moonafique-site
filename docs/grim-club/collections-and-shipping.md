@@ -44,7 +44,7 @@ The server reads the business return address from `lib/grimmunity/shipping-profi
 
 | Profile | Dimensions, inches | Packed weight | Notes |
 | --- | --- | --- | --- |
-| Grimm | 8 × 8 × 8 | 8 oz | Includes collectible, contents, box, and packing |
+| Grimm | 6 × 6 × 6 | 10 oz | Uses the high end of the owner-confirmed 8–10 oz packed range |
 | ACEO | 7 × 5 × 1 | 6 oz | 5 × 7 bubble mailer; uses the high end of the owner-confirmed 3–6 oz range |
 
 Weigh and measure the sealed parcel before buying postage. If a monthly design exceeds a profile, correct the profile and review its effect on shipping costs. A bubble mailer is quoted as a tracked parcel. This implementation does not use stamped-letter or untracked flat rates. A smaller mailer does not guarantee a lower postage price.

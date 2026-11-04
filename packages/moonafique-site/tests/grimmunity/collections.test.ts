@@ -132,10 +132,10 @@ it("uses all four approved prices, distinct caps, and the right packing profiles
     ["aceo_originals", 2000, 12, 0],
   ]);
   expect(shippingParcel({ id: "grimm_keeper" })).toEqual({
-    length: 8,
-    width: 8,
-    height: 8,
-    weight: 8,
+    length: 6,
+    width: 6,
+    height: 6,
+    weight: 10,
   });
   expect(shippingParcel({ id: "aceo_originals" })).toEqual({
     length: 7,

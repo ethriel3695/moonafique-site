@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { ClubAction, TrackingForm } from "./actions";
 import { money } from "@/lib/grimmunity/model";
+import { aceoParcel, grimmParcel } from "@/lib/grimmunity/package-profiles";
 import { Input } from "@/components/ui/input";
 import type { ShippingLabel } from "@/lib/grimmunity/shipping";
 
@@ -94,8 +95,10 @@ export function ShippingPanel({
         disabled={fixture}
       >
         <p className="text-xs leading-5">
-          Quotes the locked packing address. Grimm: 8 × 8 × 8 in, 8 oz. ACEO: 7
-          × 5 × 1 in, 6 oz.
+          Quotes the locked packing address. Grimm uses {grimmParcel.length} ×{" "}
+          {grimmParcel.width} × {grimmParcel.height} in at {grimmParcel.weight} oz.
+          ACEO uses {aceoParcel.length} × {aceoParcel.width} × {aceoParcel.height} in
+          at {aceoParcel.weight} oz.
         </p>
       </ClubAction>
       {label && rate && (

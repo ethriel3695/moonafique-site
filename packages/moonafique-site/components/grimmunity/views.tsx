@@ -274,7 +274,7 @@ export function OfferView({
               </h2>
               <p className="mt-3 leading-7">
                 {grimm
-                  ? "Grimm Starter is $15 a month and includes accessories and two matching pets. Grimm Keeper is $30 a month, with an exclusive painted finish and coordinated accessories worn by the Grimm."
+                  ? "Grimm Starter is $15 a month and includes accessories and two matching pets. Grimm Keeper is $30 a month and includes a Grimm with an exclusive painted finish, coordinated accessories worn by the Grimm, and one custom-painted pet."
                   : "ACEO Prints includes two physical prints of original Moonafique artwork for $10 a month. ACEO Originals includes one original piece from the new monthly collection for $20."}
               </p>
               <p className="mt-4 text-sm leading-6 text-muted-foreground">

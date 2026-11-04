@@ -30,7 +30,7 @@ These examples use the current four membership prices and actual application com
 
 The lower-mailer-price example is hypothetical. An ACEO mailer may cost the same as a Grimm box. Actual quotes depend on the carrier, destination, packed dimensions, and packed weight.
 
-The shared package profiles are 8 × 8 × 8 inches at 8 oz for Grimm and 7 × 5 × 1 inches at 6 oz for ACEOs. Return addresses and credentials are not imported into the stories.
+The shared package profiles are 6 × 6 × 6 inches at 10 oz for Grimm and 7 × 5 × 1 inches at 6 oz for ACEOs. Return addresses and credentials are not imported into the stories.
 
 ## Run and build
 

@@ -52,10 +52,10 @@ it("sends the approved origin, dimensions, units, and packed weight to Shippo wi
       }),
       parcels: [
         {
-          length: "8",
-          width: "8",
-          height: "8",
-          weight: "8",
+          length: "6",
+          width: "6",
+          height: "6",
+          weight: "10",
           distanceUnit: "in",
           massUnit: "oz",
         },
