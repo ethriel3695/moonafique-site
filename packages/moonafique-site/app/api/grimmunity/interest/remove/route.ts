@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { database } from "@/lib/grimmunity/db";
+import { database, transaction } from "@/lib/grimmunity/db";
 import { jsonAction } from "@/lib/grimmunity/http";
 import { grimMode } from "@/lib/grimmunity/runtime";
 
@@ -10,7 +10,13 @@ export async function POST(request: Request) {
       email: z.string().trim().toLowerCase().max(254).email(),
       confirmed: z.literal("yes"),
     }).parse(await request.json());
-    if (confirmed) await database().query("DELETE FROM grim.interest WHERE mode=$1 AND purpose='launch' AND email=$2", [grimMode(), email]);
+    if (confirmed) {
+      const mode = grimMode();
+      await transaction(database(), async (db) => {
+        await db.query("DELETE FROM grim.email_opt_ins WHERE mode=$1 AND purpose='launch' AND email=$2", [mode, email]);
+        await db.query("DELETE FROM grim.interest WHERE mode=$1 AND email=$2", [mode, email]);
+      });
+    }
     return { ok: true };
   });
 }

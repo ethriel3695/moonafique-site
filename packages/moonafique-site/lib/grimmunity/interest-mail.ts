@@ -27,7 +27,7 @@ export async function deliverInterestConfirmations(
   if (!process.env.RESEND_API_KEY || !process.env.RESEND_FROM_EMAIL) throw new ClubError("email_not_configured");
   const resend = new Resend(process.env.RESEND_API_KEY);
   const pending = (await pool.query<{ interest_id: string }>(
-    `SELECT n.interest_id FROM grim.interest_notifications n JOIN grim.interest i ON i.id=n.interest_id
+    `SELECT n.interest_id FROM grim.email_opt_in_notifications n JOIN grim.email_opt_ins i ON i.id=n.interest_id
      WHERE i.mode=$1 AND n.state='pending' AND ($2::uuid IS NULL OR i.id=$2)
        AND i.purpose=ANY($4::text[]) AND i.confirmation_expires_at>now() AND i.confirmed_at IS NULL
      ORDER BY n.created_at LIMIT $3`,
@@ -39,7 +39,7 @@ export async function deliverInterestConfirmations(
     // Save the exact request before sending. A crash or later copy edit must not change a retry.
     await transaction(pool, async (db) => {
       const notification = await one<Notification>(db,
-        `SELECT n.*,i.email FROM grim.interest_notifications n JOIN grim.interest i ON i.id=n.interest_id
+        `SELECT n.*,i.email FROM grim.email_opt_in_notifications n JOIN grim.email_opt_ins i ON i.id=n.interest_id
          WHERE n.interest_id=$1 AND i.mode=$2 AND n.state='pending'
            AND i.purpose=ANY($3::text[]) AND i.confirmation_expires_at>now() AND i.confirmed_at IS NULL
          FOR UPDATE OF n SKIP LOCKED`, [row.interest_id, mode, purposes]);
@@ -50,33 +50,33 @@ export async function deliverInterestConfirmations(
         to: mode === "sandbox" ? sink! : notification.email,
         replyTo: "hello@moonafique.com",
       };
-      await db.query("UPDATE grim.interest_notifications SET payload=$2,first_attempt_at=now() WHERE interest_id=$1", [row.interest_id, payload]);
+      await db.query("UPDATE grim.email_opt_in_notifications SET payload=$2,first_attempt_at=now() WHERE interest_id=$1", [row.interest_id, payload]);
     });
     try {
       await transaction(pool, async (db) => {
         const notification = await one<Notification>(db,
-          `SELECT n.*,i.confirmation_expires_at FROM grim.interest_notifications n JOIN grim.interest i ON i.id=n.interest_id
+          `SELECT n.*,i.confirmation_expires_at FROM grim.email_opt_in_notifications n JOIN grim.email_opt_ins i ON i.id=n.interest_id
            WHERE n.interest_id=$1 AND i.mode=$2 AND n.state='pending'
              AND i.purpose=ANY($3::text[]) AND i.confirmation_expires_at>now() AND i.confirmed_at IS NULL
            FOR UPDATE OF n SKIP LOCKED`, [row.interest_id, mode, purposes]);
         if (!notification?.first_attempt_at || !notification.payload) return;
         // Resend retains idempotency keys for 24 hours. An older ambiguous send needs review.
         if (Date.now() - notification.first_attempt_at.getTime() > 23 * 60 * 60000) {
-          await db.query("UPDATE grim.interest_notifications SET state='review' WHERE interest_id=$1", [row.interest_id]);
+          await db.query("UPDATE grim.email_opt_in_notifications SET state='review' WHERE interest_id=$1", [row.interest_id]);
           failures++;
           return;
         }
         const { data, error } = await resend.emails.send(notification.payload,
           { idempotencyKey: `grim-interest/${row.interest_id}/${notification.confirmation_expires_at.getTime()}` });
         if (error || !data) { failures++; return; }
-        await db.query("UPDATE grim.interest_notifications SET state='sent',provider_id=$2,sent_at=now() WHERE interest_id=$1", [row.interest_id, data.id]);
+        await db.query("UPDATE grim.email_opt_in_notifications SET state='sent',provider_id=$2,sent_at=now() WHERE interest_id=$1", [row.interest_id, data.id]);
         sent++;
       });
     } catch {
       // Never roll back the signup or log provider errors containing personal data.
       failures++;
     }
-    await pool.query("UPDATE grim.interest_notifications SET attempts=attempts+1 WHERE interest_id=$1", [row.interest_id]);
+    await pool.query("UPDATE grim.email_opt_in_notifications SET attempts=attempts+1 WHERE interest_id=$1", [row.interest_id]);
   }
   return { sent, failures };
 }

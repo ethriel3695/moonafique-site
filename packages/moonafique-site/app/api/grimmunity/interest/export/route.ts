@@ -8,7 +8,7 @@ export async function GET() {
   try {
     await requireStaff();
     const rows = (await database().query(
-      `SELECT email,confirmed_at AS created_at,consent_version FROM grim.interest
+      `SELECT email,confirmed_at AS created_at,consent_version FROM grim.email_opt_ins
        WHERE mode=$1 AND purpose='launch' AND confirmed_at IS NOT NULL ORDER BY confirmed_at`, [grimMode()],
     )).rows;
     return new Response(interestCSV(rows), { headers: {

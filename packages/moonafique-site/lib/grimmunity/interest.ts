@@ -36,11 +36,10 @@ export async function registerInterest(
         !await limitRequest(db, secret, `${scope}:day`, "all", 400, 24 * hour, now))
       return { allowed: false };
     const created = await one<{ id: string }>(db,
-      `INSERT INTO grim.interest(mode,purpose,email,consent_version,confirmation_expires_at) VALUES($1,$2,$3,$4,$5)
+      `INSERT INTO grim.email_opt_ins(mode,purpose,email,consent_version,confirmation_expires_at) VALUES($1,$2,$3,$4,$5)
        ON CONFLICT(mode,purpose,email) DO UPDATE SET consent_version=EXCLUDED.consent_version,
          confirmation_expires_at=EXCLUDED.confirmation_expires_at
-       WHERE grim.interest.confirmed_at IS NULL AND
-         (grim.interest.confirmation_expires_at IS NULL OR grim.interest.confirmation_expires_at<=$6)
+       WHERE grim.email_opt_ins.confirmed_at IS NULL AND grim.email_opt_ins.confirmation_expires_at<=$6
        RETURNING id`,
       [mode, purpose, data.email, purpose === "launch" ? interestConsentVersion : "newsletter-confirmed-v1", expiresAt, now],
     );
@@ -56,14 +55,14 @@ export async function registerInterest(
         html: `<p>Confirm your signup for the Moonafique ${list}.</p><p><a href="${url}">Review and confirm your email</a></p><p>${details}</p><p>If you didn’t request this, ignore this email. The link expires in 24 hours.</p>`,
       };
       await db.query(
-        `INSERT INTO grim.interest_notifications(interest_id,message) VALUES($1,$2)
+        `INSERT INTO grim.email_opt_in_notifications(interest_id,message) VALUES($1,$2)
          ON CONFLICT(interest_id) DO UPDATE SET message=EXCLUDED.message, payload=NULL, state='pending',
            attempts=0, first_attempt_at=NULL, provider_id=NULL, sent_at=NULL, created_at=now()`,
         [created.id, message],
       );
     }
     const contact = created ?? await one<{ id: string }>(db,
-      `SELECT id FROM grim.interest WHERE mode=$1 AND purpose=$2 AND email=$3
+      `SELECT id FROM grim.email_opt_ins WHERE mode=$1 AND purpose=$2 AND email=$3
        AND confirmed_at IS NULL AND confirmation_expires_at>$4`, [mode, purpose, data.email, now]);
     return { allowed: true, id: contact?.id };
   });
@@ -91,13 +90,13 @@ export async function confirmEmail(
     throw invalid();
   return transaction(pool, async (db) => {
     const contact = await one<{ email: string; purpose: EmailPurpose; confirmed_at: Date | null }>(db,
-      `SELECT email,purpose,confirmed_at FROM grim.interest WHERE id=$1 AND mode=$2 AND confirmation_expires_at=$3 FOR UPDATE`,
+      `SELECT email,purpose,confirmed_at FROM grim.email_opt_ins WHERE id=$1 AND mode=$2 AND confirmation_expires_at=$3 FOR UPDATE`,
       [id, mode, new Date(expires)],
     );
     if (!contact) throw invalid();
     if (contact.confirmed_at) return contact.purpose;
     if (contact.purpose === "newsletter" && mode === "live") await activateNewsletter(contact.email);
-    await db.query("UPDATE grim.interest SET confirmed_at=$2 WHERE id=$1", [id, now]);
+    await db.query("UPDATE grim.email_opt_ins SET confirmed_at=$2 WHERE id=$1", [id, now]);
     return contact.purpose;
   });
 }

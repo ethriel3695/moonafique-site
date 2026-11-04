@@ -25,7 +25,7 @@ const now = new Date();
 const submit = (data: unknown = input, ip = "192.0.2.1", at = now) => registerInterest(pool, "live", data, ip, secret, at);
 beforeAll(() => migrate(pool));
 beforeEach(async () => {
-  await pool.query("TRUNCATE grim.interest,grim.interest_rate_limits CASCADE");
+  await pool.query("TRUNCATE grim.interest,grim.email_opt_ins,grim.interest_rate_limits CASCADE");
   notifications.send.mockReset().mockResolvedValue({ data: { id: "email_confirmation_fixture" }, error: null });
   notifications.activate.mockReset().mockResolvedValue(undefined);
   notifications.after.length = 0;
@@ -48,23 +48,23 @@ describe("launch interest list", () => {
     await submit({ ...input, email: " Collector@Example.invalid " });
     await submit();
     await registerInterest(pool, "sandbox", input, "192.0.2.1", secret, now);
-    const rows = (await pool.query("SELECT mode,email,consent_version FROM grim.interest ORDER BY mode")).rows;
+    const rows = (await pool.query("SELECT mode,email,consent_version FROM grim.email_opt_ins ORDER BY mode")).rows;
     expect(rows).toHaveLength(2);
     expect(rows[0]).toEqual({ mode: "live", email: input.email, consent_version: interestConsentVersion });
   });
   it("requires consent and a valid email", async () => {
     await expect(submit({ ...input, consent: false })).rejects.toThrow();
     await expect(submit({ ...input, email: "invalid" })).rejects.toThrow();
-    expect((await pool.query("SELECT * FROM grim.interest")).rowCount).toBe(0);
+    expect((await pool.query("SELECT * FROM grim.email_opt_ins")).rowCount).toBe(0);
   });
   it("discards the bot field without creating a contact", async () => {
     await submit({ ...input, website: "spam" });
-    expect((await pool.query("SELECT * FROM grim.interest")).rowCount).toBe(0);
+    expect((await pool.query("SELECT * FROM grim.email_opt_ins")).rowCount).toBe(0);
   });
   it("limits concurrent submissions across connections without storing raw IPs", async () => {
     const result = await Promise.allSettled(Array.from({ length: 12 }, (_, i) => submit({ ...input, email: `collector${i}@example.invalid` })));
     expect(result.filter((r) => r.status === "fulfilled")).toHaveLength(8);
-    expect((await pool.query("SELECT * FROM grim.interest")).rowCount).toBe(8);
+    expect((await pool.query("SELECT * FROM grim.email_opt_ins")).rowCount).toBe(8);
     const rates = (await pool.query("SELECT * FROM grim.interest_rate_limits")).rows;
     expect(rates.map((r) => r.attempts)).toContain(9);
     expect(JSON.stringify(rates)).not.toContain("192.0.2.1");
@@ -75,7 +75,7 @@ describe("launch interest list", () => {
       submit({ ...input, email: `rotating${i}@example.invalid` }, `192.0.2.${i + 1}`),
     ));
     expect(result.filter((r) => r.status === "fulfilled")).toHaveLength(120);
-    expect((await pool.query("SELECT * FROM grim.interest_notifications")).rowCount).toBe(120);
+    expect((await pool.query("SELECT * FROM grim.email_opt_in_notifications")).rowCount).toBe(120);
   });
   it("fails closed without a rate-limit secret", async () => {
     await expect(registerInterest(pool, "live", input, "192.0.2.1", "", now)).rejects.toMatchObject({ code: "interest_unavailable" });
@@ -97,13 +97,13 @@ describe("launch interest list", () => {
     expect(message.subject).not.toContain("[TEST]");
     expect(message.text).toContain("doesn’t reserve a membership");
     expect(options.idempotencyKey).toMatch(/^grim-interest\//);
-    expect((await pool.query("SELECT state FROM grim.interest_notifications")).rows[0].state).toBe("sent");
+    expect((await pool.query("SELECT state FROM grim.email_opt_in_notifications")).rows[0].state).toBe("sent");
   });
   it("keeps the signup after an ambiguous provider failure and retries the identical request", async () => {
     const interestId = await submit();
     notifications.send.mockRejectedValueOnce(new Error("Connection interrupted after send"));
     expect(await deliverInterestConfirmations(pool, "live", { interestId })).toMatchObject({ sent: 0, failures: 1 });
-    expect((await pool.query("SELECT * FROM grim.interest")).rowCount).toBe(1);
+    expect((await pool.query("SELECT * FROM grim.email_opt_ins")).rowCount).toBe(1);
     vi.stubEnv("RESEND_FROM_EMAIL", "Changed <other@example.invalid>");
     expect(await deliverInterestConfirmations(pool, "live", { interestId })).toMatchObject({ sent: 1 });
     expect(notifications.send.mock.calls[0]).toEqual(notifications.send.mock.calls[1]);
@@ -112,10 +112,10 @@ describe("launch interest list", () => {
     await submit();
     notifications.send.mockRejectedValueOnce(new Error("Unknown delivery"));
     await deliverInterestConfirmations(pool, "live");
-    await pool.query("UPDATE grim.interest_notifications SET first_attempt_at=now()-interval '25 hours'");
+    await pool.query("UPDATE grim.email_opt_in_notifications SET first_attempt_at=now()-interval '25 hours'");
     await deliverInterestConfirmations(pool, "live");
     expect(notifications.send).toHaveBeenCalledTimes(1);
-    expect((await pool.query("SELECT state FROM grim.interest_notifications")).rows[0].state).toBe("review");
+    expect((await pool.query("SELECT state FROM grim.email_opt_in_notifications")).rows[0].state).toBe("review");
   });
   it("uses the separate delivery gate and sends sandbox messages only to the approved sink", async () => {
     await submit();
@@ -129,22 +129,25 @@ describe("launch interest list", () => {
     await deliverInterestConfirmations(pool, "sandbox", { interestId });
     expect(notifications.send).toHaveBeenCalledTimes(1);
     expect(notifications.send.mock.calls[0][0]).toMatchObject({ to: "verified-owner@example.invalid", subject: "[TEST] Confirm your Moonafique membership launch list signup" });
-    expect((await pool.query("SELECT n.state FROM grim.interest_notifications n JOIN grim.interest i ON i.id=n.interest_id WHERE i.mode='live'")).rows[0].state).toBe("pending");
+    expect((await pool.query("SELECT n.state FROM grim.email_opt_in_notifications n JOIN grim.email_opt_ins i ON i.id=n.interest_id WHERE i.mode='live'")).rows[0].state).toBe("pending");
   });
   it("does not backfill old contacts or send after a contact is removed", async () => {
-    await pool.query("INSERT INTO grim.interest(mode,email,consent_version) VALUES('live',$1,'grimmunity-launch-notice-v1')", [input.email]);
-    await migrate(pool);
+    const legacySignup = `INSERT INTO grim.interest(mode,email,consent_version)
+      VALUES('live',$1,'grimmunity-launch-notice-v1') ON CONFLICT(mode,email) DO NOTHING`;
+    expect((await pool.query(legacySignup, [input.email])).rowCount).toBe(1);
+    expect((await pool.query(legacySignup, [input.email])).rowCount).toBe(0);
+    expect((await pool.query("SELECT id FROM grim.email_opt_ins")).rowCount).toBe(0);
     await deliverInterestConfirmations(pool, "live");
     expect(notifications.send).not.toHaveBeenCalled();
     const id = await submit({ ...input, email: "removed@example.invalid" });
-    await pool.query("DELETE FROM grim.interest WHERE id=$1", [id]);
+    await pool.query("DELETE FROM grim.email_opt_ins WHERE id=$1", [id]);
     await deliverInterestConfirmations(pool, "live");
     expect(notifications.send).not.toHaveBeenCalled();
-    expect((await pool.query("SELECT * FROM grim.interest_notifications")).rowCount).toBe(0);
+    expect((await pool.query("SELECT * FROM grim.email_opt_in_notifications")).rowCount).toBe(0);
   });
   it("keeps the address pending until a valid link is confirmed and does not subscribe it to the newsletter", async () => {
     await submit();
-    expect((await pool.query("SELECT * FROM grim.interest WHERE confirmed_at IS NOT NULL")).rowCount).toBe(0);
+    expect((await pool.query("SELECT * FROM grim.email_opt_ins WHERE confirmed_at IS NOT NULL")).rowCount).toBe(0);
     await deliverInterestConfirmations(pool, "live");
     const token = notifications.send.mock.calls[0][0].text.match(/confirm-email#(\S+)/)[1];
     const activate = vi.fn();
@@ -154,7 +157,7 @@ describe("launch interest list", () => {
     await expect(confirmEmail(pool, "live", token, secret, activate, new Date(now.getTime() + 86_400_000))).rejects.toMatchObject({ status: 400 });
     await expect(confirmEmail(pool, "live", token, secret, activate)).resolves.toBe("launch");
     expect(activate).not.toHaveBeenCalled();
-    expect((await pool.query("SELECT * FROM grim.interest WHERE confirmed_at IS NOT NULL")).rowCount).toBe(1);
+    expect((await pool.query("SELECT * FROM grim.email_opt_ins WHERE confirmed_at IS NOT NULL")).rowCount).toBe(1);
   });
   it("keeps newsletter consent separate and activates it once after confirmation", async () => {
     await submit();
@@ -167,7 +170,7 @@ describe("launch interest list", () => {
     const activate = vi.fn().mockResolvedValue(undefined);
     expect(await Promise.all([confirmEmail(pool, "live", token, secret, activate), confirmEmail(pool, "live", token, secret, activate)])).toEqual(["newsletter", "newsletter"]);
     expect(activate).toHaveBeenCalledExactlyOnceWith(input.email);
-    expect((await pool.query("SELECT purpose FROM grim.interest WHERE confirmed_at IS NOT NULL")).rows).toEqual([{ purpose: "newsletter" }]);
+    expect((await pool.query("SELECT purpose FROM grim.email_opt_ins WHERE confirmed_at IS NOT NULL")).rows).toEqual([{ purpose: "newsletter" }]);
   });
   it("requires a same-site confirmation POST before sending a newsletter contact to the provider", async () => {
     vi.stubEnv("GRIM_MODE", "live");
