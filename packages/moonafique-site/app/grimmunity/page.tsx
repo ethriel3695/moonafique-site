@@ -7,5 +7,5 @@ export const metadata = {
     "Collect a new Grimm each month: mystery characters with Starter or exclusive painted finishes with Keeper. Memberships from $15, plus shipping.",
 };
 export default async function GrimmunityPage() {
-  return <OfferView {...await publicOfferProps()} club="grimm" />;
+  return <OfferView {...await publicOfferProps("grimm")} club="grimm" />;
 }

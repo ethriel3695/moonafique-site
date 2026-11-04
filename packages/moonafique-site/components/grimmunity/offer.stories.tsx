@@ -76,6 +76,19 @@ export const EnrollmentOpen: Story = {
     ).not.toBeInTheDocument();
   },
 };
+export const AlreadyHasGrimmMembership: Story = {
+  args: { existingMembershipName: "Grimm Keeper" },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(
+      canvas.getByText("Grimm Keeper is already on your account."),
+    ).toBeVisible();
+    await expect(canvas.queryByRole("radio")).not.toBeInTheDocument();
+    await expect(
+      canvas.getByRole("link", { name: "Manage my membership" }),
+    ).toHaveAttribute("href", "/account/grimmunity");
+  },
+};
 export const ACEOEnrollmentClosed: Story = {
   args: {
     club: "aceo",

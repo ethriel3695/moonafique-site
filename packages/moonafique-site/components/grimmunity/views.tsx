@@ -27,7 +27,7 @@ import {
 import { collectionPages } from "@/lib/grimmunity/collections";
 import { launchPlan } from "@/lib/grimmunity/launch-plan";
 import type { AccountView, OrderView } from "@/lib/grimmunity/queries";
-import { ClubAction, JoinForm } from "./actions";
+import { ClubAction, ExistingMembershipNotice, JoinForm } from "./actions";
 import { InterestForm } from "./interest-form";
 import { GrimDesignShowcase } from "./design-showcase";
 import { ShippingPanel } from "./shipping-panel";
@@ -189,6 +189,7 @@ export function OfferView({
   availability = {},
   availabilityEditionId = null,
   club = "grimm",
+  existingMembershipName,
 }: {
   program?: Program;
   edition?: Edition;
@@ -199,6 +200,7 @@ export function OfferView({
   availability?: TierAvailability;
   availabilityEditionId?: string | null;
   club?: ClubId;
+  existingMembershipName?: string;
 }) {
   const current =
     !!program &&
@@ -314,25 +316,39 @@ export function OfferView({
             className="rounded-[2rem] border border-border bg-card p-6 shadow-soft sm:p-8"
             aria-label="Membership offer"
           >
-            <Status>{open ? "Enrollment open" : "Coming soon"}</Status>
+            <Status>
+              {existingMembershipName
+                ? "Membership on your account"
+                : open
+                  ? "Enrollment open"
+                  : "Coming soon"}
+            </Status>
             <h2 className="mt-5 text-3xl">
-              {open
-                ? "Choose your membership."
-                : "The next collection is taking shape."}
+              {existingMembershipName
+                ? "Your collection."
+                : open
+                  ? "Choose your membership."
+                  : "The next collection is taking shape."}
             </h2>
             <p className="mt-5 leading-7">
-              {grimm
-                ? "Explore Starter and Keeper below, then choose the Grimm membership that fits your collection."
-                : "Explore the prints and originals below, then choose how you want to collect."}
+              {existingMembershipName
+                ? "View your current membership and manage your deliveries below."
+                : grimm
+                  ? "Explore Starter and Keeper below, then choose the Grimm membership that fits your collection."
+                  : "Explore the prints and originals below, then choose how you want to collect."}
             </p>
             <p className="mt-4 text-sm leading-6">
               {grimm
                 ? "Keeper has limited places. When they’re filled, Keeper is “Vaulted for now” and closed to new members. Existing memberships continue."
                 : "Prints and Originals each have limited places. Check the availability shown with each membership."}
             </p>
-            {open ? (
+            {existingMembershipName || open ? (
               <Button asChild className="mt-6 w-full">
-                <a href="#membership-tiers">Choose your membership</a>
+                <a href="#membership-tiers">
+                  {existingMembershipName
+                    ? "View your membership"
+                    : "Choose your membership"}
+                </a>
               </Button>
             ) : (
               <>
@@ -364,15 +380,23 @@ export function OfferView({
           className="mt-12 scroll-mt-24 border-t border-border pt-8"
         >
           <h2 id="tiers-heading" className="text-3xl sm:text-4xl">
-            {grimm
-              ? "Choose your Grimm membership."
-              : "Choose your ACEO membership."}
+            {existingMembershipName
+              ? "Your membership"
+              : grimm
+                ? "Choose your Grimm membership."
+                : "Choose your ACEO membership."}
           </h2>
-          <p className="mb-7 mt-4 max-w-3xl leading-7 text-muted-foreground">
-            Compare what’s included each month. Shipping is calculated for your
-            delivery address and charged separately.
-          </p>
-          {open && program && edition ? (
+          {!existingMembershipName && (
+            <p className="mb-7 mt-4 max-w-3xl leading-7 text-muted-foreground">
+              Compare what’s included each month. Shipping is calculated for your
+              delivery address and charged separately.
+            </p>
+          )}
+          {existingMembershipName ? (
+            <div className="mt-6">
+              <ExistingMembershipNotice name={existingMembershipName} />
+            </div>
+          ) : open && program && edition ? (
             <JoinForm
               tiers={program.tiers.filter((tier) => tierClub(tier) === club)}
               availability={availability}

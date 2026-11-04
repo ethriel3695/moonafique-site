@@ -1,5 +1,6 @@
 "use client";
 import { useRef, useState } from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { money, type Address } from "@/lib/grimmunity/model";
@@ -112,6 +113,28 @@ export type JoinFormFixtureState = {
   address?: Address;
 };
 
+export function ExistingMembershipNotice({ name }: { name?: string }) {
+  return (
+    <div
+      role="status"
+      className="space-y-4 rounded-3xl border border-primary/20 bg-accent/20 p-6"
+    >
+      <p className="font-semibold">
+        {name
+          ? `${name} is already on your account.`
+          : "You already have a membership in this collection."}
+      </p>
+      <p className="text-sm leading-6">
+        Review your billing and deliveries in My memberships. If you’d like an
+        extra copy, <Link className="underline" href="/contact">ask us about availability</Link>.
+      </p>
+      <Button asChild>
+        <Link href="/account/grimmunity">Manage my membership</Link>
+      </Button>
+    </div>
+  );
+}
+
 export function JoinForm({
   termsVersion,
   countries,
@@ -173,6 +196,8 @@ export function JoinForm({
   const key = useRef<string | undefined>(undefined);
   const [pending, setPending] = useState(false),
     [error, setError] = useState(example?.error ?? "");
+  const [alreadyMember, setAlreadyMember] = useState(false);
+  if (alreadyMember) return <ExistingMembershipNotice />;
   return (
     <form
       ref={formRef}
@@ -216,6 +241,10 @@ export function JoinForm({
           const result = await response.json();
           if (response.status === 401) {
             window.location.assign(`/sign-in?returnTo=${membershipPage(tier)}`);
+            return;
+          }
+          if (!response.ok && result.code === "already_member") {
+            setAlreadyMember(true);
             return;
           }
           if (!response.ok) throw new Error(result.error);

@@ -1,6 +1,9 @@
+import { withAuth } from "@workos-inc/authkit-nextjs";
+import { database, one } from "./db";
 import { publicOffer } from "./queries";
+import type { ClubId } from "./tiers";
 
-export async function publicOfferProps() {
+export async function publicOfferProps(club: ClubId) {
   const { program, editions, availability, availabilityEditionId } =
     await publicOffer();
   const now = new Date();
@@ -9,8 +12,27 @@ export async function publicOfferProps() {
     program?.id === "live" && process.env.GRIM_LIVE_ENROLLMENT !== "approved"
       ? { ...program, enabled: false }
       : program;
+  let existingMembershipName: string | undefined;
+  if (displayedProgram?.enabled) {
+    try {
+      const { user } = await withAuth();
+      if (user) {
+        const membership = await one<{ name: string }>(
+          database(),
+          `SELECT tier_snapshot->>'name' AS name FROM grim.memberships
+           WHERE program_id=$1 AND owner_id=$2 AND club=$3
+             AND (subscription_id IS NOT NULL OR seat_held)`,
+          [displayedProgram.id, user.id, club],
+        );
+        existingMembershipName = membership?.name;
+      }
+    } catch {
+      // The offer still loads if this lookup fails. Checkout enforces the limit.
+    }
+  }
   return {
     program: displayedProgram,
+    existingMembershipName,
     availability,
     availabilityEditionId,
     interestEnabled: process.env.GRIM_INTEREST_ENABLED === "true",

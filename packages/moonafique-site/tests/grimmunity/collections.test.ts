@@ -196,6 +196,18 @@ it("lets one owner hold a Grimm and ACEO membership while preventing a second Gr
     ).rows.map((m) => m.club),
   ).toEqual(["aceo", "grimm"]);
 });
+it("blocks another Stripe checkout for either Grimm tier after the account pays", async () => {
+  await paid();
+  const owner = { id: "collector", email: "collector@example.invalid" };
+  for (const tier of ["grimm_keeper", "grimm_starter"] as const) {
+    await expect(c.checkout(owner, await input(owner.id, tier))).rejects.toMatchObject({
+      code: "already_member",
+    });
+  }
+  expect(billing.creates).toBe(1);
+  await c.checkout(owner, await input(owner.id, "aceo_prints"));
+  expect(billing.creates).toBe(2);
+});
 it("counts held checkouts and paid members once per tier, and restores spots after an unpaid checkout expires", async () => {
   const program = (
     await pool.query<Program>("SELECT * FROM grim.program WHERE id='sandbox'")

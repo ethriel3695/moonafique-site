@@ -73,7 +73,7 @@ const messages: Record<string, string> = {
     "You have an unfinished checkout for a different tier. Return to that tier to resume, or wait for its checkout to expire before choosing another.",
   sold_out: "This subscriber edition is full. No payment was taken.",
   already_member:
-    "You already have a Grimmunity membership. Open your account to manage it.",
+    "You already have a membership in this collection. Open My memberships to manage it.",
   checkout_needs_review:
     "Your earlier checkout is being checked. Please try again later or contact Moonafique before starting another checkout.",
   checkout_expired:

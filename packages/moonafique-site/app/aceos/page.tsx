@@ -9,5 +9,5 @@ export const metadata = {
 };
 
 export default async function ACEOsPage() {
-  return <OfferView {...await publicOfferProps()} club="aceo" />;
+  return <OfferView {...await publicOfferProps("aceo")} club="aceo" />;
 }
