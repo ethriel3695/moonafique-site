@@ -15,6 +15,9 @@ export default authkitMiddleware({
       '/grimmunity/review',
       '/api/grimmunity/:path*',
       '/api/grim-club/:path*',
+      // These handlers enforce requireStaff and return JSON 401/403 instead of an OAuth redirect.
+      '/admin/whatnot/refresh',
+      '/admin/whatnot/export',
       '/contact',
       '/customs',
       '/api/custom-requests/:path*',

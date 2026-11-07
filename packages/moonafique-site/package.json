@@ -15,7 +15,8 @@
     "test:grim": "vitest run --config vitest.grim.config.mts",
     "grim": "tsx scripts/grimmunity/cli.ts",
     "grim:prepare-preview": "tsx scripts/grimmunity/prepare-preview.ts",
-    "test:storefront": "vitest run --config vitest.storefront.config.mts"
+    "test:storefront": "vitest run --config vitest.storefront.config.mts",
+    "test:whatnot": "vitest run --config vitest.whatnot.config.mts"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "1.1.1",

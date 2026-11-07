@@ -48,10 +48,11 @@ export default async function AdminPage({
         Moonafique staff
       </p>
       <h1 className="text-4xl sm:text-5xl">Grimmunity fulfillment</h1>
-      <p className="mt-4 text-sm font-bold">
+      <p className="mt-4 flex flex-wrap gap-5 text-sm font-bold">
         <Link className="underline underline-offset-4" href="/admin/customs">
           Open custom request queue
         </Link>
+        <Link className="underline underline-offset-4" href="/admin/whatnot">Whatnot business</Link>
       </p>
       <p className="mt-4 max-w-3xl leading-7">
         Check exceptions, lock each paid order’s address, export the packing
