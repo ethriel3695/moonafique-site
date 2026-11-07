@@ -13,9 +13,11 @@ export async function publicOfferProps(club: ClubId) {
       ? { ...program, enabled: false }
       : program;
   let existingMembershipName: string | undefined;
+  let signedIn = false;
   if (displayedProgram?.enabled) {
     try {
       const { user } = await withAuth();
+      signedIn = !!user;
       if (user) {
         const membership = await one<{ name: string }>(
           database(),
@@ -33,6 +35,7 @@ export async function publicOfferProps(club: ClubId) {
   return {
     program: displayedProgram,
     existingMembershipName,
+    signedIn,
     availability,
     availabilityEditionId,
     interestEnabled: process.env.GRIM_INTEREST_ENABLED === "true",

@@ -31,6 +31,7 @@ import { ClubAction, ExistingMembershipNotice, JoinForm } from "./actions";
 import { InterestForm } from "./interest-form";
 import { GrimDesignShowcase } from "./design-showcase";
 import { Grimmfest } from "./grimmfest";
+import { membershipSignInUrl } from "@/lib/sign-in-return";
 import { GrimGroupPhoto } from "./group-photo";
 import { ShippingPanel } from "./shipping-panel";
 import { BillingSummary } from "./billing-summary";
@@ -192,6 +193,7 @@ export function OfferView({
   availabilityEditionId = null,
   club = "grimm",
   existingMembershipName,
+  signedIn = false,
 }: {
   program?: Program;
   edition?: Edition;
@@ -203,6 +205,7 @@ export function OfferView({
   availabilityEditionId?: string | null;
   club?: ClubId;
   existingMembershipName?: string;
+  signedIn?: boolean;
 }) {
   const current =
     !!program &&
@@ -238,6 +241,42 @@ export function OfferView({
   const grimm = club === "grimm";
   const other = collectionPages[grimm ? "aceo" : "grimm"];
   const CollectionIcon = grimm ? Moon : Palette;
+  const tierComparison = (
+              <div className="grid gap-5 md:grid-cols-2">
+                {displayedTiers.map((tier) => (
+                  <article
+                    key={tier.id}
+                    className="rounded-3xl border bg-card p-7"
+                  >
+                    <div className="mb-4">
+                      <AvailabilityBadge
+                        tier={tier}
+                        availability={availability}
+                      />
+                    </div>
+                    <h3 className="text-2xl">{tier.name}</h3>
+                    <p className="mt-3 text-sm leading-6">{tier.description}</p>
+                    <p className="mt-6 text-3xl font-bold">
+                      {money({ amount: tier.amount, currency: "usd" })}
+                      <span className="text-sm font-normal"> / month</span>
+                    </p>
+                    <p className="mt-2 text-sm font-semibold text-primary">
+                      {shippingLabel(tier, "usd")}
+                    </p>
+                    <ul className="mt-6 space-y-3 text-sm leading-6">
+                      {tier.perks.map((perk) => (
+                        <li key={perk} className="flex gap-3">
+                          <span aria-hidden className="text-primary">
+                            ✓
+                          </span>
+                          <span>{perk}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </article>
+                ))}
+              </div>
+  );
   return (
     <MembershipAvailability
       key={availabilityEditionId ?? "unconfigured"}
@@ -406,8 +445,17 @@ export function OfferView({
             <div className="mt-6">
               <ExistingMembershipNotice name={existingMembershipName} />
             </div>
+          ) : open && program && edition && !signedIn && !fixture ? (
+            <>{tierComparison}<div className="mt-6 rounded-3xl border border-primary/20 bg-card p-6 sm:p-8">
+              <h3 className="text-2xl">Start with a quick sign-in.</h3>
+              <p className="mt-3 max-w-xl text-sm leading-7 text-muted-foreground">Sign in or create your account, then choose your membership, add your preferences, and calculate shipping. You’ll return here to continue.</p>
+              <Button asChild className="mt-5"><Link href={membershipSignInUrl(grimm ? "/grimmunity" : "/aceos")}>Sign in to continue</Link></Button>
+              <p className="mt-3 text-xs leading-6 text-muted-foreground">Signing in won’t start a membership or take a payment.</p>
+            </div></>
           ) : open && program && edition ? (
             <JoinForm
+              key={`${program.id}:${club}:${edition.id}`}
+              draftScope={`${program.id}:${club}:${edition.id}`}
               tiers={program.tiers.filter((tier) => tierClub(tier) === club)}
               availability={availability}
               currency={program.currency}
@@ -426,40 +474,7 @@ export function OfferView({
                 Paid enrollment is currently closed. Explore the memberships
                 below and join the launch list for the opening announcement.
               </p>
-              <div className="grid gap-5 md:grid-cols-2">
-                {displayedTiers.map((tier) => (
-                  <article
-                    key={tier.id}
-                    className="rounded-3xl border bg-card p-7"
-                  >
-                    <div className="mb-4">
-                      <AvailabilityBadge
-                        tier={tier}
-                        availability={availability}
-                      />
-                    </div>
-                    <h3 className="text-2xl">{tier.name}</h3>
-                    <p className="mt-3 text-sm leading-6">{tier.description}</p>
-                    <p className="mt-6 text-3xl font-bold">
-                      {money({ amount: tier.amount, currency: "usd" })}
-                      <span className="text-sm font-normal"> / month</span>
-                    </p>
-                    <p className="mt-2 text-sm font-semibold text-primary">
-                      {shippingLabel(tier, "usd")}
-                    </p>
-                    <ul className="mt-6 space-y-3 text-sm leading-6">
-                      {tier.perks.map((perk) => (
-                        <li key={perk} className="flex gap-3">
-                          <span aria-hidden className="text-primary">
-                            ✓
-                          </span>
-                          <span>{perk}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </article>
-                ))}
-              </div>
+              {tierComparison}
             </>
           )}
         </section>

@@ -1,10 +1,12 @@
 "use client";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { money, type Address } from "@/lib/grimmunity/model";
 import { membershipPage } from "@/lib/grimmunity/collections";
+import { membershipSignInUrl } from "@/lib/sign-in-return";
+import { blankSignupFields, saveSignupDraft, takeSignupDraft, type SignupFields } from "@/lib/grimmunity/signup-draft";
 import {
   monthlyAmount,
   publicTierCopy,
@@ -147,6 +149,7 @@ export function JoinForm({
   availability: initialAvailability = {},
   fixtureState,
   managedBilling = false,
+  draftScope,
 }: {
   children?: React.ReactNode;
   tiers: Tier[];
@@ -160,6 +163,7 @@ export function JoinForm({
   /** Presentation data is used only when fixture=true. Never authorizes checkout. */
   fixtureState?: JoinFormFixtureState;
   managedBilling?: boolean;
+  draftScope?: string;
 }) {
   const availability = useMembershipAvailability(initialAvailability);
   const displayedTiers = tiers.map(publicTierCopy);
@@ -197,6 +201,53 @@ export function JoinForm({
   const [pending, setPending] = useState(false),
     [error, setError] = useState(example?.error ?? "");
   const [alreadyMember, setAlreadyMember] = useState(false);
+  const [fields, setFields] = useState<SignupFields>(() => ({
+    ...blankSignupFields,
+    country: countries[0] ?? "US",
+    ...example?.address,
+    ...Object.fromEntries((example?.preferredColors ?? []).map((color, index) => [`color_${index}`, color])),
+    avoided_colors: example?.avoidedColors ?? "",
+  }));
+  const [restored, setRestored] = useState(false);
+  const [signInElsewhere, setSignInElsewhere] = useState(false);
+  const restorationChecked = useRef(false);
+  useEffect(() => {
+    if (fixture || restorationChecked.current) return;
+    restorationChecked.current = true;
+    if (draftScope) {
+      try {
+        const draft = takeSignupDraft(window.sessionStorage, draftScope, tiers.map(t => t.id), countries);
+        if (draft) {
+          // One-time hydration from browser-only storage after returning from authentication.
+          // eslint-disable-next-line react-hooks/set-state-in-effect
+          setSelected(draft.tierId);
+          setBillingMonths(managedBilling ? draft.billingMonths : 1);
+          setFields(draft.fields);
+          setRestored(true);
+        }
+      } catch { /* Storage can be unavailable in privacy-restricted browsers. */ }
+    }
+    const url = new URL(window.location.href);
+    if (url.searchParams.get("resume") === "membership") {
+      url.searchParams.delete("resume");
+      url.hash = "membership-tiers";
+      window.history.replaceState(window.history.state, "", url.pathname + url.search + url.hash);
+      window.requestAnimationFrame(() => document.getElementById("membership-tiers")?.scrollIntoView({ block: "start" }));
+    }
+  }, [fixture, draftScope, tiers, countries, managedBilling]);
+
+  function signInAndResume() {
+    let saved = false;
+    try {
+      saved = !!draftScope && saveSignupDraft(window.sessionStorage, { scope: draftScope, tierId: tier.id, billingMonths, fields });
+    } catch { /* Keep this form open if the browser cannot preserve it. */ }
+    if (!saved) {
+      setSignInElsewhere(true);
+      setError("Your session expired. Sign in in a new tab, then return here and try again. Keep this tab open to retain your details.");
+      return;
+    }
+    window.location.assign(membershipSignInUrl(membershipPage(tier)));
+  }
   if (alreadyMember) return <ExistingMembershipNotice />;
   return (
     <form
@@ -240,7 +291,7 @@ export function JoinForm({
           });
           const result = await response.json();
           if (response.status === 401) {
-            window.location.assign(`/sign-in?returnTo=${membershipPage(tier)}`);
+            signInAndResume();
             return;
           }
           if (!response.ok && result.code === "already_member") {
@@ -260,6 +311,7 @@ export function JoinForm({
         }
       }}
     >
+      {restored && <p role="status" className="rounded-2xl border border-primary/20 bg-primary/5 p-4 text-sm leading-6">Your membership choices and delivery details have been restored. Calculate shipping again, then review and agree to the total.</p>}
       <fieldset disabled={pending || quoting} className="mb-8 min-w-0">
         <legend className="mb-4 text-sm font-bold">
           {tiers.length === 1
@@ -323,7 +375,7 @@ export function JoinForm({
         </div>
       </fieldset>
       {managedBilling && (
-        <fieldset disabled={pending} className="rounded-3xl border bg-card p-6">
+        <fieldset disabled={pending || quoting} className="rounded-3xl border bg-card p-6">
           <legend className="px-2 text-lg font-bold">
             Choose your billing rhythm
           </legend>
@@ -370,7 +422,7 @@ export function JoinForm({
         </fieldset>
       )}
       {tier.id === "grimm_starter" && (
-        <fieldset disabled={pending} className="rounded-3xl border bg-card p-6">
+        <fieldset disabled={pending || quoting} className="rounded-3xl border bg-card p-6">
           <legend className="px-2 text-lg font-bold">
             Make the mystery a little more you
           </legend>
@@ -387,7 +439,8 @@ export function JoinForm({
                   required
                   maxLength={40}
                   list="grimm-colors"
-                  defaultValue={example?.preferredColors?.[n]}
+                  value={fields[`color_${n}` as keyof SignupFields]}
+                  onChange={(event) => setFields(previous => ({ ...previous, [`color_${n}`]: event.target.value }))}
                 />
               </label>
             ))}
@@ -415,7 +468,8 @@ export function JoinForm({
             <Input
               name="avoided_colors"
               maxLength={800}
-              defaultValue={example?.avoidedColors}
+              value={fields.avoided_colors}
+              onChange={(event) => setFields(previous => ({ ...previous, avoided_colors: event.target.value }))}
             />
           </label>
         </fieldset>
@@ -454,9 +508,10 @@ export function JoinForm({
                   name={name}
                   required={name !== "line2"}
                   maxLength={name === "state" ? 2 : 150}
-                  defaultValue={example?.address?.[name as keyof Address]}
+                  value={fields[name as keyof SignupFields]}
+                  onChange={(event) => setFields(previous => ({ ...previous, [name]: event.target.value }))}
                   autoComplete={
-                    name === "postal_code" ? "postal-code" : undefined
+                    ({ name: "name", line1: "address-line1", line2: "address-line2", city: "address-level2", state: "address-level1", postal_code: "postal-code" } as Record<string, string>)[name]
                   }
                 />
               </label>
@@ -496,9 +551,7 @@ export function JoinForm({
                 });
                 const result = await response.json();
                 if (response.status === 401) {
-                  window.location.assign(
-                    `/sign-in?returnTo=${membershipPage(tier)}`,
-                  );
+                  signInAndResume();
                   return;
                 }
                 if (!response.ok) throw new Error(result.error);
@@ -567,6 +620,14 @@ export function JoinForm({
             <select
               required
               name="country"
+              value={fields.country}
+              disabled={pending || quoting}
+              onChange={(event) => {
+                setFields(previous => ({ ...previous, country: event.target.value }));
+                setQuote(null);
+                setConsent(false);
+                key.current = undefined;
+              }}
               className="mt-2 block w-full rounded-xl border bg-background p-3"
             >
               {countries.map((c) => (
@@ -626,6 +687,7 @@ export function JoinForm({
               {error}
             </p>
           )}
+          {signInElsewhere && <a href={membershipSignInUrl(membershipPage(tier))} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center font-semibold underline underline-offset-4">Sign in in a new tab<span className="sr-only"> (opens in a new tab)</span></a>}
         </div>
       </div>
     </form>

@@ -1,7 +1,7 @@
 import Image from "next/image";
-import { Archive, ArrowUpRight, ImageIcon, Sparkles } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { grimShowcaseEditions, grimShowcaseUpdated, grimWhatnotUrl, type GrimShowcaseEdition } from "@/lib/grimmunity/showcase";
+import { ImageIcon } from "lucide-react";
+import { grimShowcaseEditions, type GrimShowcaseEdition } from "@/lib/grimmunity/showcase";
+import { EditionAvailability, InventoryRefreshNote } from "./showcase-inventory";
 
 function EditionPhoto({ image }: { image: NonNullable<GrimShowcaseEdition["image"]> }) {
   const { crop } = image;
@@ -67,26 +67,13 @@ export function GrimDesignShowcase() {
                   <span className="text-xs text-muted-foreground">{edition.year}</span>
                 </div>
                 <h3 id={`grim-${edition.monthNumber}-title`} className="mt-2 text-3xl">{edition.month}</h3>
-                <div className="mt-4">
-                  <span className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-bold ${vaulted ? "bg-muted text-muted-foreground" : "bg-primary/10 text-primary"}`}>
-                    {vaulted ? <Archive aria-hidden="true" className="size-3.5" /> : <Sparkles aria-hidden="true" className="size-3.5" />}
-                    {vaulted ? "Vaulted · sold out" : `${edition.remaining} left on Whatnot`}
-                  </span>
-                </div>
-                <p className="mt-4 text-sm leading-6 text-muted-foreground">
-                  {vaulted ? "This Whatnot-exclusive edition sold out and is now vaulted." : "Find this Whatnot-exclusive edition while it’s still available."}
-                </p>
-                {!vaulted && (
-                  <Button asChild variant="outline" className="mt-5 w-full rounded-full">
-                    <a href={grimWhatnotUrl} target="_blank" rel="noopener noreferrer">Shop on Whatnot <ArrowUpRight aria-hidden="true" className="size-4" /><span className="sr-only"> (opens in a new tab)</span></a>
-                  </Button>
-                )}
+                <EditionAvailability edition={`${edition.year}-${edition.monthNumber}`} vaulted={vaulted} />
               </div>
             </article>
           );
         })}
       </div>
-      <p className="mt-5 text-xs leading-5 text-muted-foreground">October availability last updated <time dateTime={grimShowcaseUpdated.date}>{grimShowcaseUpdated.label}</time>. Check Whatnot for the latest availability.</p>
+      <InventoryRefreshNote />
     </section>
   );
 }

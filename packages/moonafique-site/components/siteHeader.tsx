@@ -1,5 +1,5 @@
 "use client";
-import { Suspense, useId } from "react";
+import { Suspense, useId, useRef } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Menu, Search } from "lucide-react";
@@ -93,6 +93,7 @@ function SearchBarInput({ className }: { className?: string }) {
 }
 function Sidebar() {
   const pathname = usePathname();
+  const titleRef = useRef<HTMLHeadingElement>(null);
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -107,9 +108,13 @@ function Sidebar() {
       </SheetTrigger>
       <SheetContent
         side="left"
+        onOpenAutoFocus={(event) => {
+          event.preventDefault();
+          titleRef.current?.focus({ preventScroll: true });
+        }}
         className="flex w-[min(90vw,380px)] flex-col gap-6 overflow-y-auto bg-background p-6 pt-14"
       >
-        <SheetTitle className="text-2xl">Explore Moonafique</SheetTitle>
+        <SheetTitle ref={titleRef} tabIndex={-1} className="text-2xl">Explore Moonafique</SheetTitle>
         <SearchBar />
         <nav aria-label="Mobile navigation" className="grid gap-2">
           {siteNavigation.map((item) => (
