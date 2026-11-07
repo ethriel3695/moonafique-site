@@ -35,13 +35,13 @@ export const showcaseFeatures: ShowcaseFeature[] = [
     imageCaption: 'Photograph of the finished lyre',
   },
   {
-    id: 'grimfest',
+    id: 'moonafique-houses',
     category: 'A world to get lost in',
-    title: 'The four houses of Grimmfest',
+    title: 'The four houses of Moonafique',
     description:
-      'Meet Marrowick, Hollowsmere, Veradell, and Glimmerfell. Four names at the heart of Grimmfest, with room for a whole world of stories.',
+      'Meet Marrowick, Hollowsmere, Veradell, and Glimmerfell—the four houses of Moonafique, with room for a whole world of stories.',
     detail: 'Marrowick · Hollowsmere · Veradell · Glimmerfell',
-    missingImage: 'The four approved Grimmfest house crests',
+    missingImage: 'The four approved Moonafique house crests',
     images: [
       {
         src: '/showcase/Marrowick_Crest.png',
@@ -72,7 +72,7 @@ export const showcaseFeatures: ShowcaseFeature[] = [
         label: 'Glimmerfell',
       },
     ],
-    imageCaption: 'Grimmfest house crests · digital artwork',
+    imageCaption: 'Moonafique house crests · digital artwork',
   },
   {
     id: 'aceo-original-art',

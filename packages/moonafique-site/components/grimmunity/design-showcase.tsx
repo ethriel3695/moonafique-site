@@ -74,7 +74,7 @@ export function GrimDesignShowcase() {
                   </span>
                 </div>
                 <p className="mt-4 text-sm leading-6 text-muted-foreground">
-                  {vaulted ? "This Whatnot-exclusive edition sold out and is now vaulted." : "This edition is available exclusively on Whatnot while the remaining copies last."}
+                  {vaulted ? "This Whatnot-exclusive edition sold out and is now vaulted." : "Find this Whatnot-exclusive edition while it’s still available."}
                 </p>
                 {!vaulted && (
                   <Button asChild variant="outline" className="mt-5 w-full rounded-full">

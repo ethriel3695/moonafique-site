@@ -270,6 +270,7 @@ export function OfferView({
             {grimm && <nav aria-label="Explore Grimmunity" className="mt-5 flex flex-wrap gap-x-6 gap-y-2 text-sm font-bold text-primary">
               <a href="#membership-tiers" className="inline-flex min-h-11 items-center underline underline-offset-4">Monthly memberships</a>
               <a href="#grimmfest" className="inline-flex min-h-11 items-center underline underline-offset-4">Grimmfest live shows</a>
+              <a href="#moonafique-houses" className="inline-flex min-h-11 items-center underline underline-offset-4">Moonafique houses</a>
               <a href="#grim-showcase" className="inline-flex min-h-11 items-center underline underline-offset-4">Past editions</a>
             </nav>}
             <div className="my-8 rounded-[2rem] border border-primary/20 bg-gradient-to-br from-accent/35 to-surface p-7 sm:p-9">

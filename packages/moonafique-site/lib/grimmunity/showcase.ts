@@ -15,7 +15,7 @@ export type GrimShowcaseEdition = {
 
 export const grimWhatnotUrl = "https://www.whatnot.com/user/moonafique";
 // Owner-provided availability. Update this date and count together after a Whatnot sale.
-export const grimShowcaseUpdated = { date: "2026-10-24", label: "October 24, 2026" };
+export const grimShowcaseUpdated = { date: "2026-11-07", label: "November 7, 2026" };
 
 // Display separate frames from the owner's original group photo. These coordinates
 // crop only the view; the photograph and painted details remain unchanged.
@@ -39,7 +39,7 @@ export const grimShowcaseEditions: GrimShowcaseEdition[] = [
     },
   },
   {
-    month: "October", monthNumber: "10", year: 2026, status: "available", remaining: 2,
+    month: "October", monthNumber: "10", year: 2026, status: "available", remaining: 1,
     image: {
       ...groupPhoto,
       alt: "October Grim of the Month in witchy purple and gold, holding its blue and green articulated cat pet.",

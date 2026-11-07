@@ -10,7 +10,7 @@ The useful lesson from 3DA's Print Wars presentation is to give a recurring even
 
 The homepage next-show card leads directly to the scheduled Whatnot show. The Live Shows page provides automatically updated show dates, a Grimmfest introduction, Print Wars recognition, and instructions for first-time viewers. It initially shows the next eight dates after the featured show; visitors can reveal more dates in groups of eight. Both use the existing cream, purple, serif headings, rounded cards, and product photography.
 
-Grimmfest has a dedicated section within Grimmunity, with the existing film, four house crests, a show link, and links to past editions. Quick links near the top let visitors jump to memberships, Grimmfest, or past editions. Watching Grimmfest does not require a membership, and Whatnot editions are separate from membership editions.
+Grimmfest has a dedicated section within Grimmunity, with the existing film, a show link, and links to past editions. The four houses of Moonafique have a separate section and their own crests. Quick links near the top let visitors jump to memberships, Grimmfest, Moonafique’s houses, or past editions. Watching Grimmfest does not require a membership, and Whatnot editions are separate from membership editions.
 
 3DA references are limited to Print Wars. The Lion King diorama links to September 2026's Hall of Fame and its verified Most Creative Interpretation award. The August butterfly and October lyre link to their respective monthly awards without implying Moonafique won those months.
 
@@ -19,7 +19,7 @@ Grimmfest has a dedicated section within Grimmunity, with the existing film, fou
 | Finding | Implemented improvement |
 | --- | --- |
 | A profile link makes visitors search for the next show. | A prominent next-show card links to the individual show, with date and Mountain Time. |
-| Community stories were hard to discover within the membership flow. | Grimmfest has its own feature, film, house crests, and direct section links. |
+| Community stories were hard to discover within the membership flow. | Grimmfest has its own feature and film; Moonafique’s houses have a separate section. Direct section links make both easy to find. |
 | Large mobile headings delayed the primary show action. | Smaller phone headings and spacing bring the show details forward. |
 | Newsletter feedback disappeared in a toast. | Persistent inline confirmation, errors, visible email label, and explicit consent. |
 | A scheduled start is not evidence a broadcast is live. | Show “Live now” only when a recent Whatnot response reports a live broadcast. Otherwise retain the scheduled-time label. |
@@ -69,3 +69,9 @@ The owner saved `WHATNOT_API_TOKEN` as a Sensitive Production variable. The depl
 A browser left on the staged page advanced its update time from 1:38 to 1:41 a.m. Mountain without a reload. The shared API cache reused fresh responses and replaced an expired response after background refresh. Mouse and keyboard checks expanded the schedule from eight to sixteen and twenty-four dates. The page fits 320, 390, and 768 pixel widths without horizontal overflow, and the browser reported no console errors. Public checks passed after promotion, including all key pages, newsletter validation, protected membership endpoints, and a scan of 18 client bundles for credentials. Both public domains point to the verified deployment.
 
 Whatnot currently has two distinct listings for Plot Twists and Side Quests on November 19, 2026, at 8 p.m. Mountain: [first listing](https://www.whatnot.com/live/b2fc75df-2c0a-4c9a-b7ee-12407b199efb) and [second listing](https://www.whatnot.com/live/c565de87-eb8e-4e91-bb16-0bf27564d987). The website preserves both source records. If one is accidental, cancel it in Whatnot; the next successful sync will remove it from the website.
+
+## Owner corrections — November 7, 2026
+
+Marrowick, Hollowsmere, Veradell, and Glimmerfell are the four houses of Moonafique. The shared showcase wording and captions now use that attribution. On Grimmunity, the houses appear in their own section outside the Grimmfest event section.
+
+The owner confirmed one October Grim remains on Whatnot. Its card now shows “1 left on Whatnot,” with availability updated November 7, 2026. This stock count is owner-maintained; automatic Whatnot synchronization covers show dates, not edition inventory.
