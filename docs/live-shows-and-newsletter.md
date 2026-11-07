@@ -2,7 +2,7 @@
 
 Updated November 7, 2026.
 
-Published to both `www.moonafique.com` and `moonafique.com`. The deployed application source is commit `f59a5a4d4ec2554e0db3cb86e61d05048d2fe073`, Vercel deployment `dpl_2R8aPnUGz34BJfBs64GvFT8HpSLw`. The previous release, `dpl_8v2fCn4UURHZtkhvmzKLLPacuexB`, remains the rollback reference.
+Published to both `www.moonafique.com` and `moonafique.com`. The deployed application source is commit `800d7f5237f87545ff2abc5586f313903350ca33`, Vercel deployment `dpl_7Ut7uxyXttqzFD5RGZ94YEQFQXkc`. The previous release, `dpl_2R8aPnUGz34BJfBs64GvFT8HpSLw`, remains the rollback reference.
 
 The useful lesson from 3DA's Print Wars presentation is to give a recurring event a recognizable identity and preserve its finished work and recognition. Grimmfest now has that prominence within Grimmunity, while [Print Wars' monthly Hall of Fame](https://3d-addicts.com/print-wars/hall-of-fame/) provides supporting evidence for Moonafique's competition work.
 
@@ -75,3 +75,5 @@ Whatnot currently has two distinct listings for Plot Twists and Side Quests on N
 Marrowick, Hollowsmere, Veradell, and Glimmerfell are the four houses of Moonafique. The shared showcase wording and captions now use that attribution. On Grimmunity, the houses appear in their own section outside the Grimmfest event section.
 
 The owner confirmed one October Grim remains on Whatnot. Its card now shows “1 left on Whatnot,” with availability updated November 7, 2026. This stock count is owner-maintained; automatic Whatnot synchronization covers show dates, not edition inventory.
+
+The corrections are published on both public domains. The production build, staged checks, and public checks passed. Browser review confirmed the separate house section, all four loaded crests, the one-copy October badge, and the November 7 update date. The 390-pixel layout has no horizontal overflow, and the public page reported no console errors. Whatnot synchronization, newsletter signup, and membership enrollment remain active.
