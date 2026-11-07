@@ -8,7 +8,7 @@ The useful lesson from 3DA's Print Wars presentation is to give a recurring even
 
 ## Visitor experience
 
-The homepage next-show card leads directly to the scheduled Whatnot show. The Live Shows page provides selected upcoming dates, a Grimmfest introduction, Print Wars recognition, and instructions for first-time viewers. Both use the existing cream, purple, serif headings, rounded cards, and product photography.
+The homepage next-show card leads directly to the scheduled Whatnot show. The Live Shows page provides automatically updated show dates, a Grimmfest introduction, Print Wars recognition, and instructions for first-time viewers. Both use the existing cream, purple, serif headings, rounded cards, and product photography.
 
 Grimmfest has a dedicated section within Grimmunity, with the existing film, four house crests, a show link, and links to past editions. Quick links near the top let visitors jump to memberships, Grimmfest, or past editions. Watching Grimmfest does not require a membership, and Whatnot editions are separate from membership editions.
 
@@ -22,7 +22,7 @@ Grimmfest has a dedicated section within Grimmunity, with the existing film, fou
 | Community stories were hard to discover within the membership flow. | Grimmfest has its own feature, film, house crests, and direct section links. |
 | Large mobile headings delayed the primary show action. | Smaller phone headings and spacing bring the show details forward. |
 | Newsletter feedback disappeared in a toast. | Persistent inline confirmation, errors, visible email label, and explicit consent. |
-| A scheduled start is not evidence a broadcast is live. | Use “Scheduled today” after the start, with Whatnot as the source of current status. |
+| A scheduled start is not evidence a broadcast is live. | Show “Live now” only when a recent Whatnot response reports a live broadcast. Otherwise retain the scheduled-time label. |
 | Keyboard focus was suppressed on some links. | Visible focus outlines, contrasting focus in Grimmfest, and an active navigation state. |
 | The cart provider hid the entire page until JavaScript loaded. | Page content now renders on the server, while saved cart details wait for hydration. |
 
@@ -30,11 +30,19 @@ Reviewed desktop and 320, 390, and 768 pixel layouts. Phone layouts stack cards 
 
 The next content priority is real product photography: several current shop listings still display “Photo unavailable.” Adding accurate photos will help buyers judge those products. The new live-show and Grimmfest features use existing Moonafique photography and artwork.
 
-## Maintaining show dates
+## Automatic Whatnot schedule
 
-Edit `packages/moonafique-site/lib/live-shows.ts`. This is a curated schedule, not an automatic Whatnot feed. Use a verified direct show URL and an ISO timestamp with the correct Mountain Time offset. Update `scheduleCheckedOn` after checking Whatnot. Grimmfest's November 7 time was confirmed by the owner as 8 p.m. Mountain.
+Schedule shows in Whatnot. The homepage card, Live Shows page, and Grimmfest feature read the same server snapshot. Dates, titles, and cancellations update without code edits or another deployment. Times use America/Boise, including daylight saving changes. Grimmfest's November 7 start was confirmed by the owner as 8 p.m. Mountain; future changes come from Whatnot.
 
-The next-show card and Grimmfest feature use the same data. They refresh on page focus and every minute. Shows from prior Mountain calendar days drop out automatically. When no dated shows remain, visitors get a link to Moonafique's Whatnot profile rather than a stale event. A changed or cancelled Whatnot listing still requires an editorial update here.
+The connection uses the [official Whatnot Seller API](https://developers.whatnot.com/api-reference/tag/shows). Save a personal token with `read:shows` as `WHATNOT_API_TOKEN` in Vercel → moonafique-site → Settings → Environment Variables → Production. Mark it Sensitive. Enter the raw token without `Bearer`, then deploy. For local development, use an ignored `.env.local` file. Never put the token in source control, browser code, or a `NEXT_PUBLIC_` variable.
+
+The server verifies the token belongs to `moonafique`, then reads paginated scheduled and live shows. It publishes only public shows and creates viewer links; Whatnot's API supplies seller-dashboard URLs, which visitors cannot use. Other 3DA-branded events are omitted to preserve the owner's Print Wars-only rule. The full Whatnot profile link remains available. Private, stopped, ended, and cancelled shows are excluded. Undated shows appear only while live.
+
+The shared Next.js cache refreshes after two minutes when requested. Open, visible pages check it every minute and when the visitor returns to the tab. Changes normally appear within a few minutes; there is no paid cron dependency. No requests run solely to update an unvisited page. The first visitor after an idle period can briefly see the previous snapshot while the background refresh completes.
+
+Failed refreshes retain the last successful snapshot. After ten minutes, the site marks dates as potentially outdated and stops asserting a show is live. After 24 hours, it hides old dates and links to Whatnot. A successful empty schedule clears the old shows. A missing or invalid token yields a usable profile link. Rotation changes the cache key; revocation or expiry requires a replacement token and deployment.
+
+`scripts/check-whatnot.ts` verifies the seller and schedule during deployment without modifying any show. Production builds fail if the token is missing, unauthorized, belongs to another account, or the schedule cannot be read. Logs contain fixed error categories and a public show count, never credentials or provider response bodies. Provider rate limits and failed requests trigger a short backoff, and imports use a ten-second timeout.
 
 ## Newsletter activation
 

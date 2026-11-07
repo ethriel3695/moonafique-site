@@ -4,6 +4,8 @@ import Link from "next/link";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { NextShowCard, ShowSchedule } from "@/components/live-shows";
 import { GrimGroupPhoto } from "@/components/grimmunity/group-photo";
+import { getLiveSchedule } from "@/lib/live-shows-server";
+import { LiveShowsProvider } from "@/components/live-shows-provider";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
@@ -12,9 +14,10 @@ export const metadata: Metadata = {
   alternates: { canonical: "/live-shows" },
 };
 
-export default function LiveShowsPage() {
+export default async function LiveShowsPage() {
+  const schedule = await getLiveSchedule();
   const initialNow = new Date().toISOString();
-  return <div className="mx-auto max-w-screen-xl px-5 py-10 sm:px-8 sm:py-16">
+  return <LiveShowsProvider initialSchedule={schedule}><div className="mx-auto max-w-screen-xl px-5 py-10 sm:px-8 sm:py-16">
     <header className="mb-9 max-w-3xl">
       <p className="text-xs font-bold uppercase tracking-[.22em] text-primary">Moonafique, live on Whatnot</p>
       <h1 className="mt-5 text-4xl leading-[1.08] sm:text-6xl">Pull up a chair.<br /><span className="text-primary">See what’s on the table.</span></h1>
@@ -31,5 +34,5 @@ export default function LiveShowsPage() {
       <figure><Image src="/showcase/lion-king-diorama.jpg" alt="Moonafique’s Lion King diorama: lions and cubs among colorful trees, rocks, and scenery." width={1024} height={768} sizes="(min-width: 768px) 50vw, 100vw" className="w-full rounded-2xl" /><figcaption className="mt-3 text-sm text-muted-foreground">The Lion King Diorama · September 2026 Print Wars</figcaption></figure>
     </section>
     <section aria-labelledby="first-show-title" className="mt-12 max-w-3xl"><h2 id="first-show-title" className="text-3xl">First time joining us?</h2><p className="mt-4 leading-7 text-muted-foreground">Open a show on Whatnot to see its details and bookmark it. When it’s time, return to the same show link. You’re welcome to ask about the pieces, join the conversation, or simply look around.</p><Link href="/#newsletter" className="mt-4 inline-flex min-h-11 items-center gap-2 font-bold text-primary underline underline-offset-4">Get show and studio updates <ArrowRight aria-hidden="true" className="size-4" /></Link></section>
-  </div>;
+  </div></LiveShowsProvider>;
 }

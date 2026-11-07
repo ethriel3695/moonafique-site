@@ -2,8 +2,8 @@ import { describe, expect, it } from "vitest";
 import { featuredShow, showAction, showDate, showDay, showTime, upcomingShows, type LiveShow } from "@/lib/live-shows";
 
 const shows: LiveShow[] = [
-  { id: "second", title: "Second", series: "art", startsAt: "2026-11-08T15:00:00-07:00", href: "https://www.whatnot.com/live/second", description: "" },
-  { id: "first", title: "Grimmfest", series: "grimmfest", startsAt: "2026-11-07T20:00:00-07:00", href: "https://www.whatnot.com/live/first", description: "" },
+  { id: "second", title: "Second", series: "art", status: "scheduled", startsAt: "2026-11-08T15:00:00-07:00", href: "https://www.whatnot.com/live/second", description: "" },
+  { id: "first", title: "Grimmfest", series: "grimmfest", status: "scheduled", startsAt: "2026-11-07T20:00:00-07:00", href: "https://www.whatnot.com/live/first", description: "" },
 ];
 
 describe("show schedule lifecycle", () => {
