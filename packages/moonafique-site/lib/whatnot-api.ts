@@ -24,7 +24,7 @@ export class WhatnotSyncError extends Error {
 function seriesFor(title: string): LiveShow["series"] {
   if (/print[\s-]*wars/i.test(title)) return "print-wars";
   if (/grimm?[\s-]*fest/i.test(title)) return "grimmfest";
-  if (/\baceos?\b|art cards/i.test(title)) return "art";
+  if (/\baceos?\b|art cards?/i.test(title)) return "art";
   return "collectibles";
 }
 

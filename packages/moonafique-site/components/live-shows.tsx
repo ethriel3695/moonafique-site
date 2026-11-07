@@ -69,6 +69,7 @@ export function NextShowCard({ initialNow, compact = false }: { initialNow: stri
 
 export function ShowSchedule({ initialNow }: { initialNow: string }) {
   const now = useShowClock(initialNow);
+  const [visibleCount, setVisibleCount] = useState(8);
   const schedule = useLiveSchedule(now);
   const shows = upcomingShows(now, schedule.shows);
   const featured = featuredShow(now, schedule.shows, schedule.trustLiveStatus);
@@ -80,13 +81,17 @@ export function ShowSchedule({ initialNow }: { initialNow: string }) {
       <a href={allShowsUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center gap-2 text-sm font-bold text-primary underline underline-offset-4">Full Whatnot schedule <ArrowUpRight aria-hidden="true" className="size-4" /><span className="sr-only"> (opens in a new tab)</span></a>
     </div>
     <p className="mt-4 text-sm leading-6 text-muted-foreground">All times are Mountain Time. These dates update automatically from Whatnot. New shows and schedule changes usually appear within a few minutes.</p>
-    {remaining.length ? <ol className="mt-6 divide-y divide-border border-y border-border">
-      {remaining.map((show) => <li key={show.id} className="grid gap-3 py-6 sm:grid-cols-[180px_minmax(0,1fr)] sm:gap-6 lg:grid-cols-[180px_minmax(0,1fr)_auto] lg:items-center">
+    {remaining.length ? <ol id="upcoming-show-list" className="mt-6 divide-y divide-border border-y border-border">
+      {remaining.slice(0, visibleCount).map((show) => <li key={show.id} className="grid gap-3 py-6 sm:grid-cols-[180px_minmax(0,1fr)] sm:gap-6 lg:grid-cols-[180px_minmax(0,1fr)_auto] lg:items-center">
         <time dateTime={show.startsAt!} className="text-sm"><span className="block font-bold text-primary">{showDate(show.startsAt!)}</span><span className="mt-1 block text-muted-foreground">{showTime(show.startsAt!)}</span></time>
         <div className="min-w-0"><h3 className="break-words text-2xl">{show.title}</h3><p className="mt-2 max-w-lg text-sm leading-6 text-muted-foreground">{show.description}</p></div>
         <a href={show.href} target="_blank" rel="noopener noreferrer" aria-label={`View ${show.title}, ${showDate(show.startsAt!)}, on Whatnot (opens in a new tab)`} className="inline-flex min-h-11 w-fit items-center gap-2 rounded-full border border-border bg-card px-5 text-sm font-bold text-primary hover:bg-secondary sm:col-start-2 lg:col-start-auto">View show <ArrowUpRight aria-hidden="true" className="size-4" /></a>
       </li>)}
     </ol> : <p className="mt-6 rounded-2xl border border-border bg-surface p-6 leading-7">{schedule.state === "unavailable" ? "The schedule is temporarily unavailable here. Open our Whatnot profile for the latest shows." : "More dates will appear here as they’re scheduled on Whatnot. Follow us there for new show announcements."}</p>}
+    {remaining.length > 8 && <div className="mt-6 flex flex-wrap items-center gap-4">
+      <Button type="button" variant="outline" className="min-h-11" aria-controls="upcoming-show-list" disabled={visibleCount >= remaining.length} onClick={() => setVisibleCount(count => count + 8)}>{visibleCount >= remaining.length ? "All dates shown" : "Show more dates"}</Button>
+      <p className="text-sm text-muted-foreground" role="status">Showing {Math.min(visibleCount, remaining.length)} of {remaining.length} upcoming dates.</p>
+    </div>}
     <p className="mt-4 text-xs leading-5 text-muted-foreground" role="status">{schedule.syncedAt && schedule.state !== "unavailable" ? <>{schedule.state === "stale" ? "Last successful update" : "Updated from Whatnot"}: <time dateTime={schedule.syncedAt}>{showDate(schedule.syncedAt)} at {showTime(schedule.syncedAt)}</time>.{schedule.state === "stale" && " Please confirm dates on Whatnot."}</> : "You can always find our full schedule on Whatnot."}</p>
   </section>;
 }

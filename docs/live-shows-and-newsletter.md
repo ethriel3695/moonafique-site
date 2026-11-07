@@ -8,7 +8,7 @@ The useful lesson from 3DA's Print Wars presentation is to give a recurring even
 
 ## Visitor experience
 
-The homepage next-show card leads directly to the scheduled Whatnot show. The Live Shows page provides automatically updated show dates, a Grimmfest introduction, Print Wars recognition, and instructions for first-time viewers. Both use the existing cream, purple, serif headings, rounded cards, and product photography.
+The homepage next-show card leads directly to the scheduled Whatnot show. The Live Shows page provides automatically updated show dates, a Grimmfest introduction, Print Wars recognition, and instructions for first-time viewers. It initially shows the next eight dates after the featured show; visitors can reveal more dates in groups of eight. Both use the existing cream, purple, serif headings, rounded cards, and product photography.
 
 Grimmfest has a dedicated section within Grimmunity, with the existing film, four house crests, a show link, and links to past editions. Quick links near the top let visitors jump to memberships, Grimmfest, or past editions. Watching Grimmfest does not require a membership, and Whatnot editions are separate from membership editions.
 
