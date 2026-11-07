@@ -119,13 +119,19 @@ body {
   }
 
   :focus-visible {
-    outline: none;
+    outline: 3px solid currentColor;
+    outline-offset: 4px;
   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
 }
 
 /* The Grim flow must retain a visible keyboard focus indicator, including links and native inputs. */
 .grimmunity :focus-visible {
-  outline: 3px solid hsl(var(--primary));
+  outline: 3px solid currentColor;
   outline-offset: 4px;
 }
+.grimmunity #grimmfest :focus-visible { outline-color: #f8f0fc; }
 .grimmunity a:hover { text-decoration: underline; text-underline-offset: 4px; }

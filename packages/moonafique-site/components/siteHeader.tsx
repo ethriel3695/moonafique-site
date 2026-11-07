@@ -1,6 +1,6 @@
 "use client";
 import { useId } from "react";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Menu, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -18,6 +18,7 @@ import { siteNavigation } from "@/lib/site-content";
 import { cn } from "@/lib/utils";
 
 export function SiteHeader() {
+  const pathname = usePathname();
   return (
     <header className="sticky top-0 z-20 border-b border-border/70 bg-background/95 backdrop-blur-xl">
       <div className="mx-auto flex min-h-20 max-w-screen-xl items-center justify-between gap-4 px-5 py-3 sm:px-8">
@@ -42,7 +43,8 @@ export function SiteHeader() {
             <Link
               key={item.href}
               href={item.href}
-              className="rounded-full px-3 py-3 text-sm font-semibold hover:bg-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
+              aria-current={pathname === item.href ? "page" : undefined}
+              className={cn("rounded-full px-3 py-3 text-sm font-semibold hover:bg-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary", pathname === item.href && "bg-secondary text-primary")}
             >
               {item.label}
             </Link>
@@ -85,6 +87,7 @@ function SearchBar({ className }: { className?: string }) {
   );
 }
 function Sidebar() {
+  const pathname = usePathname();
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -108,7 +111,8 @@ function Sidebar() {
             <SheetClose key={item.href} asChild>
               <Link
                 href={item.href}
-                className="rounded-xl px-3 py-3 text-lg font-semibold hover:bg-secondary"
+                aria-current={pathname === item.href ? "page" : undefined}
+                className={cn("rounded-xl px-3 py-3 text-lg font-semibold hover:bg-secondary", pathname === item.href && "bg-secondary text-primary")}
               >
                 {item.label}
               </Link>

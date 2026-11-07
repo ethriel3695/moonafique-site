@@ -13,6 +13,7 @@ export type PrintWarsCreation = {
   description: string;
   theme: 'glow' | 'gold' | 'violet';
   note?: string;
+  hallOfFame?: { href: string; label: string };
   photos?: CreationPhoto[];
 };
 
@@ -26,6 +27,7 @@ export const printWarsCreations: PrintWarsCreation[] = [
     description:
       'A butterfly with a fighting spirit. Our glowing battle bot brought a little unexpected beauty to August’s Print Wars.',
     theme: 'glow',
+    hallOfFame: { href: 'https://3d-addicts.com/print-wars/hall-of-fame/#august-2026', label: 'August’s Print Wars Hall of Fame' },
     photos: [
       {
         src: '/showcase/butterfly-battle-bot-color.jpg',
@@ -74,6 +76,8 @@ export const printWarsCreations: PrintWarsCreation[] = [
     description:
       'A beloved world, brought together piece by piece. Created by Moonafique for September’s Print Wars.',
     theme: 'gold',
+    note: 'Most Creative Interpretation · September 2026 Printy Award',
+    hallOfFame: { href: 'https://3d-addicts.com/print-wars/hall-of-fame/#september-2026', label: 'Our award in September’s Hall of Fame' },
     photos: [
       {
         src: '/showcase/lion-king-diorama.jpg',
@@ -98,6 +102,7 @@ export const printWarsCreations: PrintWarsCreation[] = [
     description:
       'Sweeping horns, a skull, and strings. A Moonafique creation for October’s Print Wars.',
     theme: 'violet',
+    hallOfFame: { href: 'https://3d-addicts.com/print-wars/hall-of-fame/#october-2026', label: 'October’s Print Wars Hall of Fame' },
     photos: [
       {
         src: '/showcase/IMG_3160.jpeg',

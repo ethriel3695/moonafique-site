@@ -38,7 +38,7 @@ export const LocalDraft: Story = {
         expect(image.alt.trim().length).toBeGreaterThan(0);
       }
     });
-    await expect(canvas.getByText('Grimfest house crests · digital artwork')).toBeVisible();
+    await expect(canvas.getByText('Grimmfest house crests · digital artwork')).toBeVisible();
     await expect(canvas.queryByText(/Image transfer pending/)).not.toBeInTheDocument();
     await expect(canvas.getByRole('heading', { name: 'The Devil’s Favorite Lyre' })).toBeVisible();
     await expect(canvas.getByRole('link', { name: 'Meet the makers' })).toHaveAttribute('href', '/about');

@@ -30,6 +30,8 @@ import type { AccountView, OrderView } from "@/lib/grimmunity/queries";
 import { ClubAction, ExistingMembershipNotice, JoinForm } from "./actions";
 import { InterestForm } from "./interest-form";
 import { GrimDesignShowcase } from "./design-showcase";
+import { Grimmfest } from "./grimmfest";
+import { GrimGroupPhoto } from "./group-photo";
 import { ShippingPanel } from "./shipping-panel";
 import { BillingSummary } from "./billing-summary";
 import { AvailabilityBadge, MembershipAvailability } from "./availability";
@@ -265,6 +267,11 @@ export function OfferView({
                 ? "Choose a mystery Grimm with accessories and matching pets, or a Keeper with an exclusive painted finish. A new character joins your collection each month."
                 : "Collect artwork that measures just 2.5 by 3.5 inches. Choose two prints or one original from each month’s collection, with plenty of detail in very little space."}
             </p>
+            {grimm && <nav aria-label="Explore Grimmunity" className="mt-5 flex flex-wrap gap-x-6 gap-y-2 text-sm font-bold text-primary">
+              <a href="#membership-tiers" className="inline-flex min-h-11 items-center underline underline-offset-4">Monthly memberships</a>
+              <a href="#grimmfest" className="inline-flex min-h-11 items-center underline underline-offset-4">Grimmfest live shows</a>
+              <a href="#grim-showcase" className="inline-flex min-h-11 items-center underline underline-offset-4">Past editions</a>
+            </nav>}
             <div className="my-8 rounded-[2rem] border border-primary/20 bg-gradient-to-br from-accent/35 to-surface p-7 sm:p-9">
               <Sparkles aria-hidden className="mb-5 size-8 text-primary" />
               <h2 className="text-2xl">
@@ -316,6 +323,7 @@ export function OfferView({
             className="rounded-[2rem] border border-border bg-card p-6 shadow-soft sm:p-8"
             aria-label="Membership offer"
           >
+            {grimm && <div className="mb-6"><GrimGroupPhoto sizes="(min-width: 1024px) 400px, 85vw" /></div>}
             <Status>
               {existingMembershipName
                 ? "Membership on your account"
@@ -374,6 +382,7 @@ export function OfferView({
             )}
           </aside>
         </div>
+        {grimm && <Grimmfest initialNow={now.toISOString()} />}
         <section
           id="membership-tiers"
           aria-labelledby="tiers-heading"

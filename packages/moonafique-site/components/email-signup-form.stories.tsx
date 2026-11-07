@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { expect, userEvent, within } from 'storybook/test';
 
-import { Toaster } from '@/components/ui/toaster';
 import { EmailSignupForm } from './email-signup-form';
 
 const meta = {
@@ -11,9 +10,8 @@ const meta = {
   args: { subscribe: async () => undefined },
   decorators: [
     (Story) => (
-      <div className="w-full max-w-xl p-4">
+      <div className="w-full max-w-xl rounded-2xl bg-primary p-4 text-primary-foreground">
         <Story />
-        <Toaster />
       </div>
     ),
   ],
@@ -32,6 +30,6 @@ export const CheckYourInbox: Story = {
     const canvas = within(canvasElement);
     await userEvent.type(canvas.getByRole('textbox', { name: 'Email address' }), 'collector@example.invalid');
     await userEvent.click(canvas.getByRole('button', { name: 'Subscribe' }));
-    await expect(await canvas.findByText('Confirm your email to join the Moonafique newsletter.')).toBeVisible();
+    await expect(await canvas.findByText('One more step: check your inbox.')).toBeVisible();
   },
 };

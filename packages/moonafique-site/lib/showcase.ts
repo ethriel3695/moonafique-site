@@ -37,11 +37,11 @@ export const showcaseFeatures: ShowcaseFeature[] = [
   {
     id: 'grimfest',
     category: 'A world to get lost in',
-    title: 'The four houses of Grimfest',
+    title: 'The four houses of Grimmfest',
     description:
-      'Meet Marrowick, Hollowsmere, Veradell, and Glimmerfell. Four names at the heart of Grimfest, with room for a whole world of stories.',
+      'Meet Marrowick, Hollowsmere, Veradell, and Glimmerfell. Four names at the heart of Grimmfest, with room for a whole world of stories.',
     detail: 'Marrowick · Hollowsmere · Veradell · Glimmerfell',
-    missingImage: 'The four approved Grimfest house crests',
+    missingImage: 'The four approved Grimmfest house crests',
     images: [
       {
         src: '/showcase/Marrowick_Crest.png',
@@ -72,7 +72,7 @@ export const showcaseFeatures: ShowcaseFeature[] = [
         label: 'Glimmerfell',
       },
     ],
-    imageCaption: 'Grimfest house crests · digital artwork',
+    imageCaption: 'Grimmfest house crests · digital artwork',
   },
   {
     id: 'aceo-original-art',

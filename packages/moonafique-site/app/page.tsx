@@ -2,6 +2,8 @@ import { Homepage } from "@/components/homepage";
 import { ProductList } from "@/components/product-list";
 import { getProducts } from "@/lib/products";
 
+export const dynamic = "force-dynamic";
+
 export default async function Page() {
   const products = await getProducts({ limit: 8 });
   const newsletterPaused = process.env.GRIM_MODE === "live" && (
@@ -11,6 +13,7 @@ export default async function Page() {
   return (
     <Homepage
       catalog={<ProductList initialList={products} />}
+      initialNow={new Date().toISOString()}
       newsletter={newsletterPaused ? (
         <p id="newsletter-email" className="text-sm">
           Newsletter signups are paused for now.

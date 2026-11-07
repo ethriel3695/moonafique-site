@@ -32,6 +32,7 @@ export const socialLinks = [
 export const siteNavigation = [
   { label: "Collections", href: "/#collections" },
   { label: "Shop", href: "/#shop" },
+  { label: "Live shows", href: "/live-shows" },
   { label: "Memberships", href: "/communities" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },

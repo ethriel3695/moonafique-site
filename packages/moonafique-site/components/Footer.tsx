@@ -3,6 +3,7 @@ import { brandDescription, socialLinks } from "@/lib/site-content";
 const links = [
   { label: "Collections", href: "/#collections" },
   { label: "Shop", href: "/#shop" },
+  { label: "Live shows", href: "/live-shows" },
   { label: "The creations showcase", href: "/creations" },
   { label: "Monthly memberships", href: "/communities" },
   { label: "Custom requests", href: "/customs" },

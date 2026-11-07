@@ -65,7 +65,7 @@ export function GrimShowcaseFilm() {
       <video
         ref={videoRef}
         id="grim-showcase-film"
-        aria-label="Grimfest: August through October Grim of the Month showcase"
+        aria-label="Grimmfest: August through October Grim of the Month showcase"
         aria-describedby="grim-film-description"
         controls
         muted
@@ -88,7 +88,7 @@ export function GrimShowcaseFilm() {
         <a href={filmSource}>Watch the Grim of the Month film.</a>
       </video>
       <figcaption className="mt-3 flex items-center justify-between gap-3">
-        <p className="text-xs leading-5 text-[#d3c8d9]">Grimfest, in motion.<br />August–October 2026</p>
+        <p className="text-xs leading-5 text-[#d3c8d9]">Grimmfest, in motion.<br />August–October 2026</p>
         <button
           type="button"
           onClick={togglePlayback}
@@ -99,7 +99,7 @@ export function GrimShowcaseFilm() {
           {playing ? "Pause video" : "Play video"}
         </button>
       </figcaption>
-      <p id="grim-film-description" className="sr-only">A close-up tour of our August, September, and October Grims with their matching pets, colorful paintwork, and glowing details. The film invites viewers to Grimfest, live on Whatnot.</p>
+      <p id="grim-film-description" className="sr-only">A close-up tour of our August, September, and October Grims with their matching pets, colorful paintwork, and glowing details. The film invites viewers to Grimmfest, live on Whatnot.</p>
       {unavailable && <p className="mt-3 text-sm text-[#fbf5ec]">Having trouble playing the film? <a href={filmSource} className="underline underline-offset-4">Open the video.</a></p>}
     </figure>
   );

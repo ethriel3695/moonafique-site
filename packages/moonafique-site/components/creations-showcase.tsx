@@ -58,13 +58,13 @@ export function CreationsShowcase({
           </div>
 
           <div className="mb-6 mt-9 flex items-center justify-between gap-4 border-t border-white/15 pt-5 sm:mt-11">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#eee1f4]">From our Print Wars table</p>
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#eee1f4]">From our table at 3DA’s Print Wars</p>
             <p className="text-xs text-[#c4b6cd]">2026</p>
           </div>
 
           <div className="grid gap-x-7 gap-y-10 md:grid-cols-2 lg:gap-x-9 lg:gap-y-12">
             {creations.map((creation) => (
-              <article key={creation.id} aria-labelledby={`${creation.id}-showcase-title`} className="min-w-0">
+              <article key={creation.id} id={creation.id} aria-labelledby={`${creation.id}-showcase-title`} className="min-w-0 scroll-mt-28">
                 {creation.photos?.length ? (
                   <CreationPhotoGallery title={creation.title} photos={creation.photos} />
                 ) : (
@@ -81,6 +81,9 @@ export function CreationsShowcase({
                   </h3>
                   {creation.note && <p className="mt-3 w-fit rounded-full border border-[#d6b9eb]/30 bg-[#d6b9eb]/10 px-3 py-1.5 text-xs leading-5 text-[#e4cfee]">{creation.note}</p>}
                   <p className="mt-3 text-sm leading-6 text-[#d3c8d9]">{creation.description}</p>
+                  {creation.hallOfFame && <a href={creation.hallOfFame.href} target="_blank" rel="noopener noreferrer" className="mt-3 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-[#eee1f4] underline underline-offset-4">
+                    {creation.hallOfFame.label}<ArrowUpRight className="size-4 shrink-0" aria-hidden="true" /><span className="sr-only"> (opens in a new tab)</span>
+                  </a>}
                 </div>
               </article>
             ))}

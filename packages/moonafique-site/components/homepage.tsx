@@ -7,6 +7,7 @@ import { Testimonials } from "@/components/testimonials";
 import { FAQ } from "@/components/faq";
 import { EmailSignupForm } from "@/components/email-signup-form";
 import { socialLinks, whatnotUrl } from "@/lib/site-content";
+import { NextShowCard } from "@/components/live-shows";
 
 const collections = [
   {
@@ -38,13 +39,18 @@ const collections = [
 export function Homepage({
   catalog,
   newsletter,
+  initialNow = new Date().toISOString(),
 }: {
   catalog: ReactNode;
   newsletter?: ReactNode;
+  initialNow?: string;
 }) {
   return (
     <>
       <Hero />
+      <div className="mx-auto max-w-screen-xl px-5 pb-12 sm:px-8">
+        <NextShowCard initialNow={initialNow} compact />
+      </div>
       <section
         id="collections"
         aria-labelledby="collections-title"
@@ -193,7 +199,8 @@ export function Homepage({
       <Testimonials />
       <FAQ />
       <section
-        className="px-5 pb-16 sm:px-8 sm:pb-20"
+        id="newsletter"
+        className="scroll-mt-28 px-5 pb-16 sm:px-8 sm:pb-20"
         aria-labelledby="newsletter-title"
       >
         <div className="mx-auto max-w-screen-xl rounded-[2rem] bg-primary px-6 py-10 text-primary-foreground sm:px-10 sm:py-14">

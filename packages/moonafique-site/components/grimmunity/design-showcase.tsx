@@ -1,7 +1,6 @@
 import Image from "next/image";
 import { Archive, ArrowUpRight, ImageIcon, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { GrimShowcaseFilm } from "@/components/grimmunity/showcase-film";
 import { grimShowcaseEditions, grimShowcaseUpdated, grimWhatnotUrl, type GrimShowcaseEdition } from "@/lib/grimmunity/showcase";
 
 function EditionPhoto({ image }: { image: NonNullable<GrimShowcaseEdition["image"]> }) {
@@ -36,14 +35,13 @@ function EditionPhoto({ image }: { image: NonNullable<GrimShowcaseEdition["image
 export function GrimDesignShowcase() {
   return (
     <section id="grim-showcase" aria-labelledby="grim-showcase-title" className="mt-16 scroll-mt-24 border-t border-border pt-10 sm:mt-20 sm:pt-12">
-      <div className="mb-8 grid items-center gap-8 overflow-hidden rounded-[2rem] bg-[#1e1826] p-6 text-[#fbf5ec] sm:p-8 lg:grid-cols-[1fr_.8fr] lg:gap-12 lg:p-12">
+      <div className="mb-8 overflow-hidden rounded-[2rem] bg-[#1e1826] p-6 text-[#fbf5ec] sm:p-8 lg:p-10">
         <div className="max-w-xl">
           <p className="text-xs font-bold uppercase tracking-[.2em] text-[#d6b9eb]">The Grim of the Month showcase</p>
           <h2 id="grim-showcase-title" className="mt-4 text-3xl leading-tight sm:text-4xl lg:text-5xl">A little look into our Grim world.</h2>
           <p className="mt-5 text-lg leading-8 text-[#eee1f4]">Meet our August, September, and October Grim of the Month editions—a look at the custom-painted creations behind Moonafique.</p>
           <p className="mt-5 text-sm leading-7 text-[#d3c8d9]">Grim of the Month releases are sold exclusively on Whatnot. Grimm subscriptions are separate monthly releases: choose a mystery Starter or a subscription-exclusive Keeper.</p>
         </div>
-        <GrimShowcaseFilm />
       </div>
 
       <div className="grid gap-6 md:grid-cols-3">
