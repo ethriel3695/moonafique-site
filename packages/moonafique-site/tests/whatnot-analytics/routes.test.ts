@@ -11,7 +11,7 @@ import Page from "../../app/admin/whatnot/page";
 const request = (body = '{"action":"start"}', origin = "https://example.invalid") => new Request("https://example.invalid/admin/whatnot/refresh", { method: "POST", headers: { origin }, body });
 beforeEach(() => {
   vi.clearAllMocks(); state.user = null;
-  vi.stubEnv("GRIM_SITE_URL", "https://example.invalid"); vi.stubEnv("GRIM_STAFF_USER_IDS", "staff"); vi.stubEnv("WHATNOT_ANALYTICS_API_TOKEN", "test-token");
+  vi.stubEnv("GRIM_SITE_URL", "https://example.invalid"); vi.stubEnv("GRIM_STAFF_USER_IDS", "staff"); vi.stubEnv("GRIM_ADDITIONAL_STAFF_USER_IDS", ""); vi.stubEnv("WHATNOT_ANALYTICS_API_TOKEN", "test-token");
   state.read.mockResolvedValue({ snapshot: snapshot(), refresh: null });
   state.start.mockResolvedValue({ id: "fixture", status: "pending" });
 });
@@ -32,6 +32,17 @@ it("requires an exact staff ID and same-origin refresh, validates JSON before st
   expect((await POST(request('{"action":"poll","id":"bad"}'))).status).toBe(400);
   expect(state.database).not.toHaveBeenCalled();
   expect((await POST(request())).status).toBe(200); expect(state.start).toHaveBeenCalledTimes(1);
+});
+it("adds exact approved staff IDs while retaining existing staff access", async () => {
+  vi.stubEnv("GRIM_ADDITIONAL_STAFF_USER_IDS", " additional_staff, second_staff ");
+  for (const id of ["staff", "additional_staff", "second_staff"]) {
+    state.user = { id, email: "staff@example.invalid" };
+    expect((await POST(request())).status).toBe(200);
+  }
+  for (const id of ["additional", "staff_suffix", "SECOND_STAFF"]) {
+    state.user = { id, email: "staff@example.invalid" };
+    expect((await POST(request())).status).toBe(403);
+  }
 });
 it("returns private staff CSV attachments without provider URLs or secret configuration", async () => {
   state.user = { id: "staff", email: "staff@example.invalid" };

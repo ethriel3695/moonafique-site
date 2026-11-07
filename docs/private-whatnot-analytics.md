@@ -1,6 +1,6 @@
 # Private Whatnot business dashboard
 
-Staff can open `/admin/whatnot` or follow **Whatnot business** from the existing membership or custom-request admin pages. The public navigation and sitemap do not link to it. WorkOS sign-in and the existing `GRIM_STAFF_USER_IDS` allowlist control access; knowing the URL does not grant access.
+Staff can open `/admin/whatnot` or follow **Whatnot business** from the existing membership or custom-request admin pages. The public navigation and sitemap do not link to it. WorkOS sign-in and the existing `GRIM_STAFF_USER_IDS` allowlist control access; knowing the URL does not grant access. `GRIM_ADDITIONAL_STAFF_USER_IDS` adds exact WorkOS user IDs without replacing an existing unreadable sensitive allowlist. Only explicitly approved accounts should be added after matching their verified email to the production WorkOS user. Redeploy after changing either variable.
 
 The four views cover settled financial activity, show performance, listing groups and buyers, and downloadable records. Date and currency filters apply to all three CSV exports. **Refresh from Whatnot** requests new reports, then checks their progress while the dashboard remains open. Reports can also finish after the browser closes; opening the dashboard resumes collection. Refreshing is on request, without a scheduled job. The last successful import remains available if a replacement fails.
 

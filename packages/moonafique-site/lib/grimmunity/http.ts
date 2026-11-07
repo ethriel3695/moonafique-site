@@ -10,7 +10,9 @@ export async function requireMember() {
   return { id: user.id, email: user.email, emailVerified: user.emailVerified };
 }
 export function assertStaff(id: string) {
-  const allowed = (process.env.GRIM_STAFF_USER_IDS ?? "")
+  // Additions can be managed without replacing an existing sensitive Vercel
+  // allowlist whose value cannot be retrieved after creation.
+  const allowed = [process.env.GRIM_STAFF_USER_IDS, process.env.GRIM_ADDITIONAL_STAFF_USER_IDS].filter(Boolean).join(",")
     .split(",")
     .map((s) => s.trim())
     .filter(Boolean);
