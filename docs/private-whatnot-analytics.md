@@ -39,3 +39,16 @@ If Whatnot changes its report columns or download host, imports fail closed and 
 The analytics suite tests CSV parsing and formula escaping, signed money and quantity handling, DST/date comparisons, currency separation, unknown costs, account and report validation, anonymous/member denial, same-origin writes, private CSV headers, concurrency, idempotence, pending reports, and failed-import recovery. PostgreSQL integration tests require a disposable loopback database named `grim_test` via `WHATNOT_TEST_DATABASE_URL`.
 
 Run `pnpm test:whatnot`, `pnpm test:storefront`, and `pnpm exec tsc --noEmit` from `packages/moonafique-site`. Browser checks use synthetic records in a separate temporary checkout. Real financial exports and screenshots must remain outside Git and public assets.
+
+## Published verification — November 7, 2026
+
+Production deployment `dpl_6VEyPwKC7VLonR1YXHWWk2H6UT8v` serves both Moonafique domains from source commit `b29d431c68f2fc37361a5d08e8d1640d3a02d335` on `codex/brand-first-release`.
+
+- Passed 21 analytics tests, including five PostgreSQL integration tests, 73 storefront tests, and 27 membership/custom-request tests. TypeScript and focused lint checks passed.
+- Verified desktop layout, mobile layout at 390 pixels, date filtering, section navigation, listing search, table scrolling containment, and readable chart values for assistive technology.
+- Verified anonymous dashboard requests require sign-in; anonymous exports and refreshes return 401; cross-origin refreshes return 403. Ordinary-member denial and preservation of existing staff access are covered by authorization tests.
+- Matched the owner's two explicitly approved emails to verified production WorkOS accounts. Saved their IDs in the additive Production staff setting and local configuration, without replacing the original sensitive staff setting.
+- Opened the live dashboard with the authenticated owner account, completed a real report refresh, and downloaded the complete financial CSV. The downloaded totals reconciled with the imported reports.
+- Scanned 18 public client bundles for configured secrets. Public navigation contains no dashboard link. Public live shows, inventory recovery after a cold start, newsletter readiness, and membership enrollment checks passed.
+
+The immediately preceding deployment is `dpl_3qZQ2vmyL72gVLAWqsHE8Uyh2ExD`. It contains the dashboards before the additive staff-access update. No financial records, customer usernames, credentials, or real dashboard screenshots are stored in this repository.
