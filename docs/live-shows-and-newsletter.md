@@ -77,3 +77,7 @@ Marrowick, Hollowsmere, Veradell, and Glimmerfell are the four houses of Moonafi
 The owner confirmed one October Grim remains on Whatnot. Its card now shows “1 left on Whatnot,” with availability updated November 7, 2026. This stock count is owner-maintained; automatic Whatnot synchronization covers show dates, not edition inventory.
 
 The corrections are published on both public domains. The production build, staged checks, and public checks passed. Browser review confirmed the separate house section, all four loaded crests, the one-copy October badge, and the November 7 update date. The 390-pixel layout has no horizontal overflow, and the public page reported no console errors. Whatnot synchronization, newsletter signup, and membership enrollment remain active.
+
+## Inventory and signup follow-up
+
+The November 7 [inventory and signup release](whatnot-inventory-and-signup-20261107.md) supersedes the manual October count and update date described above. Remaining inventory now comes from Whatnot. That release also preserves signup fields through reauthentication and prevents search autofocus when the menu opens.

@@ -1,5 +1,7 @@
 # Whatnot inventory and membership signup
 
+Published November 7, 2026 to both `www.moonafique.com` and `moonafique.com`. Application source: `b97e4eea9f466c1d330c4ddbf167c5d6b35f6706`. Vercel deployment: `dpl_6KRXNaZv3tg55qBVuaunTmEAHNoE`. Previous production / rollback reference: `dpl_7Ut7uxyXttqzFD5RGZ94YEQFQXkc`.
+
 The Grim of the Month showcase reads remaining stock from Whatnot. The October 2026 edition maps to the owner-confirmed product `661335701`, “October Grimm of the Month.” Whatnot initially returned no variants for this product. After the owner added a variant, the production credential returned one available item.
 
 ## Inventory behavior
@@ -26,7 +28,11 @@ Opening the mobile menu focuses its heading, leaving search available by tapping
 - TypeScript and lint passed for changed files. Vercel built the production candidate successfully with the real inventory credential.
 - A browser check with simulated sign-in and a simulated expired-session quote restored all six colors, avoided colors, delivery fields, and six-month billing. The quote and agreement remained unset. The harness lived only in a temporary source copy and is not shipped.
 - At 390 × 844, the menu focused the heading, Tab reached search, Escape returned focus to Open menu, and the page had no horizontal overflow.
-- Staged checks verified October stock of one from Whatnot, public plan comparisons and sign-in entry points, existing show sync, house attribution, active newsletter readiness, membership availability, route authorization, and 18 client bundles without secrets.
+- Staged and public checks verified October stock of one from Whatnot, public plan comparisons and sign-in entry points, existing show sync, house attribution, active newsletter readiness, membership availability, route authorization, and 18 client bundles without secrets.
+
+The public browser also verified the authenticated form, updated shipping instructions, October’s imported one-copy badge, and mobile menu focus on the heading. The anonymous HTTP checks verified sign-in before editing on both collection pages. No real purchase or label was created.
+
+![Published mobile navigation](grim-club/screenshots/menu-focus-20261107.png)
 
 ## Private records and shipping
 
