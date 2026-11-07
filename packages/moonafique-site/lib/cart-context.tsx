@@ -21,18 +21,6 @@ function subscribe() {
   return () => {};
 }
 
-function HydratedCartProvider({
-  children,
-  storageKey,
-}: {
-  children: React.ReactNode;
-  storageKey: string;
-}) {
-  const cart = useCart(storageKey);
-
-  return <CartContext.Provider value={cart}>{children}</CartContext.Provider>;
-}
-
 export function CartProvider({
   children,
   storageKey = "cart",
@@ -40,20 +28,19 @@ export function CartProvider({
   children: React.ReactNode;
   storageKey?: string;
 }) {
+  const cart = useCart(storageKey);
   const mounted = useSyncExternalStore(
     subscribe,
     () => true,
     () => false,
   );
 
-  if (!mounted) {
-    return null;
-  }
-
+  // Render the page on the server. Only the saved cart waits for hydration;
+  // its first client snapshot must match the empty server snapshot.
   return (
-    <HydratedCartProvider storageKey={storageKey}>
+    <CartContext.Provider value={mounted ? cart : { ...cart, items: [], total: 0, loading: true }}>
       {children}
-    </HydratedCartProvider>
+    </CartContext.Provider>
   );
 }
 

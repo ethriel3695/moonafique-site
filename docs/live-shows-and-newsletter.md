@@ -20,8 +20,11 @@ Grimmfest has a dedicated section within Grimmunity, with the existing film, fou
 | Newsletter feedback disappeared in a toast. | Persistent inline confirmation, errors, visible email label, and explicit consent. |
 | A scheduled start is not evidence a broadcast is live. | Use “Scheduled today” after the start, with Whatnot as the source of current status. |
 | Keyboard focus was suppressed on some links. | Visible focus outlines, contrasting focus in Grimmfest, and an active navigation state. |
+| The cart provider hid the entire page until JavaScript loaded. | Page content now renders on the server, while saved cart details wait for hydration. |
 
 Reviewed desktop and 320, 390, and 768 pixel layouts. Phone layouts stack cards and controls, and the key pages have no horizontal overflow. Images retain their proportions; the Grimm group photo is framed closer using CSS. Reduced-motion preferences disable smooth scrolling; the existing film keeps its playback controls.
+
+The next content priority is real product photography: several current shop listings still display “Photo unavailable.” Adding accurate photos will help buyers judge those products. The new live-show and Grimmfest features use existing Moonafique photography and artwork.
 
 ## Maintaining show dates
 
@@ -37,7 +40,7 @@ Production requires `NEWSLETTER_SEND_EMAILS=approved`, the General segment ID, a
 
 Visitors consent through the form, then confirm their address using a 24-hour signed link before the app adds them to the newsletter segment. Existing unsubscribed contacts remain suppressed. Launch-interest signups do not silently become newsletter subscribers. This activation does not send a newsletter campaign.
 
-Verification includes the existing 17 database-backed opt-in tests and five date-selection tests, plus storefront regression tests, TypeScript, ESLint, and browser checks. Provider delivery to a real inbox requires a separate authorized test; the deployment preflight is read-only.
+Verification includes the existing 17 database-backed opt-in tests and 36 storefront tests, including date selection and initial page rendering, plus TypeScript, ESLint, and browser checks. A browser check confirmed that an added cart item survives reload without hydration errors and can be removed normally. Provider delivery to a real inbox requires a separate authorized test; the deployment preflight is read-only.
 
 ## Release settings
 

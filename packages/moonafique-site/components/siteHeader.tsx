@@ -1,5 +1,5 @@
 "use client";
-import { useId } from "react";
+import { Suspense, useId } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Menu, Search } from "lucide-react";
@@ -59,6 +59,11 @@ export function SiteHeader() {
   );
 }
 function SearchBar({ className }: { className?: string }) {
+  return <Suspense fallback={<div aria-hidden="true" className={cn("h-11 w-full md:w-44", className)} />}>
+    <SearchBarInput className={className} />
+  </Suspense>;
+}
+function SearchBarInput({ className }: { className?: string }) {
   const id = useId();
   const searchParams = useSearchParams();
   return (
