@@ -2,7 +2,7 @@
 
 Updated November 7, 2026.
 
-Published to both `www.moonafique.com` and `moonafique.com`. The deployed application source is commit `6306f49122467e022d9d0c9e6115c5461124125c`, Vercel deployment `dpl_8v2fCn4UURHZtkhvmzKLLPacuexB`. The previous release, `dpl_EmdTToQX7s8EqPC6fwL2UNNJCfeN`, remains the rollback reference.
+Published to both `www.moonafique.com` and `moonafique.com`. The deployed application source is commit `f59a5a4d4ec2554e0db3cb86e61d05048d2fe073`, Vercel deployment `dpl_2R8aPnUGz34BJfBs64GvFT8HpSLw`. The previous release, `dpl_8v2fCn4UURHZtkhvmzKLLPacuexB`, remains the rollback reference.
 
 The useful lesson from 3DA's Print Wars presentation is to give a recurring event a recognizable identity and preserve its finished work and recognition. Grimmfest now has that prominence within Grimmunity, while [Print Wars' monthly Hall of Fame](https://3d-addicts.com/print-wars/hall-of-fame/) provides supporting evidence for Moonafique's competition work.
 
@@ -52,7 +52,7 @@ Production requires `NEWSLETTER_SEND_EMAILS=approved`, the General segment ID, a
 
 Visitors consent through the form, then confirm their address using a 24-hour signed link before the app adds them to the newsletter segment. Existing unsubscribed contacts remain suppressed. Launch-interest signups do not silently become newsletter subscribers. This activation does not send a newsletter campaign.
 
-Verification includes the existing 17 database-backed opt-in tests and 36 storefront tests, including date selection and initial page rendering, plus TypeScript, ESLint, and browser checks. A browser check confirmed that an added cart item survives reload without hydration errors and can be removed normally. Provider delivery to a real inbox requires a separate authorized test; the deployment preflight is read-only.
+The newsletter release passed 17 database-backed opt-in tests. The current storefront suite passes 56 tests, including API pagination, account validation, private-show filtering, cancelled and empty schedules, stale data, live status, and initial page rendering. TypeScript, targeted ESLint, and production builds also pass. A browser check confirmed that an added cart item survives reload without hydration errors and can be removed normally. Provider delivery to a real inbox requires a separate authorized test; the deployment preflight is read-only.
 
 ## Release settings
 
@@ -61,3 +61,11 @@ The November 4 live release used deployment overrides for membership flags. Pres
 Stage production without changing domains, check newsletter readiness and the public routes, then promote. Keep the previous deployment available for rollback.
 
 For this release, the production build verified the sender, segment access, and confirmation storage. Staged and public checks passed for the homepage, Live Shows, Grimmunity, ACEOs, creations, confirmation page, newsletter input validation, same-origin protections, and protected membership endpoints. Both public domains point to the new deployment. Membership enrollment stayed open. Eighteen client bundles were checked for secret leakage. Public browser checks showed the new show card, Grimmfest feature, and active signup form without console errors.
+
+## Schedule sync release verification
+
+The owner saved `WHATNOT_API_TOKEN` as a Sensitive Production variable. The deployment check verified the Moonafique account and imported 96 public shows. The public snapshot contains the confirmed November 7 Grimmfest show at 8 p.m. Mountain, with the same viewer link on all three pages. No Whatnot show was changed.
+
+A browser left on the staged page advanced its update time from 1:38 to 1:41 a.m. Mountain without a reload. The shared API cache reused fresh responses and replaced an expired response after background refresh. Mouse and keyboard checks expanded the schedule from eight to sixteen and twenty-four dates. The page fits 320, 390, and 768 pixel widths without horizontal overflow, and the browser reported no console errors. Public checks passed after promotion, including all key pages, newsletter validation, protected membership endpoints, and a scan of 18 client bundles for credentials. Both public domains point to the verified deployment.
+
+Whatnot currently has two distinct listings for Plot Twists and Side Quests on November 19, 2026, at 8 p.m. Mountain: [first listing](https://www.whatnot.com/live/b2fc75df-2c0a-4c9a-b7ee-12407b199efb) and [second listing](https://www.whatnot.com/live/c565de87-eb8e-4e91-bb16-0bf27564d987). The website preserves both source records. If one is accidental, cancel it in Whatnot; the next successful sync will remove it from the website.
