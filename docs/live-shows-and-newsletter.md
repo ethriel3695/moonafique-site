@@ -2,6 +2,10 @@
 
 Updated November 7, 2026.
 
+Published to both `www.moonafique.com` and `moonafique.com`. The deployed application source is commit `6306f49122467e022d9d0c9e6115c5461124125c`, Vercel deployment `dpl_8v2fCn4UURHZtkhvmzKLLPacuexB`. The previous release, `dpl_EmdTToQX7s8EqPC6fwL2UNNJCfeN`, remains the rollback reference.
+
+The useful lesson from 3DA's Print Wars presentation is to give a recurring event a recognizable identity and preserve its finished work and recognition. Grimmfest now has that prominence within Grimmunity, while [Print Wars' monthly Hall of Fame](https://3d-addicts.com/print-wars/hall-of-fame/) provides supporting evidence for Moonafique's competition work.
+
 ## Visitor experience
 
 The homepage next-show card leads directly to the scheduled Whatnot show. The Live Shows page provides selected upcoming dates, a Grimmfest introduction, Print Wars recognition, and instructions for first-time viewers. Both use the existing cream, purple, serif headings, rounded cards, and product photography.
@@ -34,7 +38,7 @@ The next-show card and Grimmfest feature use the same data. They refresh on page
 
 ## Newsletter activation
 
-The old public page was paused because `NEWSLETTER_SEND_EMAILS` was disabled and `RESEND_NEWSLETTER_SEGMENT_ID` was missing. The intended general newsletter segment is Resend's existing General segment, separate from membership launch notifications.
+The old public page was paused because `NEWSLETTER_SEND_EMAILS` was disabled and `RESEND_NEWSLETTER_SEGMENT_ID` was missing. Signups are now active and use Resend's existing General segment (`55b393d8-c0bb-4d18-b0d7-eb99c3ee93fd`), separate from membership launch notifications. Both settings are saved in Vercel's Production environment.
 
 Production requires `NEWSLETTER_SEND_EMAILS=approved`, the General segment ID, an existing full-access Resend key, a verified sender, the live opt-in database, signing secret, and canonical site URL. `scripts/check-newsletter.ts` runs during deployment and verifies the provider connection and confirmation storage without sending mail or adding contacts. It blocks an enabled live newsletter build when the connection is incomplete.
 
@@ -47,3 +51,5 @@ Verification includes the existing 17 database-backed opt-in tests and 36 storef
 The November 4 live release used deployment overrides for membership flags. Preserve `GRIM_LIVE_ENROLLMENT`, `GRIM_MANAGED_COLLECTION`, `GRIM_SEND_EMAILS`, and `CONTACT_SEND_EMAILS` as `approved`, `GRIM_REVIEW_UI=false`, and blank `GRIM_PRODUCTION_SETUP` and `GRIM_INTEREST_SMOKE_CLEANUP`. Do not rerun the historical November launch script. This update changes newsletter configuration and presentation, not membership billing or edition data.
 
 Stage production without changing domains, check newsletter readiness and the public routes, then promote. Keep the previous deployment available for rollback.
+
+For this release, the production build verified the sender, segment access, and confirmation storage. Staged and public checks passed for the homepage, Live Shows, Grimmunity, ACEOs, creations, confirmation page, newsletter input validation, same-origin protections, and protected membership endpoints. Both public domains point to the new deployment. Membership enrollment stayed open. Eighteen client bundles were checked for secret leakage. Public browser checks showed the new show card, Grimmfest feature, and active signup form without console errors.
