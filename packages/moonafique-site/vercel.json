@@ -4,7 +4,7 @@
       "codex/site-checkpoint-2026-10-26": false
     }
   },
-  "buildCommand": "pnpm exec tsx scripts/grimmunity/prepare-deployment.ts && pnpm exec tsx scripts/check-newsletter.ts && pnpm exec tsx scripts/check-whatnot.ts && pnpm build",
+  "buildCommand": "pnpm exec tsx scripts/grimmunity/prepare-deployment.ts && pnpm exec tsx scripts/check-newsletter.ts && pnpm exec tsx scripts/check-whatnot.ts && pnpm exec tsx scripts/check-whatnot-inventory.ts && pnpm build",
   "crons": [
     { "path": "/api/grimmunity/worker", "schedule": "0 12 * * *" },
     { "path": "/api/custom-requests/notifications", "schedule": "0 0 * * *" }
