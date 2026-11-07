@@ -54,3 +54,13 @@ No customer contact fields, tokens, provider report URLs, or raw Notion exports 
 `pnpm test:whatnot` includes costing arithmetic, explicit unit import, incomplete coverage, refund handling, route authorization/CSRF/size limits, concurrent writes, reference snapshot preservation, and revision history. Database tests require `WHATNOT_TEST_DATABASE_URL` pointing to a disposable loopback database named `grim_test`.
 
 The browser workflow was checked with synthetic local jobs: save/reload, expected cost and earnings calculations, CSV preview/import, and a 390-pixel mobile layout. Live deployment and staff import verification are recorded in the release notes.
+
+## Release verification — November 7, 2026
+
+Published application commit `a07079b66a5ba518da899722fc63c2b327a36cb3` as Vercel deployment `dpl_F3kHbGZq4fFhctqR7owyWer5LE3j`. Both production aliases point to this deployment. The previous deployment is `dpl_6VEyPwKC7VLonR1YXHWWk2H6UT8v`; the additive schema can remain if application rollback is needed.
+
+TypeScript, all 33 analytics/costing tests (including disposable PostgreSQL integration tests), and all 73 storefront tests passed. The production build verified the private schema and Whatnot account. Staged and published checks confirmed login redirects for private pages, 401 responses for anonymous data/export/write requests, 403 for cross-origin writes, and no private analytics links or secrets in public assets. The initial schedule and inventory checks needed cache warm-up; the final staged and public runs passed with fresh provider snapshots and the confirmed October quantity of one.
+
+The authenticated production browser loaded the private workspace successfully. Imported the owner’s Notion export using explicitly selected per-gram prices: 70 named references, five unnamed rows skipped, 44 references with review notes (primarily missing batch quantities). The snapshot survived a reload, search worked, and starting a job copied the expected grams, $/kg conversion, machine hours, and packaging values. The production form and reference list fit a 390-pixel viewport without horizontal overflow. Production browser error logs were empty.
+
+No synthetic jobs were saved to production. M.A.S.H. Machine costs remain blank until actual usage and time are entered. The test job, test receipts, and test reference imports stayed in the disposable local database. A local navigation check confirmed that cancelling the leave-page prompt retains unsaved job edits.
