@@ -1,5 +1,5 @@
 // Bounded RFC 4180 reader. Reports may contain commas/newlines inside quoted titles.
-export function parseCsv(source: string, requiredHeaders: readonly string[] = []): Record<string, string>[] {
+export function parseCsv(source: string, requiredHeaders: readonly string[] = [], headerStyle: "report" | "notion" = "report"): Record<string, string>[] {
   if (Buffer.byteLength(source, "utf8") > 25_000_000) throw Error("report_too_large");
   const text = source.replace(/^\uFEFF/, "");
   const rows: string[][] = [];
@@ -20,7 +20,7 @@ export function parseCsv(source: string, requiredHeaders: readonly string[] = []
   if (quoted) throw Error("invalid_csv");
   if (value || row.length || closed) line();
   const headers = rows.shift();
-  if (!headers?.length || new Set(headers).size !== headers.length || headers.some(h => !/^[a-z][a-z0-9_]*$/.test(h))) throw Error("invalid_csv_headers");
+  if (!headers?.length || new Set(headers).size !== headers.length || headers.some(h => headerStyle === "report" ? !/^[a-z][a-z0-9_]*$/.test(h) : !h.trim() || h.length > 150 || /[\r\n\x00-\x1f]/.test(h))) throw Error("invalid_csv_headers");
   if (requiredHeaders.some(header => !headers.includes(header))) throw Error("missing_report_columns");
   return rows.map(values => {
     if (values.length !== headers.length) throw Error("invalid_csv_columns");

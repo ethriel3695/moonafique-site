@@ -8,15 +8,18 @@ import { normalizeDaily, normalizeLedger, normalizeShows, reportTypes, type Anal
 
 export type Refresh = { id: string; status: "requesting" | "pending" | "ready" | "failed"; seller_id: string; currency: string; coverage_start: Date; coverage_end: Date; requested_at: Date; finished_at: Date | null; report_ids: Partial<Record<ReportType, string>>; error_code: string | null };
 export async function migrateAnalytics(pool: Pool) {
-  const sql = await readFile(path.join(process.cwd(), "db/whatnot-analytics/001_private_reports.sql"), "utf8");
+  const migrations = await Promise.all(["001_private_reports.sql", "002_job_costs.sql"].map(file => readFile(path.join(process.cwd(), "db/whatnot-analytics", file), "utf8")));
   await transaction(pool, async db => {
     await db.query("SELECT pg_advisory_xact_lock(hashtext('whatnot:analytics-migration'))");
     await db.query("CREATE SCHEMA IF NOT EXISTS whatnot_private");
     await db.query("CREATE TABLE IF NOT EXISTS whatnot_private.schema_migrations(version integer PRIMARY KEY,checksum text NOT NULL,applied_at timestamptz NOT NULL DEFAULT now())");
-    const checksum = createHash("sha256").update(sql).digest("hex");
-    const applied = (await db.query<{ checksum: string }>("SELECT checksum FROM whatnot_private.schema_migrations WHERE version=1")).rows[0];
-    if (applied && applied.checksum !== checksum) throw Error("Analytics migration checksum changed.");
-    if (!applied) { await db.query(sql); await db.query("INSERT INTO whatnot_private.schema_migrations(version,checksum) VALUES(1,$1)", [checksum]); }
+    for (const [index, sql] of migrations.entries()) {
+      const version = index + 1;
+      const checksum = createHash("sha256").update(sql).digest("hex");
+      const applied = (await db.query<{ checksum: string }>("SELECT checksum FROM whatnot_private.schema_migrations WHERE version=$1", [version])).rows[0];
+      if (applied && applied.checksum !== checksum) throw Error("Analytics migration checksum changed.");
+      if (!applied) { await db.query(sql); await db.query("INSERT INTO whatnot_private.schema_migrations(version,checksum) VALUES($1,$2)", [version, checksum]); }
+    }
   });
 }
 export async function readAnalytics(pool: Pool) {

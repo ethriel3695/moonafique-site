@@ -18,6 +18,7 @@ export default authkitMiddleware({
       // These handlers enforce requireStaff and return JSON 401/403 instead of an OAuth redirect.
       '/admin/whatnot/refresh',
       '/admin/whatnot/export',
+      '/admin/whatnot/costs/data',
       '/contact',
       '/customs',
       '/api/custom-requests/:path*',

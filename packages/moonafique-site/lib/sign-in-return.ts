@@ -1,4 +1,4 @@
-const allowedPaths = new Set(["/communities", "/grimmunity", "/aceos", "/account/grimmunity", "/admin/whatnot"]);
+const allowedPaths = new Set(["/communities", "/grimmunity", "/aceos", "/account/grimmunity", "/admin/whatnot", "/admin/whatnot/costs"]);
 
 export function signInReturnPath(requested: string | null): string | undefined {
   if (!requested?.startsWith("/") || requested.startsWith("//")) return undefined;
