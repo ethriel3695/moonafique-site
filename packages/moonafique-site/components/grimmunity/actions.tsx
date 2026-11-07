@@ -649,7 +649,9 @@ export function JoinForm({
             />
             <span>
               {total === null
-                ? "The full monthly total will be available once the shipping fee is set. Checkout is closed."
+                ? dynamicShipping
+                  ? "Calculate shipping to review your total before agreeing to the membership."
+                  : "The full monthly total will be available once the shipping fee is set. Checkout is closed."
                 : managedBilling
                   ? `I agree to ${money({ amount: billing.amount, currency })} for ${billingMonths} month${billingMonths === 1 ? "" : "s"} of ${tier.name}, renewing at that interval until I cancel renewal. Shipping is charged separately each month at the quoted carrier price, plus applicable tax. Future automatic payments follow an itemized email delivered at least seven days beforehand. I will save my card, then review and pay the first invoice to confirm my membership.`
                   : `I agree to ${money({ amount: total, currency })}${taxAdded ? " plus applicable sales tax" : ""} per month for ${tier.name}${tier.shipping ? ", including the separately listed shipping fee" : ""}, starting today and renewing monthly until I cancel future renewals.`}
@@ -679,7 +681,7 @@ export function JoinForm({
                         : `Join ${tier.name}`}
           </Button>
           <p className="text-xs leading-5 text-muted-foreground">
-            Sign in to join. Pay securely with Stripe, then manage your
+            Pay securely with Stripe, then manage your
             membership in your account.
           </p>
           {error && (
