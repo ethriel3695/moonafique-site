@@ -10,9 +10,9 @@ export default function ShippingPolicyPage() {
     <section className="space-y-4"><h2 className="text-2xl">One-time shop orders</h2>
       <p>We currently ship website orders within the United States. Enter your delivery address at checkout and review shipping before you pay.</p>
       <ul className="list-disc space-y-2 pl-5">
-        <li>Standard shipping: {formatCurrency(shopShipping.standard.amount)}, with an estimated {shopShipping.standard.estimate} in transit.</li>
-        <li>Express shipping: {formatCurrency(shopShipping.express.amount)}, with an estimated {shopShipping.express.estimate} in transit.</li>
-        <li>Free standard shipping on shop orders with an item subtotal of {formatCurrency(shopShipping.freeThreshold)} or more, before shipping and tax.</li>
+        <li>Standard shipping: {formatCurrency(shopShipping.standard.amount / 100)}, with an estimated {shopShipping.standard.estimate} in transit.</li>
+        <li>Express shipping: {formatCurrency(shopShipping.express.amount / 100)}, with an estimated {shopShipping.express.estimate} in transit.</li>
+        <li>Free standard shipping on shop orders with an item subtotal of {formatCurrency(shopShipping.freeThreshold / 100)} or more, before shipping and tax.</li>
       </ul>
       <p className="text-muted-foreground">Transit estimates begin after dispatch and are not guaranteed delivery dates. The shipping options available for your order are shown at checkout.</p>
     </section>
