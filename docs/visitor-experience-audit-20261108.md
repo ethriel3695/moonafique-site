@@ -31,7 +31,7 @@ Tier IDs (`grimm_starter` and `grimm_keeper`), Stripe product and price IDs, sav
 ## Verification
 
 - Read-only crawl of 16 public pages: all returned HTTP 200; no missing image-alt attributes or broken internal anchors were found among those pages. The missing creations-page H1 was corrected.
-- Desktop and 390-pixel mobile browser checks covered the edition label, membership selection, search recovery, and menu focus. The mobile menu focuses its heading rather than the search input. The checked mobile pages had no horizontal overflow.
+- Desktop and 390-pixel mobile browser checks covered the edition label, membership selection, search recovery, cart quantities and prices, and menu focus. Live pagination expanded the catalog from eight to nine pieces without losing the first page. The mobile menu focuses its heading rather than the search input. The checked mobile pages had no horizontal overflow.
 - An isolated local fixture exercised catalog failure followed by a successful retry. No real emails or payments were submitted in browser testing.
 - Automated coverage includes edition formatting, retryable product requests, saved membership identity, the $100 shipping boundary, U.S. address collection, checkout return links, and paid/pending/unavailable confirmation states.
 - Production builds now verify the configured live Stripe shipping rates and checkout return origin before publishing.
@@ -39,3 +39,13 @@ Tier IDs (`grimm_starter` and `grimm_keeper`), Stripe product and price IDs, sav
 This is a focused usability and implementation audit. It is not a complete accessibility certification, legal review of policies, or an end-to-end paid-order fulfillment test.
 
 Stripe reference consulted for the confirmation flow: [Customize redirect behavior](https://docs.stripe.com/payments/checkout/custom-success-page).
+
+## Published release
+
+Published to https://www.moonafique.com on November 8, 2026 from application commit `0bf4f4a9841db4cd075ff8f7f5d3a96a13cf5093` (Vercel deployment `dpl_Hgqs5F1fgmaRveDhQVfuXQ9gaHzP`). Both public domain aliases were verified.
+
+Validation covered 87 storefront tests and 20 targeted membership tests, TypeScript, and lint checks of the changed interactive and checkout code. Staged and public smoke checks passed. Eighteen client bundles were checked for credential exposure. Private analytics and cost exports rejected unauthenticated requests, and cross-origin writes were rejected.
+
+The final candidate created one unpaid checkout session with the expected U.S. address collection, live shipping rates, and return links. That session was immediately expired. The earlier candidate's unpaid audit session was also expired. No payments, membership changes, or customer emails were made during these checks.
+
+The live browser confirmed both new names retain their existing tier values, the edition reads “November 2026 collection,” the mobile page fits a 390-pixel viewport, and the navigation menu focuses its heading. The final public browser checks reported no production console errors or warnings in the inspected log entries.
