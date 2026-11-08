@@ -1,13 +1,13 @@
 import type { Pool } from "pg";
 import { transaction } from "../grimmunity/db";
-import { costInput, costOrders, type CostJob, type CostReference, type ReferenceImport } from "./costs";
+import { allocatedUnits, costInput, costOrders, type CostJob, type CostReference, type ReferenceImport } from "./costs";
 import type { AnalyticsSnapshot } from "./model";
 
 export class CostError extends Error {
   constructor(public code: "conflict" | "order_link" | "reference_missing" | "invalid" | "limit", public status = 400) { super(code); }
 }
 type JobRow = { id: string; revision: number; data: CostJob["data"]; reference: CostJob["reference"]; updated_at: Date };
-const asJob = (row: JobRow): CostJob => ({ id: row.id, revision: row.revision, data: row.data, reference: row.reference, updatedAt: row.updated_at.toISOString() });
+const asJob = (row: JobRow): CostJob => ({ id: row.id, revision: row.revision, data: costInput.parse(row.data), reference: row.reference, updatedAt: row.updated_at.toISOString() });
 export async function readCosts(pool: Pool) {
   const [jobs, references, snapshots, links] = await Promise.all([
     pool.query<JobRow>("SELECT * FROM whatnot_private.cost_jobs ORDER BY updated_at DESC LIMIT 5000"),
@@ -48,7 +48,7 @@ export async function saveCostJob(pool: Pool, id: string, revision: number, raw:
       const snapshot = (await db.query<{ data: AnalyticsSnapshot }>("SELECT data FROM whatnot_private.snapshot WHERE singleton=true")).rows[0]?.data ?? null;
       const orders = costOrders(snapshot);
       const selected = data.orderIds.map(id => orders.find(o => o.id === id && o.currency === data.currency));
-      if (selected.some(o => !o) || selected.reduce((n, o) => n + (o?.quantity ?? 0), 0) !== data.units) throw new CostError("order_link");
+      if (selected.some(o => !o || allocatedUnits(data, o) > o.quantity) || selected.reduce((n, o) => n + (o ? allocatedUnits(data, o) : 0), 0) > data.units - data.vaultUnits) throw new CostError("order_link");
       if ((await db.query("SELECT 1 FROM whatnot_private.cost_order_links WHERE order_id=ANY($1::text[]) AND currency=$2 AND job_id<>$3", [data.orderIds, data.currency, id])).rowCount) throw new CostError("order_link", 409);
     }
     const next = revision + 1;

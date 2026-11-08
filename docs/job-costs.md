@@ -21,7 +21,7 @@ Reference cards show the original Notion cost per unit, which excludes hands-on 
 5. Add time entries by person and activity. The editable $25/hour default is a suggested planning allowance, not payroll or a market wage estimate.
 6. Confirm the cost and time records are complete. Missing values do not become zero cost.
 7. Link settled Whatnot orders, or enter net receipts from another channel. Quotes and unpaid requests stay without receipts.
-8. Mark the job completed when finished. Only completed non-development jobs with full cost and receipt coverage enter the main result totals.
+8. Mark the job completed when finished. Only completed, sold-out non-development jobs with reviewed costs, time, and receipts enter the main result totals.
 
 Use development jobs for prototype/design work that should not be charged repeatedly to each future item. Their recorded hours appear separately. A failed or development job may have zero finished units; per-unit cost is then unavailable.
 
@@ -33,11 +33,23 @@ Amounts are stored in integer USD cents. Material and time products are summed b
 - Earnings after machine allowance = cash after direct costs − machine hours × machine allowance.
 - Contribution after valued labor = earnings after machine allowance − person-hours × each entry’s labor rate.
 - Earned per hands-on hour = earnings after machine allowance ÷ recorded person-hours, before the labor allowance.
-- Cost per finished unit = all recorded job costs, including machine and labor allowances, ÷ finished units.
+- Cost per sellable copy = all recorded job costs, including vault copies, machine and labor allowances, ÷ (finished units − vault copies).
 
 Linked Whatnot earnings sum signed ledger entries for the selected order IDs and currency, including order-attributed refunds. Fees and shipping are already included in that net figure. Provider cost-of-goods values are not subtracted again. Account adjustments without order IDs, bank deposits, business overhead, income tax, and sales outside linked jobs are not included. Job dates drive the cost workspace filters; they are not settlement dates.
 
-Each Whatnot order can belong to only one job, including archived jobs. Selected orders’ combined sold quantity must equal the job’s finished units. A job can cover a batch across multiple orders, but cannot allocate a fraction of one order to separate jobs. Search uses item titles or exact order IDs; ambiguous titles are never auto-matched. Refreshing financial reports updates linked earnings. Manual receipts require manual updates for later payments or refunds.
+Each Whatnot order can belong to only one job, including archived jobs. Selected orders can cover part of a batch. Their allocated physical copies cannot exceed the sellable batch. For a paid rerun, allocate zero copies to one transaction and explain why. Both receipts still count. An allocation cannot exceed the provider quantity. A job can cover a batch across multiple orders, but cannot allocate a fraction of one order to separate jobs. Search uses item titles or exact order IDs; ambiguous titles are never auto-matched. Refreshing financial reports updates linked earnings. Manual receipts require manual updates for later payments or refunds.
+
+## Batch stock and asking prices
+
+Record all printed copies, copies kept for the vault, and a target selling price. Full-run target gross is sellable copies multiplied by that price. It never becomes actual receipts.
+
+The sold count and gross item sales are dated staff records, including paid sales awaiting settlement. Count each physical copy once, even when a supporter pays and donates it for a second auction. Record both paid transactions in gross sales. Leave counts unknown until confirmed. These fields do not synchronize inventory; update the dated record after sales or returns.
+
+Link exact settled order IDs as reports become available. A paid rerun can use zero physical copies on one order, with a required reason. This keeps its receipt without charging for another printed copy. Do not enter a buyer’s total payment as net earnings. Gross sales exclude buyer shipping and tax.
+
+The job’s batch balance subtracts the entire run’s costs from receipts linked so far. Unsold stock costs are included, so this is not profit per sold copy. The summary excludes jobs until production, sell-through, costs, time, and receipts are complete. Entered costs per sellable copy exclude unknown fields and remain provisional until reviewed.
+
+New batch fields use defaults when reading older records. No migration rewrites existing job history.
 
 ## Storage and recovery
 

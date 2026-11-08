@@ -31,8 +31,19 @@ describe.skipIf(!connection)("private job costing storage", () => {
     expect(Number((await pool.query("SELECT count(*) FROM whatnot_private.cost_job_history")).rows[0].count)).toBe(2);
   });
   it("rejects unknown orders and quantity mismatch without partial writes", async () => {
-    for (const bad of [{ ...input(), units: 2 }, { ...input(), orderIds: ["missing"] }]) await expect(saveCostJob(pool, randomUUID(), 0, bad, "staff")).rejects.toMatchObject({ code: "order_link" });
+    for (const bad of [{ ...input(), units: 0 }, { ...input(), orderIds: ["missing"] }]) await expect(saveCostJob(pool, randomUUID(), 0, bad, "staff")).rejects.toMatchObject({ code: "order_link" });
     expect((await readCosts(pool)).jobs).toHaveLength(0);
+  });
+  it("stores partially sold batches and allocates rerun revenue without another physical unit", async () => {
+    const partial = await saveCostJob(pool, randomUUID(), 0, { ...input(), units: 3, vaultUnits: 1, soldUnits: 1, soldAsOf: "2026-11-07", targetPrice: 2500 }, "staff");
+    expect(partial.data).toMatchObject({ units: 3, vaultUnits: 1, soldUnits: 1 });
+    await saveCostJob(pool, partial.id, 1, { ...partial.data, unitAllocations: [{ orderId: "order-1", units: 0, reason: "Buyer paid and donated this copy to be rerun" }] }, "staff");
+    await expect(saveCostJob(pool, partial.id, 2, { ...partial.data, unitAllocations: [{ orderId: "order-1", units: 2, reason: "Invalid extra copy" }] }, "staff")).rejects.toMatchObject({ code: "order_link" });
+  });
+  it("reads old records with batch defaults", async () => {
+    const job = await saveCostJob(pool, randomUUID(), 0, input(), "staff");
+    await pool.query("UPDATE whatnot_private.cost_jobs SET data=data-'vaultUnits'-'targetPrice'-'soldUnits'-'soldAsOf'-'recordedGross'-'unitAllocations' WHERE id=$1", [job.id]);
+    expect((await readCosts(pool)).jobs[0].data).toMatchObject({ vaultUnits: 0, targetPrice: null, soldUnits: null, recordedGross: null, unitAllocations: [] });
   });
   it("preserves the recipe snapshot and historical costs when references change", async () => {
     const csv = 'Inventory,Filament,Filament Used (g),Filament Cost ($/kg),Estimated Time (hrs),Hourly Machine Rate ($/hr),Number on Plate,Packaging Cost,"Post-processing Cost (Paint, Sand, etc.)",Total Cost (Per Print)\nExample,PLA,100,.025,2,.48,1,.5,0,3.96\n';

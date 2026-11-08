@@ -52,3 +52,24 @@ it("rejects forged fields, non-finite amounts, invalid dates, and mixed earnings
   expect(costInput.safeParse({ ...completeJob(), date: "2026-02-30" }).success).toBe(false);
   expect(costInput.safeParse({ ...completeJob(), orderIds: ["order-1"] }).success).toBe(false);
 });
+
+it("allocates the vault across sellable units and separates gross targets from actual receipts", () => {
+  const job = { ...completeJob(), units: 12, vaultUnits: 1, soldUnits: 2, soldAsOf: "2026-11-07", targetPrice: 2500, recordedGross: 5900, revenue: "none" as const, manualNet: null, materials: [{ name: "White PLA", grams: 1234.8, pricePerKg: 1500 }], time: [{ person: "Combined", activity: "All work", minutes: 180, rate: 2500 }], machineHours: 102, machineRate: null, extras: [{ name: "Packaging", cents: null }], reviewed: false, timeComplete: false };
+  expect(costTotals(job, [])).toMatchObject({ sellableUnits: 11, soldUnits: 2, remainingUnits: 9, targetGross: 27500, materialCost: 1852, laborCost: 7500, enteredCost: 9352, enteredPerSellable: 850, totalCost: null, net: null, afterLabor: null });
+  expect(costInput.safeParse({ ...job, vaultUnits: 13 }).success).toBe(false);
+  expect(costInput.safeParse({ ...job, soldUnits: 12 }).success).toBe(false);
+  expect(costInput.safeParse({ ...job, soldAsOf: null }).success).toBe(false);
+});
+it("counts paid rerun receipts once each while allocating physical copies separately", () => {
+  const orders = costOrders(snapshot({ ledger: [ledger({ orderId: "first", amount: 2200 }), ledger({ id: "second", orderId: "rerun", amount: 750 }), ledger({ id: "third", orderId: "another", amount: 2200 })] }));
+  const job = { ...completeJob(), units: 3, vaultUnits: 1, soldUnits: 2, soldAsOf: "2026-11-07", revenue: "whatnot" as const, manualNet: null, orderIds: ["first", "rerun", "another"], unitAllocations: [{ orderId: "first", units: 0, reason: "Paid rerun" }] };
+  expect(costTotals(job, orders)).toMatchObject({ linkedUnits: 2, remainingUnits: 0, net: 5150 });
+  expect(costTotals({ ...job, unitAllocations: [] }, orders).net).toBeNull();
+  expect(costInput.safeParse({ ...job, unitAllocations: [{ orderId: "missing", units: 0, reason: "Paid rerun" }] }).success).toBe(false);
+  expect(costInput.safeParse({ ...job, unitAllocations: [{ orderId: "first", units: 0, reason: "" }] }).success).toBe(false);
+});
+it("allows partial settled receipts without calling them sellout proceeds", () => {
+  const orders = costOrders(snapshot({ ledger: [ledger({ amount: 2200 })] }));
+  const t = costTotals({ ...completeJob(), units: 4, vaultUnits: 1, targetPrice: 2500, revenue: "whatnot", manualNet: null, orderIds: ["order-1"] }, orders);
+  expect(t).toMatchObject({ linkedUnits: 1, net: 2200, remainingUnits: null, targetGross: 7500, receiptsKnown: false });
+});
