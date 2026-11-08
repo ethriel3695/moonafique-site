@@ -29,6 +29,7 @@ export function LiveShowsProvider({ initialSchedule, children }: { initialSchedu
       } catch { /* Keep the last successful response; the UI checks its age. */ }
       finally { window.clearTimeout(timeout); pending = false; }
     };
+    if (scheduleState(initialSchedule, new Date()) !== "current") void refresh();
     const timer = window.setInterval(refresh, 60_000);
     window.addEventListener("focus", refresh);
     document.addEventListener("visibilitychange", refresh);
@@ -39,7 +40,7 @@ export function LiveShowsProvider({ initialSchedule, children }: { initialSchedu
       window.removeEventListener("focus", refresh);
       document.removeEventListener("visibilitychange", refresh);
     };
-  }, []);
+  }, [initialSchedule]);
   return <ScheduleContext.Provider value={schedule}>{children}</ScheduleContext.Provider>;
 }
 

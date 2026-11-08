@@ -20,7 +20,7 @@ export default function CreationsPage() {
           appearance here does not indicate shop availability.
         </p>
       </div>
-      <CreationsShowcase />
+      <CreationsShowcase headingLevel={1} />
     </div>
   );
 }

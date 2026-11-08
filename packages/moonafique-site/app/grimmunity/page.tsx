@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 export const metadata = {
   title: "Grimmunity | Moonafique",
   description:
-    "Collect a new Grimm each month: mystery characters with Starter or exclusive painted finishes with Keeper. Memberships from $15, plus shipping.",
+    "Collect a new Grimm each month: mystery characters with The Grimm Path or exclusive painted finishes with Grimmoire Collection. Memberships from $15, plus shipping.",
 };
 export default async function GrimmunityPage() {
   const [offer, schedule, inventory] = await Promise.all([publicOfferProps("grimm"), getLiveSchedule(), getShowcaseInventory()]);

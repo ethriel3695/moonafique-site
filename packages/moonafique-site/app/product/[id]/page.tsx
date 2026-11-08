@@ -6,6 +6,8 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
 import { AlertTriangle } from 'lucide-react';
+import Link from 'next/link';
+import { shopShipping } from '@/lib/shop-shipping';
 
 export default async function ProductPage({
   params,
@@ -42,6 +44,7 @@ export default async function ProductPage({
                 alt={product.name}
                 fill
                 className="object-cover"
+                sizes="(max-width: 768px) 100vw, 50vw"
                 priority
               />
             ) : (
@@ -109,7 +112,7 @@ export default async function ProductPage({
                 <div>
                   <h3 className="font-semibold">Size</h3>
                   <p className="text-muted-foreground">
-                    {product.metadata?.size}
+                    {product.metadata?.size || "Contact us for measurements before ordering."}
                   </p>
                 </div>
               </div>
@@ -125,12 +128,13 @@ export default async function ProductPage({
                   </p>
                 </div>
                 <div>
-                  <h3 className="font-semibold">Shipping Options</h3>
+                  <h3 className="font-semibold">U.S. shipping options</h3>
                   <p className="text-muted-foreground">
-                    Standard shipping: 3-5 business days
+                    Standard shipping: {shopShipping.standard.estimate}
                     <br />
-                    Express shipping: 1-2 business days
+                    Express shipping: {shopShipping.express.estimate}
                   </p>
+                  <Link href="/shipping" className="mt-3 inline-block font-semibold text-primary underline underline-offset-4">Shipping prices and delivery details</Link>
                 </div>
               </div>
             </TabsContent>

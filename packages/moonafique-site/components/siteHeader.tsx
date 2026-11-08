@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import {
   Sheet,
   SheetTitle,
+  SheetDescription,
   SheetContent,
   SheetClose,
   SheetTrigger,
@@ -81,6 +82,7 @@ function SearchBarInput({ className }: { className?: string }) {
         aria-hidden="true"
       />
       <Input
+        key={searchParams.get("search") ?? ""}
         type="search"
         name="search"
         id={id}
@@ -115,6 +117,7 @@ function Sidebar() {
         className="flex w-[min(90vw,380px)] flex-col gap-6 overflow-y-auto bg-background p-6 pt-14"
       >
         <SheetTitle ref={titleRef} tabIndex={-1} className="text-2xl">Explore Moonafique</SheetTitle>
+        <SheetDescription className="sr-only">Browse our collections, live shows, and memberships, or search the shop.</SheetDescription>
         <SearchBar />
         <nav aria-label="Mobile navigation" className="grid gap-2">
           {siteNavigation.map((item) => (

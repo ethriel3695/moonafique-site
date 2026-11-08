@@ -10,5 +10,6 @@ export async function GET(request: NextRequest) {
     starting_after: cursor || undefined,
     search: search || undefined,
   });
+  if (!products) return NextResponse.json({ error: "The shop could not load. Please try again." }, { status: 503 });
   return NextResponse.json(products);
 }

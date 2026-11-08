@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
+import { shopShipping } from '@/lib/shop-shipping';
 
 const faqs = [
   {
@@ -16,8 +17,8 @@ const faqs = [
     paragraphs: ['Shipping windows depend on whether an item is ready to ship or printed to order.'],
     bullets: [
       'In-stock pieces typically ship within 1 to 2 business days.',
-      'Standard shipping usually arrives within 3 to 5 business days.',
-      'Express shipping generally arrives within 1 to 2 business days.',
+      `Standard shipping is estimated at ${shopShipping.standard.estimate} after dispatch.`,
+      `Express shipping is estimated at ${shopShipping.express.estimate} after dispatch.`,
     ],
   },
   {
@@ -71,6 +72,9 @@ export function FAQ() {
               className="overflow-hidden rounded-[1.5rem] border border-border/70 bg-background/90 shadow-soft"
             >
               <button
+                type="button"
+                aria-expanded={openIndex === index}
+                aria-controls={`faq-answer-${index}`}
                 className="flex w-full items-center justify-between gap-6 px-5 py-5 text-left transition-colors hover:bg-surface/80"
                 onClick={() => toggleFAQ(index)}
               >
@@ -78,13 +82,13 @@ export function FAQ() {
                   {faq.question}
                 </span>
                 <ChevronDown
+                  aria-hidden="true"
                   className={`h-5 w-5 shrink-0 text-muted-foreground transition-transform ${
                     openIndex === index ? 'rotate-180' : ''
                   }`}
                 />
               </button>
-              {openIndex === index && (
-                <div className="border-t border-border/70 bg-surface/60 px-5 py-5">
+                <div id={`faq-answer-${index}`} hidden={openIndex !== index} className="border-t border-border/70 bg-surface/60 px-5 py-5">
                   <div className="space-y-4 text-base leading-7 text-muted-foreground">
                     {faq.paragraphs.map((paragraph) => (
                       <p key={paragraph}>{paragraph}</p>
@@ -98,7 +102,6 @@ export function FAQ() {
                     )}
                   </div>
                 </div>
-              )}
             </div>
           ))}
         </div>

@@ -30,9 +30,12 @@ function PhotoPlaceholder({ label, compact = false }: { label: string; compact?:
 
 export function CreationsShowcase({
   creations = printWarsCreations,
+  headingLevel = 2,
 }: {
   creations?: PrintWarsCreation[];
+  headingLevel?: 1 | 2;
 }) {
+  const Heading = headingLevel === 1 ? "h1" : "h2";
   return (
     <section
       id="showcase"
@@ -47,9 +50,9 @@ export function CreationsShowcase({
                 <Sparkles className="size-4 shrink-0" aria-hidden="true" />
                 The Moonafique showcase
               </p>
-              <h2 id="creations-title" className="mt-5 text-4xl leading-[1.15] sm:text-5xl lg:text-6xl">
+              <Heading id="creations-title" className="mt-5 text-4xl leading-[1.15] sm:text-5xl lg:text-6xl">
                 Imagination, made real.
-              </h2>
+              </Heading>
             </div>
             <p className="max-w-sm text-base leading-7 text-[#d3c8d9]">
               Glowing battle bots, tiny worlds, and characters with personality.

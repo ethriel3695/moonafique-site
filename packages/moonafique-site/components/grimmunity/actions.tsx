@@ -181,7 +181,7 @@ export function JoinForm({
   } | null>(example?.quote ?? null);
   const [quoting, setQuoting] = useState(example?.quoting ?? false);
   const [consent, setConsent] = useState(false);
-  const tier = tiers.find((t) => t.id === selected)!;
+  const tier = displayedTiers.find((t) => t.id === selected)!;
   const [billingMonths, setBillingMonths] = useState<BillingMonths>(
     example?.billingMonths ?? 1,
   );

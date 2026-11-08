@@ -110,9 +110,9 @@ export const tierLabels: Record<TierId, string> = {
 export const membershipTiers: Omit<Tier, "price_id" | "product_id">[] = [
   {
     id: "grimm_starter",
-    name: "Grimm Starter",
+    name: "The Grimm Path",
     description:
-      "A mystery Grimm in a gradient or two-color finish, with a new ear style, accessories, and matching pets each month.",
+      "Your path into Grimm collecting starts here. A mystery Grimm in a gradient or two-color finish, with a new ear style, accessories, and matching pets each month.",
     amount: 1500,
     member_cap: null,
     retained_copies: 0,
@@ -130,7 +130,7 @@ export const membershipTiers: Omit<Tier, "price_id" | "product_id">[] = [
   },
   {
     id: "grimm_keeper",
-    name: "Grimm Keeper",
+    name: "Grimmoire Collection",
     description:
       "Each month, get a custom-painted Grimm with an exclusive finish, coordinated accessories worn by your Grimm, and one custom-painted pet.",
     amount: 3000,
@@ -140,7 +140,7 @@ export const membershipTiers: Omit<Tier, "price_id" | "product_id">[] = [
     shipping_mode: "shippo",
     perks: [
       "One custom-painted Grimm each month",
-      "A painted finish created exclusively for Keeper members",
+      "A painted finish created exclusively for Grimmoire Collection members",
       "Coordinated accessories worn by your Grimm",
       "One custom-painted pet each month",
     ],

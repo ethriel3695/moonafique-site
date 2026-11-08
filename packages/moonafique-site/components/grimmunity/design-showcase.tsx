@@ -40,7 +40,7 @@ export function GrimDesignShowcase() {
           <p className="text-xs font-bold uppercase tracking-[.2em] text-[#d6b9eb]">The Grim of the Month showcase</p>
           <h2 id="grim-showcase-title" className="mt-4 text-3xl leading-tight sm:text-4xl lg:text-5xl">A little look into our Grim world.</h2>
           <p className="mt-5 text-lg leading-8 text-[#eee1f4]">Meet our August, September, and October Grim of the Month editions—a look at the custom-painted creations behind Moonafique.</p>
-          <p className="mt-5 text-sm leading-7 text-[#d3c8d9]">Grim of the Month releases are sold exclusively on Whatnot. Grimm subscriptions are separate monthly releases: choose a mystery Starter or a subscription-exclusive Keeper.</p>
+          <p className="mt-5 text-sm leading-7 text-[#d3c8d9]">Grim of the Month releases are sold exclusively on Whatnot. Grimm subscriptions are separate monthly releases: start with The Grimm Path or collect a subscription-exclusive Grimmoire Collection character.</p>
         </div>
       </div>
 

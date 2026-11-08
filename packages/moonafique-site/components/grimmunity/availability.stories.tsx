@@ -104,7 +104,7 @@ export const LastKeeperSpot: Story = {
       canvas.getByRole("button", { name: "Preview one spot being claimed" }),
     );
     await expect(
-      canvas.getByRole("radio", { name: "Grimm Keeper" }),
+      canvas.getByRole("radio", { name: "Grimmoire Collection" }),
     ).toBeDisabled();
     await expect(canvas.getAllByText("Vaulted for now").length).toBeGreaterThan(
       0,

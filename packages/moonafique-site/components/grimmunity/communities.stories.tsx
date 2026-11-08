@@ -27,7 +27,7 @@ export const BothCollections: Story = {
     await expect(
       canvas.getByRole("link", { name: "Explore ACEOs" }),
     ).toHaveAttribute("href", "/aceos");
-    await expect(canvas.getByText("Grimm Starter")).toBeVisible();
+    await expect(canvas.getByText("The Grimm Path")).toBeVisible();
     await expect(canvas.getByText("ACEO Originals")).toBeVisible();
   },
 };

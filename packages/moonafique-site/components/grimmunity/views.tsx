@@ -37,6 +37,7 @@ import { ShippingPanel } from "./shipping-panel";
 import { BillingSummary } from "./billing-summary";
 import { AvailabilityBadge, MembershipAvailability } from "./availability";
 import { PreferencesForm } from "./preferences-form";
+import { editionLabel, editionMonth } from "@/lib/grimmunity/presentation";
 
 export function ClubShell({
   children,
@@ -123,9 +124,11 @@ export function Status({ children }: { children: React.ReactNode }) {
 function OfferTerms({
   program,
   edition,
+  club,
 }: {
   program: Program;
   edition: Edition;
+  club: ClubId;
 }) {
   return (
     <dl className="mb-6 space-y-4 text-sm leading-6">
@@ -143,9 +146,15 @@ function OfferTerms({
       <div>
         <dt className="font-bold">Your first edition</dt>
         <dd>
-          {edition.title} · {edition.month}
+          {editionLabel(edition)}
         </dd>
       </div>
+      {club === "grimm" && program.tiers.some(tier => publicTierCopy(tier).name !== tier.name) && (
+        <div>
+          <dt className="font-bold">A new name for your collection</dt>
+          <dd>The Grimm Path was previously Grimm Starter; Grimmoire Collection was Grimm Keeper. Stripe may still show those earlier names. Your membership price and included pieces are the same.</dd>
+        </div>
+      )}
       <div>
         <dt className="font-bold">Billing</dt>
         <dd>
@@ -320,7 +329,7 @@ export function OfferView({
             </h1>
             <p className="mt-6 max-w-xl text-lg leading-8 text-muted-foreground">
               {grimm
-                ? "Choose a mystery Grimm with accessories and matching pets, or a Keeper with an exclusive painted finish. A new character joins your collection each month."
+                ? "Choose a mystery Grimm with accessories and matching pets, or a Grimmoire Collection character with an exclusive painted finish. A new character joins your collection each month."
                 : "Collect artwork that measures just 2.5 by 3.5 inches. Choose two prints or one original from each month’s collection, with plenty of detail in very little space."}
             </p>
             {grimm && <nav aria-label="Explore Grimmunity" className="mt-5 flex flex-wrap gap-x-6 gap-y-2 text-sm font-bold text-primary">
@@ -338,7 +347,7 @@ export function OfferView({
               </h2>
               <p className="mt-3 leading-7">
                 {grimm
-                  ? "Grimm Starter is $15 a month and includes accessories and two matching pets. Grimm Keeper is $30 a month and includes a Grimm with an exclusive painted finish, coordinated accessories worn by the Grimm, and one custom-painted pet."
+                  ? "The Grimm Path is $15 a month and includes accessories and two matching pets. Grimmoire Collection is $30 a month and includes a Grimm with an exclusive painted finish, coordinated accessories worn by the Grimm, and one custom-painted pet."
                   : "ACEO Prints includes two physical prints of original Moonafique artwork for $10 a month. ACEO Originals includes one original piece from the new monthly collection for $20."}
               </p>
               <p className="mt-4 text-sm leading-6 text-muted-foreground">
@@ -358,7 +367,7 @@ export function OfferView({
                 </h2>
                 <p className="mt-2 text-sm leading-6">
                   {grimm
-                    ? "Tell us six preferred colors for Starter and any colors to avoid. They guide the monthly mystery; the finished character is still a surprise."
+                    ? "Tell us six preferred colors for The Grimm Path and any colors to avoid. They guide the monthly mystery; the finished character is still a surprise."
                     : "Build a small gallery, keep a collection in an album, or give a print to someone who would appreciate it. The format leaves the choice to you."}
                 </p>
               </div>
@@ -399,12 +408,12 @@ export function OfferView({
               {existingMembershipName
                 ? "View your current membership and manage your deliveries below."
                 : grimm
-                  ? "Explore Starter and Keeper below, then choose the Grimm membership that fits your collection."
+                  ? "Explore The Grimm Path and Grimmoire Collection below, then choose the Grimm membership that fits your collection."
                   : "Explore the prints and originals below, then choose how you want to collect."}
             </p>
             <p className="mt-4 text-sm leading-6">
               {grimm
-                ? "Keeper has limited places. When they’re filled, Keeper is “Vaulted for now” and closed to new members. Existing memberships continue."
+                ? "Grimmoire Collection has limited places. When they’re filled, it is “Vaulted for now” and closed to new members. Existing memberships continue."
                 : "Prints and Originals each have limited places. Check the availability shown with each membership."}
             </p>
             {existingMembershipName || open ? (
@@ -483,7 +492,7 @@ export function OfferView({
               fixture={fixture}
               managedBilling={program.billing_policy === "notice_shipping_v1"}
             >
-              <OfferTerms program={program} edition={edition} />
+              <OfferTerms club={club} program={program} edition={edition} />
             </JoinForm>
           ) : (
             <>
@@ -601,7 +610,7 @@ function SingleAccountContent({
             Your collection
           </p>
           <h1 className="text-4xl sm:text-5xl">
-            {m?.tier_snapshot.name ?? "My memberships"}
+            {m ? publicTierCopy(m.tier_snapshot).name : "My memberships"}
           </h1>
         </div>
         {m && (
@@ -618,6 +627,11 @@ function SingleAccountContent({
           </ClubAction>
         )}
       </div>
+      {m && publicTierCopy(m.tier_snapshot).name !== m.tier_snapshot.name && (
+        <p className="mb-6 rounded-2xl border bg-surface p-5 text-sm leading-6">
+          Formerly {m.tier_snapshot.name}. Your price, included pieces, and billing schedule stay the same. Older invoices may still use the previous name.
+        </p>
+      )}
       {m?.tier_snapshot.billing && (
         <p className="mb-8 rounded-2xl border bg-surface p-5 text-sm leading-6">
           Stripe may show “Your service is paused” because Moonafique schedules
@@ -637,7 +651,7 @@ function SingleAccountContent({
         <>
           <div className="mb-8 grid gap-5 md:grid-cols-3">
             <section className="rounded-3xl border bg-card p-6">
-              <h2 className="mb-4 text-xl">{m.tier_snapshot.name}</h2>
+              <h2 className="mb-4 text-xl">{publicTierCopy(m.tier_snapshot).name}</h2>
               <Status>
                 {m.cancel_at_period_end ? "Canceling at period end" : m.status}
               </Status>
@@ -698,9 +712,9 @@ function SingleAccountContent({
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
                     <p className="mb-2 text-sm text-muted-foreground">
-                      {o.month} subscriber edition · {o.tier_snapshot.name}
+                      {editionMonth(o.month)} subscriber edition · {publicTierCopy(o.tier_snapshot).name}
                     </p>
-                    <h3 className="text-2xl">{o.title}</h3>
+                    <h3 className="text-2xl">{editionLabel(o)}</h3>
                   </div>
                   <Status>{orderStatus(o)}</Status>
                 </div>
@@ -774,7 +788,7 @@ export function StaffOrders({
         >
           <div>
             <Status>{orderStatus(o)}</Status>
-            <p className="mt-3 text-sm font-bold">{o.tier_snapshot.name}</p>
+            <p className="mt-3 text-sm font-bold">{publicTierCopy(o.tier_snapshot).name}</p>
             {o.tier_snapshot.perks.length > 0 && (
               <p className="mt-2 text-sm">
                 Included perks: {o.tier_snapshot.perks.join("; ")}

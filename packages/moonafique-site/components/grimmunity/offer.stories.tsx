@@ -51,10 +51,10 @@ export const EnrollmentClosed: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await expect(
-      canvas.getByRole("heading", { name: "Grimm Starter" }),
+      canvas.getByRole("heading", { name: "The Grimm Path" }),
     ).toBeVisible();
     await expect(
-      canvas.getByRole("heading", { name: "Grimm Keeper" }),
+      canvas.getByRole("heading", { name: "Grimmoire Collection" }),
     ).toBeVisible();
     await expect(
       canvas.queryByRole("heading", { name: "ACEO Prints" }),
@@ -69,7 +69,7 @@ export const EnrollmentOpen: Story = {
     const canvas = within(canvasElement);
     await expect(canvas.getAllByRole("radio")).toHaveLength(2);
     await expect(
-      canvas.getByRole("radio", { name: "Grimm Starter" }),
+      canvas.getByRole("radio", { name: "The Grimm Path" }),
     ).toBeVisible();
     await expect(
       canvas.queryByRole("radio", { name: "ACEO Prints" }),
@@ -77,11 +77,11 @@ export const EnrollmentOpen: Story = {
   },
 };
 export const AlreadyHasGrimmMembership: Story = {
-  args: { existingMembershipName: "Grimm Keeper" },
+  args: { existingMembershipName: "Grimmoire Collection" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await expect(
-      canvas.getByText("Grimm Keeper is already on your account."),
+      canvas.getByText("Grimmoire Collection is already on your account."),
     ).toBeVisible();
     await expect(canvas.queryByRole("radio")).not.toBeInTheDocument();
     await expect(
@@ -104,7 +104,7 @@ export const ACEOEnrollmentClosed: Story = {
       canvas.getByRole("heading", { name: "ACEO Originals" }),
     ).toBeVisible();
     await expect(
-      canvas.queryByRole("heading", { name: "Grimm Starter" }),
+      canvas.queryByRole("heading", { name: "The Grimm Path" }),
     ).not.toBeInTheDocument();
     await expect(
       canvas.queryByRole("heading", {
@@ -125,10 +125,10 @@ export const ACEOEnrollmentOpen: Story = {
       canvas.getByRole("radio", { name: "ACEO Prints" }),
     ).toBeVisible();
     await expect(
-      canvas.queryByRole("radio", { name: "Grimm Starter" }),
+      canvas.queryByRole("radio", { name: "The Grimm Path" }),
     ).not.toBeInTheDocument();
     await expect(
-      canvas.queryByText(/Grimm Keeper: 12 members/),
+      canvas.queryByText(/Grimmoire Collection: 12 members/),
     ).not.toBeInTheDocument();
   },
 };

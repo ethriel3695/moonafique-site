@@ -1,7 +1,7 @@
 import { withAuth } from "@workos-inc/authkit-nextjs";
 import { database, one } from "./db";
 import { publicOffer } from "./queries";
-import type { ClubId } from "./tiers";
+import { publicTierCopy, type ClubId, type Tier } from "./tiers";
 
 export async function publicOfferProps(club: ClubId) {
   const { program, editions, availability, availabilityEditionId } =
@@ -19,14 +19,14 @@ export async function publicOfferProps(club: ClubId) {
       const { user } = await withAuth();
       signedIn = !!user;
       if (user) {
-        const membership = await one<{ name: string }>(
+        const membership = await one<{ tier_snapshot: Tier }>(
           database(),
-          `SELECT tier_snapshot->>'name' AS name FROM grim.memberships
+          `SELECT tier_snapshot FROM grim.memberships
            WHERE program_id=$1 AND owner_id=$2 AND club=$3
              AND (subscription_id IS NOT NULL OR seat_held)`,
           [displayedProgram.id, user.id, club],
         );
-        existingMembershipName = membership?.name;
+        existingMembershipName = membership ? publicTierCopy(membership.tier_snapshot).name : undefined;
       }
     } catch {
       // The offer still loads if this lookup fails. Checkout enforces the limit.

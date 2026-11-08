@@ -218,8 +218,7 @@ export function Homepage({
           </div>
           {newsletter ?? <EmailSignupForm />}
           <p className="mx-auto mt-4 max-w-xl text-center text-sm leading-6">
-            This is our general newsletter. Membership launch notifications have
-            their own signup on the membership pages.{" "}
+            A little Moonafique in your inbox. Unsubscribe whenever you like.{" "}
             <Link href="/privacy" className="underline underline-offset-4">
               Privacy policy
             </Link>

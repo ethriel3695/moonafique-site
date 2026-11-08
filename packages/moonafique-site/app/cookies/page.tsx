@@ -3,9 +3,6 @@ export default function CookiePolicyPage() {
     <div className="mx-auto max-w-screen-xl px-4 py-16">
       <div className="max-w-3xl mx-auto space-y-8">
         <h1 className="text-4xl font-bold tracking-tight">Cookie Policy</h1>
-        <p className="text-muted-foreground">
-          Last updated: {new Date().toLocaleDateString()}
-        </p>
 
         <section className="space-y-4">
           <h2 className="text-2xl font-semibold">1. Introduction</h2>

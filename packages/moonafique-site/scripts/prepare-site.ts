@@ -4,6 +4,7 @@ import { spawnSync } from "node:child_process";
 for (const script of [
   "scripts/grimmunity/prepare-deployment.ts",
   "scripts/check-newsletter.ts",
+  "scripts/check-storefront.ts",
   "scripts/check-whatnot.ts",
   "scripts/check-whatnot-inventory.ts",
   "scripts/prepare-whatnot-analytics.ts",

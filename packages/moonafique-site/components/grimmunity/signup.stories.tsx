@@ -101,8 +101,8 @@ const meta = {
       control: {
         type: "select",
         labels: {
-          grimm_starter: "Grimm Starter · $15",
-          grimm_keeper: "Grimm Keeper · $30",
+          grimm_starter: "The Grimm Path · $15",
+          grimm_keeper: "Grimmoire Collection · $30",
           aceo_prints: "ACEO Prints · $10",
           aceo_originals: "ACEO Originals · $20",
         },
@@ -133,7 +133,7 @@ export const ChooseYourMembership: Story = {
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
     if (!args.showAllTiers) return;
-    await userEvent.click(canvas.getByRole("radio", { name: "Grimm Keeper" }));
+    await userEvent.click(canvas.getByRole("radio", { name: "Grimmoire Collection" }));
     await expect(
       canvas.queryByText("Make the mystery a little more you"),
     ).not.toBeInTheDocument();

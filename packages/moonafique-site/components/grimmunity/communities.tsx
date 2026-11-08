@@ -53,7 +53,7 @@ export function CommunitiesView() {
               <div className="flex flex-1 flex-col p-7 sm:p-9">
                 <p className="max-w-md leading-7 text-muted-foreground">
                   {grimm
-                    ? "Mystery Grimms with accessories and matching pets, or Keepers with exclusive painted finishes. Meet the next addition to your collection."
+                    ? "Mystery Grimms with accessories and matching pets, or Grimmoire Collection characters with exclusive painted finishes. Meet the next addition to your collection."
                     : "Two prints or one original artwork each month. ACEOs measure just 2.5 by 3.5 inches: small enough to collect, with plenty to look at."}
                 </p>
                 <dl className="my-7 divide-y divide-border border-y border-border">
