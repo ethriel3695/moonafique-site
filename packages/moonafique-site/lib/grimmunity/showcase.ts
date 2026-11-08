@@ -36,7 +36,8 @@ export const grimShowcaseEditions: GrimShowcaseEdition[] = [
     },
   },
   {
-    month: "October", monthNumber: "10", year: 2026, status: "current",
+    // Owner confirmed the final October copy sold in the November 7 show.
+    month: "October", monthNumber: "10", year: 2026, status: "vaulted",
     image: {
       ...groupPhoto,
       alt: "October Grim of the Month in witchy purple and gold, holding its blue and green articulated cat pet.",

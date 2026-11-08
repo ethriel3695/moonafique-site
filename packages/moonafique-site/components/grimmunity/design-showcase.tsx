@@ -73,7 +73,7 @@ export function GrimDesignShowcase() {
           );
         })}
       </div>
-      <InventoryRefreshNote />
+      {grimShowcaseEditions.some(edition => edition.status === "current") && <InventoryRefreshNote />}
     </section>
   );
 }
