@@ -286,6 +286,23 @@ export function OfferView({
     >
       <ClubShell active={club}>
         {program?.id === "sandbox" && <SandboxBanner fixture={fixture} />}
+        {grimm && (
+          <aside
+            aria-label="Your subscription Grimm and Grimmfest"
+            className="mb-8 flex items-start gap-4 rounded-3xl border border-primary/20 bg-primary/5 p-5 sm:p-6"
+          >
+            <Sparkles aria-hidden className="mt-1 size-6 shrink-0 text-primary" />
+            <div>
+              <p className="text-lg font-bold text-primary sm:text-xl">
+                Two collections. Double the mischief.
+              </p>
+              <p className="mt-2 max-w-4xl text-sm leading-7 sm:text-base">
+                Your Grimmunity subscription Grimm is <strong>different from the Grimm of the Month</strong>{" "}
+                sold at Grimmfest on Whatnot. Collect both for twice the Grimm goodness!
+              </p>
+            </div>
+          </aside>
+        )}
         <div className="grid items-start gap-8 lg:grid-cols-[1.15fr_.85fr] lg:gap-16">
           <div>
             <p className="mb-5 flex items-center gap-2 text-xs font-bold uppercase tracking-[.2em] text-primary">
