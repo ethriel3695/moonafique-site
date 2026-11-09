@@ -25,3 +25,8 @@ export const novemberGrimmOfTheMonthPhotos: CreationPhoto[] = [
   { src: "/showcase/november-grimm-of-the-month-front.jpg", alt: "Jess’s November Grimm of the Month with a cream cat-eared hood, teal button eyes, an orange patchwork coat, and yellow boots.", width: 303, height: 862, label: "November’s Grimm" },
   { src: "/showcase/november-grimm-of-the-month-back.jpg", alt: "The back of Jess’s November Grimm of the Month, with a large sunflower and stitched-patch details on its orange coat.", width: 305, height: 842, label: "The sunflower detail" },
 ];
+
+export const elizaRainbowStarsPhotos: CreationPhoto[] = [
+  { src: "/showcase/eliza-rainbow-stars-grimm-front.png", alt: "Front view of Eliza’s hand-painted Grimm with a turquoise skull, black star-covered coat, rainbow trim, and striped metallic boots; hand and background removed.", width: 1086, height: 1448, label: "Rainbow & stars" },
+  { src: "/showcase/eliza-rainbow-stars-grimm-back.png", alt: "Back view of Eliza’s Grimm with a rainbow-striped hood and colorful stars surrounding a large yellow starburst on its black coat; hand and background removed.", width: 1086, height: 1448, label: "Starburst details" },
+];

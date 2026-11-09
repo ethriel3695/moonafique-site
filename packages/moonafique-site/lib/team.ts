@@ -1,4 +1,4 @@
-import { novemberGrimmWorldPhotos, novemberGrimmOfTheMonthPhotos, elizaCustomGrimmPhotos, elizaPetPhotos } from "./project-photos";
+import { novemberGrimmWorldPhotos, novemberGrimmOfTheMonthPhotos, elizaCustomGrimmPhotos, elizaPetPhotos, elizaRainbowStarsPhotos } from "./project-photos";
 import type { CreationPhoto } from "./creations-showcase";
 
 export const teamMembers = [
@@ -54,6 +54,14 @@ export const novemberGrimmOfTheMonth: TeamProject = {
 export const teamProjects: TeamProject[] = [
   novemberGrimmOfTheMonth,
   novemberGrimmWorld,
+  {
+    slug: "rainbow-stars-grimm",
+    title: "Eliza’s rainbow & stars Grimm",
+    occasion: "Hand-painted custom creation",
+    description: "A little night sky in a rainbow coat. Eliza paired a turquoise skull and striped boots with bright stars, colorful trim, and a bold yellow starburst on the back.",
+    creators: [{ slug: "eliza", role: "Hand painting" }],
+    photos: elizaRainbowStarsPhotos,
+  },
   {
     slug: "eliza-hand-painted-grimm",
     title: "Eliza’s hand-painted Grimm",
