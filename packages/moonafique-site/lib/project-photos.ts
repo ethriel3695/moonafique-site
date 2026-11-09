@@ -41,3 +41,7 @@ export const jessAceoPhotos: CreationPhoto[] = [
   { src: "/showcase/jess-aceo-woodland-lights.jpg", alt: "Jess’s ACEO of a wide-eyed woodland character reaching toward golden winged lights against colorful swirling brushstrokes.", width: 1500, height: 2000, label: "Woodland lights" },
   { src: "/showcase/jess-aceo-purple-dinosaur.jpg", alt: "Jess’s ACEO of a smiling purple dinosaur with a sparkling pink butterfly on its head against turquoise and pastel strokes.", width: 1439, height: 2000, label: "A tiny visitor" },
 ];
+
+export const rubyAceoPhotos: CreationPhoto[] = [
+  { src: "/showcase/ruby-aceo-flower-creature.jpg", alt: "Ruby’s ACEO of a smiling green creature with a large pink flower and leafy back, sitting in grass beneath a yellow sun and blue sky.", width: 2000, height: 1459, label: "A sunny little bloom" },
+];

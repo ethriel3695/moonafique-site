@@ -1,4 +1,4 @@
-import { jessAceoPhotos, novemberGrimmWorldPhotos, novemberGrimmOfTheMonthPhotos, elizaCustomGrimmPhotos, elizaPetPhotos, elizaRainbowStarsPhotos } from "./project-photos";
+import { rubyAceoPhotos, jessAceoPhotos, novemberGrimmWorldPhotos, novemberGrimmOfTheMonthPhotos, elizaCustomGrimmPhotos, elizaPetPhotos, elizaRainbowStarsPhotos } from "./project-photos";
 import type { CreationPhoto } from "./creations-showcase";
 
 export const teamMembers = [
@@ -112,6 +112,14 @@ export const novemberGrimmOfTheMonth: TeamProject = {
 };
 
 export const teamProjects: TeamProject[] = [
+  {
+    slug: "ruby-aceo-art",
+    title: "Ruby’s ACEO art",
+    occasion: "Miniature art, big personality",
+    description: "A big pink bloom and an even bigger grin. Ruby brings this cheerful little creature to life with bold outlines, leafy greens, and a sunny blue sky.",
+    creators: [{ slug: "ruby", role: "Artwork" }],
+    photos: rubyAceoPhotos,
+  },
   {
     slug: "jess-aceo-art",
     title: "Jess’s ACEO art",
