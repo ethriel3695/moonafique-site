@@ -30,15 +30,18 @@ export const grimShowcaseEditions: GrimShowcaseEdition[] = [
     designer: { name: "Jess", href: "/about#project-jess-november-grimm-of-the-month" },
   },
   {
-    month: "August", monthNumber: "08", year: 2026, status: "vaulted",
+    // Owner confirmed the final October copy sold in the November 7 show.
+    month: "October", monthNumber: "10", year: 2026, status: "vaulted",
+    designer: { name: "Jess", href: "/about#team-jess" },
     image: {
       ...groupPhoto,
-      alt: "August Grim of the Month in mint green and lilac, holding its rabbit mermaid pet.",
-      crop: { x: 28, y: 535, width: 216, height: 630 },
+      alt: "October Grim of the Month in witchy purple and gold, holding its blue and green articulated cat pet.",
+      crop: { x: 433, y: 535, width: 222, height: 630 },
     },
   },
   {
     month: "September", monthNumber: "09", year: 2026, status: "vaulted",
+    designer: { name: "Jess", href: "/about#team-jess" },
     image: {
       ...groupPhoto,
       alt: "September Grim of the Month with a blue hood and bright green boots, holding its yellow and orange cat pet.",
@@ -46,12 +49,12 @@ export const grimShowcaseEditions: GrimShowcaseEdition[] = [
     },
   },
   {
-    // Owner confirmed the final October copy sold in the November 7 show.
-    month: "October", monthNumber: "10", year: 2026, status: "vaulted",
+    month: "August", monthNumber: "08", year: 2026, status: "vaulted",
+    designer: { name: "Jess", href: "/about#team-jess" },
     image: {
       ...groupPhoto,
-      alt: "October Grim of the Month in witchy purple and gold, holding its blue and green articulated cat pet.",
-      crop: { x: 433, y: 535, width: 222, height: 630 },
+      alt: "August Grim of the Month in mint green and lilac, holding its rabbit mermaid pet.",
+      crop: { x: 28, y: 535, width: 216, height: 630 },
     },
   },
 ];
