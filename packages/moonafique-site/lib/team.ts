@@ -34,8 +34,9 @@ export const teamProfiles: Partial<Record<TeamSlug, { role: string; bio: string[
   jess: {
     role: "CEO · Creative vision & live-show host",
     bio: [
-      "Jess is the creative spark and familiar face of Moonafique. As CEO, designer, and ACEO artist, she dreams up the characters, tiny artworks, and wonderfully unexpected ideas that make this little world our own.",
-      "On Whatnot, she brings that imagination to the camera, sharing the creations, welcoming collectors, and inviting everyone into a little Moonafique mischief. She and Keyara also photograph our Print Wars pieces, capturing the details that make each creation special.",
+      "Jess is the life and heart of Moonafique. Our CEO and creative visionary pours her imagination, energy, and care into this world, dreaming up the bold designs and unexpected little characters that make it feel like ours. Her love for the work is woven into everything we do.",
+      "She brings those ideas to life with her own hands, designing, sculpting, painting, and creating ACEOs full of personality. She also does the planning that gives a big idea a way forward. From an ambitious shop exclusive to the smallest painted detail, Jess puts her heart into the work that makes Moonafique Moonafique.",
+      "On Whatnot, she shares that same spirit with everyone who joins us, welcoming collectors, revealing new creations, and bringing a little Moonafique mischief to the camera. She and Keyara also photograph our Print Wars pieces, capturing the details and imagination behind each one. Jess brings the world to life, then invites you into it.",
     ],
   },
   reuben: {
