@@ -19,7 +19,7 @@ export const teamProfiles: Partial<Record<TeamSlug, { role: string; bio: string[
     role: "CEO · Creative vision & live-show host",
     bio: [
       "Jess is the creative spark and familiar face of Moonafique. As CEO, designer, and ACEO artist, she dreams up the characters, tiny artworks, and wonderfully unexpected ideas that make this little world our own.",
-      "On Whatnot, she brings that imagination to the camera—sharing the creations, welcoming collectors, and inviting everyone into a little Moonafique mischief.",
+      "On Whatnot, she brings that imagination to the camera—sharing the creations, welcoming collectors, and inviting everyone into a little Moonafique mischief. She and Keyara also photograph our Print Wars pieces, capturing the details that make each creation special.",
     ],
   },
   reuben: {
@@ -34,6 +34,41 @@ export const teamProfiles: Partial<Record<TeamSlug, { role: string; bio: string[
     bio: [
       "Megan brings a wonderfully extravagant imagination to the studio and is the artist behind many of our ACEOs. Her tiny canvases make room for big personality.",
       "She also helps keep the live shows moving alongside Jess and dreams up the games we play at Grimmfest. Art, play, and a little friendly mischief are all part of her corner of Moonafique.",
+    ],
+  },
+  keyara: {
+    role: "Designer & painter · Grimm World orchestrator",
+    bio: [
+      "Keyara brings an artist’s eye to everything we dream up at Moonafique. A designer and painter of Grimms and ACEOs, she has a gift for seeing how the colors, characters, and little details can come together.",
+      "She orchestrates our Grimm Worlds, turning a collection of tiny pieces into a place with a story to tell. She also photographs our Print Wars pieces alongside Jess, giving those imaginative creations their moment in the spotlight.",
+    ],
+  },
+  eliza: {
+    role: "Grimm & ACEO artist · Photography & social media",
+    bio: [
+      "Eliza gives our little characters plenty of personality, from hand-painted Grimms and ACEOs to the digital paint designs she creates for Grimms before they’re printed. There’s imagination in every stage, from screen to paintbrush.",
+      "She’s behind most of our product photography and handles much of our social media posting, helping the latest pieces find their way from the studio to your feed.",
+    ],
+  },
+  ethan: {
+    role: "Charcoal ACEO artist",
+    bio: [
+      "Ethan works a little magic in charcoal. His artistic vision is behind much of Moonafique’s charcoal ACEO art, bringing light, shadow, and texture to art small enough to hold in your hand.",
+      "These little works invite a closer look. There’s a whole lot of imagination tucked into those shades of gray.",
+    ],
+  },
+  alex: {
+    role: "Photographic ACEO artist",
+    bio: [
+      "Alex is the eye behind most of the photographic ACEO prints in our shop. With a knack for lighting and positioning, Alex finds the angle that lets a subject shine.",
+      "Each frame brings that care to a miniature print, giving collectors a little window into a thoughtfully composed scene.",
+    ],
+  },
+  ruby: {
+    role: "3D printing · Grimm builder & ACEO artist",
+    bio: [
+      "Ruby helps run the 3D print side of Moonafique alongside Jess and Reuben. She designs creations like our fabulous ice cream sets and is our official Grimm builder, assembling the pre-built characters that are ready to join your collection.",
+      "Her creativity reaches beyond the print shop, too. Ruby is an ACEO artist and has brought custom artwork commissions to life—another way she turns a little inspiration into something personal.",
     ],
   },
 };
