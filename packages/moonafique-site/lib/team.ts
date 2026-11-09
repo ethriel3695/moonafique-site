@@ -1,4 +1,4 @@
-import { rubyAceoPhotos, jessAceoPhotos, novemberGrimmWorldPhotos, novemberGrimmOfTheMonthPhotos, elizaCustomGrimmPhotos, elizaPetPhotos, elizaRainbowStarsPhotos } from "./project-photos";
+import { keyaraAceoPhotos, rubyAceoPhotos, jessAceoPhotos, novemberGrimmWorldPhotos, novemberGrimmOfTheMonthPhotos, elizaCustomGrimmPhotos, elizaPetPhotos, elizaRainbowStarsPhotos } from "./project-photos";
 import type { CreationPhoto } from "./creations-showcase";
 
 export const teamMembers = [
@@ -112,6 +112,14 @@ export const novemberGrimmOfTheMonth: TeamProject = {
 };
 
 export const teamProjects: TeamProject[] = [
+  {
+    slug: "keyara-aceo-art",
+    title: "Keyara’s ACEO art",
+    occasion: "Miniature art, big personality",
+    description: "A little doorway with a story waiting on the other side. Keyara fills this ACEO with sweeping curtains, delicate leaves, and colorful details that invite a closer look.",
+    creators: [{ slug: "keyara", role: "Artwork" }],
+    photos: keyaraAceoPhotos,
+  },
   {
     slug: "ruby-aceo-art",
     title: "Ruby’s ACEO art",

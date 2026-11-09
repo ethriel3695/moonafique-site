@@ -45,3 +45,7 @@ export const jessAceoPhotos: CreationPhoto[] = [
 export const rubyAceoPhotos: CreationPhoto[] = [
   { src: "/showcase/ruby-aceo-flower-creature.jpg", alt: "Ruby’s ACEO of a smiling green creature with a large pink flower and leafy back, sitting in grass beneath a yellow sun and blue sky.", width: 2000, height: 1459, label: "A sunny little bloom" },
 ];
+
+export const keyaraAceoPhotos: CreationPhoto[] = [
+  { src: "/showcase/keyara-aceo-decorative-doors.jpg", alt: "Keyara’s ACEO of ornate double doors with arched windows, pink and white curtains, gold handles, and delicate blue leaves and floral details.", width: 1500, height: 2000, label: "A doorway to a little wonder" },
+];
