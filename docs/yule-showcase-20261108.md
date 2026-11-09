@@ -15,3 +15,7 @@ Use case: precise-object-edit. Edit target: this vertical screenshot of Moonafiq
 ## Verification
 
 TypeScript and whitespace checks passed. Local browser review confirmed desktop framing, full-photo viewing on a 390px phone viewport without horizontal overflow, and Escape dismissal with focus returned to the photo control. No billing or inventory records were changed.
+
+## Publication
+
+Published revision `9148d3e0b89a2f293356e00560388099ec4af0f9` as Vercel deployment `dpl_F2LN4JNRdAbP1AgZJ8sLEVuH1n6C`. The first staged check encountered a stale Whatnot schedule; the unchanged check passed after the cache refreshed. Staged and public checks confirmed the Yule section, navigation link, image download, prior gallery content, and storefront access protections. Live browser review showed the finished seasonal section with no console errors. The temporary preview server was stopped.
