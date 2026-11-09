@@ -18,7 +18,7 @@ export const elizaCustomGrimmPhotos: CreationPhoto[] = [
 ];
 
 export const elizaPetPhotos: CreationPhoto[] = [
-  { src: "/showcase/eliza-hand-painted-pet.jpg", alt: "Eliza’s hand-painted pet with a dark face, bright eyes, rust-red body, cream chest, and a long cream-tipped tail.", width: 538, height: 360, label: "A little companion" },
+  { src: "/showcase/eliza-hand-painted-pet.jpg", alt: "Eliza’s hand-painted pet with a dark face, bright eyes, rust-red body, cream chest, and a long cream-tipped tail.", width: 538, height: 360, label: "A little companion", crop: { x: 194, y: 98, width: 136, height: 194 } },
 ];
 
 export const novemberGrimmOfTheMonthPhotos: CreationPhoto[] = [

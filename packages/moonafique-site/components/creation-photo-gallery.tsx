@@ -14,6 +14,15 @@ export function CreationPhotoGallery({ title, photos }: { title: string; photos:
 
   if (!photo) return null;
 
+  const crop = photo.crop;
+  const cropStyle = crop ? {
+    width: `${photo.width / crop.width * 100}%`,
+    height: `${photo.height / crop.height * 100}%`,
+    left: `${-crop.x / crop.width * 100}%`,
+    top: `${-crop.y / crop.height * 100}%`,
+    maxWidth: 'none',
+  } : undefined;
+
   const choices = photos.length > 1 ? (
     <div role="group" aria-label={`${title} photos`} className="flex flex-wrap gap-3">
       {photos.map((option, index) => (
@@ -40,6 +49,7 @@ export function CreationPhotoGallery({ title, photos }: { title: string; photos:
             type="button"
             aria-label={`Enlarge ${title} photo`}
             className={`group relative block ${photos[0].height > photos[0].width ? "aspect-[4/5]" : "aspect-[4/3]"} w-full overflow-hidden rounded-[1.5rem] bg-[#050505] ${focusStyle}`}
+            style={crop ? { aspectRatio: `${crop.width} / ${crop.height}` } : undefined}
           >
             <Image
               src={photo.src}
@@ -47,8 +57,8 @@ export function CreationPhotoGallery({ title, photos }: { title: string; photos:
               width={photo.width}
               height={photo.height}
               sizes="(min-width: 1280px) 546px, (min-width: 768px) 45vw, 90vw"
-              style={photo.previewPosition ? { objectPosition: photo.previewPosition } : undefined}
-              className={`h-full w-full ${photo.previewPosition ? "object-cover" : "object-contain"}`}
+              style={cropStyle ?? (photo.previewPosition ? { objectPosition: photo.previewPosition } : undefined)}
+              className={crop ? "absolute" : `h-full w-full ${photo.previewPosition ? "object-cover" : "object-contain"}`}
             />
             <span className="absolute bottom-3 right-3 flex items-center gap-2 rounded-full border border-white/25 bg-black/80 px-3 py-2 text-xs font-semibold text-white group-hover:bg-black">
               <Expand className="size-3.5" aria-hidden="true" />
@@ -75,7 +85,9 @@ export function CreationPhotoGallery({ title, photos }: { title: string; photos:
               <X className="size-5" aria-hidden="true" />
             </Dialog.Close>
           </div>
-          <Image
+          {crop ? <div className="relative mx-auto overflow-hidden rounded-lg bg-black" style={{ aspectRatio: `${crop.width} / ${crop.height}`, width: `min(100%, 408px, calc(60dvh * ${crop.width / crop.height}))` }}>
+            <Image src={photo.src} alt={photo.alt} width={photo.width} height={photo.height} sizes="100vw" className="absolute" style={cropStyle} />
+          </div> : <Image
             src={photo.src}
             alt={photo.alt}
             width={photo.width}
@@ -83,7 +95,7 @@ export function CreationPhotoGallery({ title, photos }: { title: string; photos:
             sizes="(min-width: 960px) 848px, 90vw"
             style={{ width: `min(100%, ${photo.width}px, calc(60dvh * ${photo.width / photo.height}))` }}
             className="mx-auto h-auto max-h-[60dvh] max-w-full rounded-lg bg-black object-contain"
-          />
+          />}
           {choices && <div className="mt-4">{choices}</div>}
         </Dialog.Content>
       </Dialog.Portal>

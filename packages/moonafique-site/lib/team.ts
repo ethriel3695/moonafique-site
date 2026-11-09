@@ -46,10 +46,11 @@ export const teamProfiles: Partial<Record<TeamSlug, { role: string; bio: string[
     ],
   },
   megan: {
-    role: "ACEO & custom pet artist · Live shows & Grimmfest games",
+    role: "Artist · Show operations & Grimmfest innovation",
     bio: [
       "Megan brings a wonderfully extravagant imagination to the studio, from many of our ACEOs to all of our custom pet commissions. Whether she’s capturing a beloved pet or creating a tiny work of art, her pieces make room for big personality.",
-      "She also helps keep the live shows moving alongside Jess and dreams up the games we play at Grimmfest. Art, play, and a little friendly mischief are all part of her corner of Moonafique.",
+      "Megan makes our live shows run. She runs shows alongside Jess, keeps inventory updated, and manages the giveaways that bring a little extra excitement to the room. While the creations take the spotlight, she keeps the moving parts working together.",
+      "She’s also the imagination behind our Grimmfest games, dreaming up new ways to play and turning each gathering into a shared adventure. Her ideas and artistic vision help shape the direction of Moonafique, from what we create to how we bring our community together. There’s a whole lot of Megan magic in this little world.",
     ],
   },
   keyara: {
@@ -153,22 +154,6 @@ export const teamProjects: TeamProject[] = [
     photos: meganCustomArtPhotos,
   },
   {
-    slug: "duck-aceo-companion",
-    title: "A rainy-day duck collaboration",
-    occasion: "ACEO & 3D companion collaboration",
-    description: "Some days call for a little duck attitude. Megan created the expressive ACEO shown here, and Jess designed the paint layout for its matching 3D-printed companion. One character, two ways to bring it into your collection.",
-    creators: [{ slug: "megan", role: "ACEO artwork" }, { slug: "jess", role: "3D companion paint design" }],
-    photos: meganJessDuckPhotos,
-  },
-  {
-    slug: "zebra-aceo-companion",
-    title: "A little zebra collaboration",
-    occasion: "ACEO & 3D companion collaboration",
-    description: "A bright-eyed zebra with a friendly little wave. Megan created the ACEO shown here, while Jess designed the paint layout for the matching 3D-printed companion, carrying that playful personality from the card into a collectible.",
-    creators: [{ slug: "megan", role: "ACEO artwork" }, { slug: "jess", role: "3D companion paint design" }],
-    photos: meganJessZebraPhotos,
-  },
-  {
     slug: "reuben-aceo-art",
     title: "Reuben’s ACEO art",
     occasion: "Miniature art, big personality",
@@ -210,6 +195,22 @@ export const teamProjects: TeamProject[] = [
   },
   novemberGrimmOfTheMonth,
   novemberGrimmWorld,
+  {
+    slug: "duck-aceo-companion",
+    title: "A rainy-day duck collaboration",
+    occasion: "ACEO & 3D companion collaboration",
+    description: "Some days call for a little duck attitude. Megan created the expressive ACEO shown here, and Jess designed the paint layout for its matching 3D-printed companion. One character, two ways to bring it into your collection.",
+    creators: [{ slug: "megan", role: "ACEO artwork" }, { slug: "jess", role: "3D companion paint design" }],
+    photos: meganJessDuckPhotos,
+  },
+  {
+    slug: "zebra-aceo-companion",
+    title: "A little zebra collaboration",
+    occasion: "ACEO & 3D companion collaboration",
+    description: "A bright-eyed zebra with a friendly little wave. Megan created the ACEO shown here, while Jess designed the paint layout for the matching 3D-printed companion, carrying that playful personality from the card into a collectible.",
+    creators: [{ slug: "megan", role: "ACEO artwork" }, { slug: "jess", role: "3D companion paint design" }],
+    photos: meganJessZebraPhotos,
+  },
   {
     slug: "rainbow-stars-grimm",
     title: "Eliza’s rainbow & stars Grimm",

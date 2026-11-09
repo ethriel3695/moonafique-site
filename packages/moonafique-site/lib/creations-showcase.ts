@@ -7,6 +7,8 @@ export type CreationPhoto = {
   height: number;
   label?: string;
   previewPosition?: string;
+  /** Frame a detail using original-image pixels, without altering the photograph. */
+  crop?: { x: number; y: number; width: number; height: number };
 };
 
 export type PrintWarsCreation = {
