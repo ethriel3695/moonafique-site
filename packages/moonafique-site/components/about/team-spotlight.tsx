@@ -64,7 +64,7 @@ export function TeamSpotlight() {
                   <CreationPhotoGallery title={project.title} photos={project.photos} />
                   <div><p className="text-sm leading-7 text-[#eee1f4]">{project.description}</p>
                   <div className="mt-4 border-t border-white/15 pt-3"><ProjectCredits project={project} /></div>
-                  <Link href={project.collectionHref} className="mt-3 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-[#eee1f4] underline underline-offset-4">Explore the Grimm Worlds collection <ArrowUpRight aria-hidden="true" className="size-4" /></Link></div>
+                  {project.collectionHref && <Link href={project.collectionHref} className="mt-3 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-[#eee1f4] underline underline-offset-4">{project.collectionLabel ?? "Explore the collection"} <ArrowUpRight aria-hidden="true" className="size-4" /></Link>}</div>
                 </div>
               </details>)}
               {!teamProjects.some((project) => project.creators.some((credit) => credit.slug === person.slug)) && <div className="flex min-h-36 flex-col items-center justify-center rounded-xl border border-dashed border-primary/25 bg-gradient-to-br from-secondary/70 to-background p-6 text-center">

@@ -1,8 +1,13 @@
+import type { CreationPhoto } from "../creations-showcase";
+import { novemberGrimmOfTheMonthPhotos } from "../project-photos";
+
 export type GrimShowcaseEdition = {
   month: string;
   monthNumber: string;
   year: number;
   status: "vaulted" | "current";
+  photos?: CreationPhoto[];
+  designer?: { name: string; href: string };
   image?: {
     src: string;
     alt: string;
@@ -19,6 +24,11 @@ export const grimWhatnotUrl = "https://www.whatnot.com/user/moonafique";
 const groupPhoto = { src: "/showcase/grim-of-the-month-august-september-october.jpg", width: 664, height: 1182 };
 
 export const grimShowcaseEditions: GrimShowcaseEdition[] = [
+  {
+    month: "November", monthNumber: "11", year: 2026, status: "current",
+    photos: novemberGrimmOfTheMonthPhotos,
+    designer: { name: "Jess", href: "/about#project-jess-november-grimm-of-the-month" },
+  },
   {
     month: "August", monthNumber: "08", year: 2026, status: "vaulted",
     image: {

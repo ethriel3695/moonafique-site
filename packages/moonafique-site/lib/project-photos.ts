@@ -11,3 +11,17 @@ export const novemberGrimmWorldPhotos: CreationPhoto[] = [
   { src: "/showcase/november-grimm-world-detail.jpg", alt: "Close-up of the cream-hooded November Grimm holding its companion inside a hand-painted autumn world with bunting, trees, and a tiny door.", width: 538, height: 360, label: "Painted details" },
   { src: "/showcase/november-grimm-world-closed.jpg", alt: "The closed November Grimm World box resembles a dark brown book with an orange autumn leaf and raised decorative corners.", width: 360, height: 538, label: "Closed book box" },
 ];
+
+export const elizaCustomGrimmPhotos: CreationPhoto[] = [
+  { src: "/showcase/eliza-custom-grimm-front.jpg", alt: "Eliza’s hand-painted custom Grimm with a dark hood, orange boots, patterned coat, and matching pet.", width: 360, height: 538, label: "Grimm & pet" },
+  { src: "/showcase/eliza-custom-grimm-back.jpg", alt: "The back of Eliza’s custom Grimm, showing the hand-painted patchwork pattern across its coat.", width: 360, height: 538, label: "Coat details" },
+];
+
+export const elizaPetPhotos: CreationPhoto[] = [
+  { src: "/showcase/eliza-hand-painted-pet.jpg", alt: "Eliza’s hand-painted pet with a dark face, bright eyes, rust-red body, cream chest, and a long cream-tipped tail.", width: 538, height: 360, label: "A little companion" },
+];
+
+export const novemberGrimmOfTheMonthPhotos: CreationPhoto[] = [
+  { src: "/showcase/november-grimm-of-the-month-front.jpg", alt: "Jess’s November Grimm of the Month with a cream cat-eared hood, teal button eyes, an orange patchwork coat, and yellow boots.", width: 303, height: 862, label: "November’s Grimm" },
+  { src: "/showcase/november-grimm-of-the-month-back.jpg", alt: "The back of Jess’s November Grimm of the Month, with a large sunflower and stitched-patch details on its orange coat.", width: 305, height: 842, label: "The sunflower detail" },
+];

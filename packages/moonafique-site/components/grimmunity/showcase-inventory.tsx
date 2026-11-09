@@ -68,8 +68,8 @@ export function EditionAvailability({ edition, vaulted }: { edition: string; vau
   </>;
 }
 
-export function InventoryRefreshNote() {
+export function InventoryRefreshNote({ editions }: { editions: string[] }) {
   const { inventory, now } = useContext(InventoryContext);
-  const hasCurrentStock = Object.keys(inventory.editions).some(key => editionQuantity(inventory, key, now) !== null);
+  const hasCurrentStock = editions.some(key => editionQuantity(inventory, key, now) !== null);
   return <p className="mt-5 text-xs leading-5 text-muted-foreground">{hasCurrentStock ? "Availability updates automatically from Whatnot every few minutes. Whatnot confirms stock when you buy." : "Check Whatnot for current availability. Remaining counts appear here when Whatnot provides them."}</p>;
 }

@@ -39,7 +39,7 @@ export function CreationPhotoGallery({ title, photos }: { title: string; photos:
           <button
             type="button"
             aria-label={`Enlarge ${title} photo`}
-            className={`group relative block aspect-[4/3] w-full overflow-hidden rounded-[1.5rem] bg-[#050505] ${focusStyle}`}
+            className={`group relative block ${photos.every((item) => item.height > item.width) ? "aspect-[4/5]" : "aspect-[4/3]"} w-full overflow-hidden rounded-[1.5rem] bg-[#050505] ${focusStyle}`}
           >
             <Image
               src={photo.src}
