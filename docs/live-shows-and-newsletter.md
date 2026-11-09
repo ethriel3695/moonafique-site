@@ -91,3 +91,13 @@ The two restored listings are “Raid into the 3DA Giving Tree Train” on Novem
 The cache version changed so the release starts with a complete snapshot. This release retained the two-minute refresh and private-show protections; the daily refresh update below supersedes that interval. Future updates require only scheduling or editing the public show in Whatnot. All 87 storefront tests and the TypeScript check passed.
 
 Published source `2decd04a7c434882cb6c25f16108afffdc535d2a` as Vercel deployment `dpl_EkFVGKR2wU2vTUBNBN6dGyzRRnYa`. Staged and public checks verified the 96-show snapshot, both ACEO listings, both Giving Tree listings, and protected staff endpoints. Browser review confirmed the restored events and their Mountain times on the public Live Shows page. Both public domains use this deployment; `dpl_G2JsvamCpnqcwbeMYBy9zFsMytZW` is the rollback reference.
+
+## Daily show refresh — November 9, 2026
+
+At the owner's request, the shared Whatnot schedule cache and browser checks now use a 24-hour interval. A browser schedules its first check when its initial snapshot is due. Subsequent checks wait 24 hours, including after a failure. Focus and visibility changes can resume an overdue check but cannot start an early one. The page's local clock still advances upcoming-show selection without a network request.
+
+Daily dates remain current for 24 hours. A failed refresh can retain the previous dates with a warning until they reach 48 hours. Live-status assertions expire after ten minutes. The server waits for an already-started refresh so a daily browser check can receive its result in the same response. The public page describes the daily interval and directs visitors to Whatnot for same-day changes.
+
+All 97 storefront tests and TypeScript passed. Tests cover the daily request limit, repeated tab-focus events, hidden tabs, cleanup, failure handling, retained snapshots, and live-status expiry.
+
+Published source `a42bcd374c004ea3edbf4cb940a755f24d1d4f61` as Vercel deployment `dpl_DC2mcwEtoWgKfhpE25ZVjXizDt2e`. Staged and public checks confirmed the daily-refresh wording, cached snapshot reuse, both ACEO listings, both Giving Tree listings, and protected staff endpoints. Both public domains use this deployment. The preceding complete-schedule release, `dpl_EkFVGKR2wU2vTUBNBN6dGyzRRnYa`, remains the rollback reference.
