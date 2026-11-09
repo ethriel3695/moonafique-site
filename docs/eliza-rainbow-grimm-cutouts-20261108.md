@@ -19,3 +19,7 @@ Use case: background-extraction. Edit target: the attached BACK-view photo of El
 ## Verification
 
 Both PNGs are 1086 × 1448 with non-opaque alpha channels. TypeScript passed. Local browser review verified the project credit, thumbnail switching, and enlarged back-view cutout. No billing, stock, or customer data changed.
+
+## Publication
+
+Published revision `e7a1b49d081e9ca62cca6df2801a9c5ea773bd82` as Vercel deployment `dpl_8mZ9YWj4PCd6E5QkMsFDG2DZWq6a`. Staged and public checks passed, including both PNG downloads, the new Eliza project anchor, prior gallery entries, and storefront access protections. Live browser review confirmed the cutout and creator credit without browser errors. The temporary preview server was stopped.
