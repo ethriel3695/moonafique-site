@@ -9,3 +9,7 @@ Jess’s portfolio now presents her ACEOs, November Grimm of the Month, and Nove
 Megan’s expanded biography credits her show operations, inventory updates, giveaways, Grimmfest game innovations, and influence on Moonafique’s direction. Her artistic work and custom pet commissions remain credited. The role line now reads “Artist · Show operations & Grimmfest innovation.”
 
 Local review confirmed the complete companion is visible in the enlarged view and Jess’s projects appear in the requested order. TypeScript and whitespace checks passed.
+
+Production build, staged smoke checks, public smoke checks, and live browser review passed. Verified Jess’s project order, Megan’s expanded biography, and Eliza’s complete companion in the cropped enlarged viewer.
+
+Published application revision: `635b39969d84aacdd5b2cd9a687479f3833e2c2a`. Vercel deployment: `dpl_9m4VnYL2RYPtEXuZ4UHVk3Bta1co`.
