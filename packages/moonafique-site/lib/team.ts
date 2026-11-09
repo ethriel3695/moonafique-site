@@ -75,6 +75,13 @@ export const teamProfiles: Partial<Record<TeamSlug, { role: string; bio: string[
       "These little works invite a closer look. There’s a whole lot of imagination tucked into those shades of gray.",
     ],
   },
+  sophia: {
+    role: "ACEO artist · Event support & creative inspiration",
+    bio: [
+      "Sophia is Moonafique’s supportive arm, bringing encouragement, imagination, and a helping hand to every event. She helps us bring people together and is a source of creative inspiration for the team. There’s a little Sophia spark in the ideas we dream up together.",
+      "She creates ACEOs of her own, giving small pieces of art plenty of personality. Sophia also helps keep us up to date on the content we share, bringing a fresh perspective to what we put out into the world. From our events to your feed, she helps keep the Moonafique magic moving.",
+    ],
+  },
   alex: {
     role: "Photographic ACEO artist",
     bio: [
