@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { fetchWhatnotSchedule, WhatnotSyncError } from "@/lib/whatnot-api";
-import { emptySchedule, featuredShow, scheduleState, showAction, type LiveShow } from "@/lib/live-shows";
+import { emptySchedule, featuredShow, scheduleState, showAction, trustScheduleLiveStatus, type LiveShow } from "@/lib/live-shows";
 
 const id = (n: number) => `85b8e152-e819-4cca-baf8-${n.toString().padStart(12, "0")}`;
 const show = (n: number, extra: Record<string, unknown> = {}) => ({
@@ -101,11 +101,22 @@ describe("schedule freshness and live status", () => {
   const now = new Date("2026-11-08T04:00:00Z");
   const live: LiveShow = { id: id(1), title: "Grimmfest", series: "grimmfest", status: "live", startsAt: null, href: `https://www.whatnot.com/live/${id(1)}`, description: "" };
 
-  it("labels missing and day-old snapshots unavailable and ten-minute-old snapshots stale", () => {
+  it("keeps daily snapshots current, warns after a day, and hides dates after two days", () => {
     expect(scheduleState(emptySchedule, now)).toBe("unavailable");
     expect(scheduleState({ shows: [], syncedAt: "2026-11-08T03:59:00Z" }, now)).toBe("current");
-    expect(scheduleState({ shows: [], syncedAt: "2026-11-08T03:49:59Z" }, now)).toBe("stale");
-    expect(scheduleState({ shows: [], syncedAt: "2026-11-07T03:59:59Z" }, now)).toBe("unavailable");
+    expect(scheduleState({ shows: [], syncedAt: "2026-11-08T03:49:59Z" }, now)).toBe("current");
+    expect(scheduleState({ shows: [], syncedAt: "2026-11-07T04:00:00Z" }, now)).toBe("current");
+    expect(scheduleState({ shows: [], syncedAt: "2026-11-07T03:59:59Z" }, now)).toBe("stale");
+    expect(scheduleState({ shows: [], syncedAt: "2026-11-06T04:00:00Z" }, now)).toBe("stale");
+    expect(scheduleState({ shows: [], syncedAt: "2026-11-06T03:59:59Z" }, now)).toBe("unavailable");
+    expect(scheduleState({ shows: [], syncedAt: "2026-11-08T05:00:00Z" }, now)).toBe("unavailable");
+  });
+
+  it("expires live assertions after ten minutes even while daily dates remain current", () => {
+    expect(trustScheduleLiveStatus(emptySchedule, now)).toBe(false);
+    expect(trustScheduleLiveStatus({ shows: [live], syncedAt: "2026-11-08T03:50:00Z" }, now)).toBe(true);
+    expect(trustScheduleLiveStatus({ shows: [live], syncedAt: "2026-11-08T03:49:59Z" }, now)).toBe(false);
+    expect(trustScheduleLiveStatus({ shows: [live], syncedAt: "2026-11-08T05:00:00Z" }, now)).toBe(false);
   });
 
   it("only trusts live status from a fresh snapshot, including an unscheduled broadcast", () => {

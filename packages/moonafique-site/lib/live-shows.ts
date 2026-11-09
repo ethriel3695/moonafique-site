@@ -12,13 +12,18 @@ export type LiveShow = {
 
 export type LiveSchedule = { shows: LiveShow[]; syncedAt: string | null };
 export const emptySchedule: LiveSchedule = { shows: [], syncedAt: null };
-export const scheduleRefreshSeconds = 120;
+export const scheduleRefreshSeconds = 24 * 60 * 60;
 export const showTimeZone = "America/Boise";
 
 export function scheduleState(schedule: LiveSchedule, now: Date) {
   const age = schedule.syncedAt ? now.getTime() - Date.parse(schedule.syncedAt) : Infinity;
-  if (!Number.isFinite(age) || age > 24 * 60 * 60_000 || age < -60_000) return "unavailable";
-  return age > 10 * 60_000 ? "stale" : "current";
+  if (!Number.isFinite(age) || age > 2 * scheduleRefreshSeconds * 1000 || age < -60_000) return "unavailable";
+  return age > scheduleRefreshSeconds * 1000 ? "stale" : "current";
+}
+
+export function trustScheduleLiveStatus(schedule: LiveSchedule, now: Date) {
+  const age = schedule.syncedAt ? now.getTime() - Date.parse(schedule.syncedAt) : Infinity;
+  return Number.isFinite(age) && age >= -60_000 && age <= 10 * 60_000;
 }
 
 export function showDay(date: Date | string) {

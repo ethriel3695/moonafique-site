@@ -19,13 +19,16 @@ const cachedSchedule = unstable_cache(async () => {
     }).finally(() => { pending = undefined; });
   }
   return pending;
-}, ["whatnot-public-schedule-v2", connection], { revalidate: scheduleRefreshSeconds });
+}, ["whatnot-public-schedule-v3", connection], { revalidate: scheduleRefreshSeconds });
 
 export async function getLiveSchedule(): Promise<LiveSchedule> {
   if (!token) return emptySchedule;
   try {
-    // Next retains the last successful snapshot if background refresh fails.
-    const schedule = await cachedSchedule();
+    let schedule = await cachedSchedule();
+    // Join an already-started daily refresh so a daily browser check receives
+    // the new dates in this response, without making another provider request.
+    // Next retains the last successful snapshot if that refresh fails.
+    if (pending) schedule = await pending.catch(() => schedule);
     return scheduleState(schedule, new Date()) === "unavailable" ? emptySchedule : schedule;
   } catch (error) {
     console.warn(error instanceof WhatnotSyncError ? error.message : "Whatnot schedule is temporarily unavailable.");

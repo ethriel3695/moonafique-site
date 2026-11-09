@@ -80,7 +80,7 @@ export function ShowSchedule({ initialNow }: { initialNow: string }) {
       <div><p className="text-xs font-bold uppercase tracking-[.18em] text-primary">Make a little time for something unexpected</p><h2 id="schedule-heading" className="mt-3 text-3xl sm:text-4xl">{featured ? "Coming up after that." : "More time at the live table."}</h2></div>
       <a href={allShowsUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center gap-2 text-sm font-bold text-primary underline underline-offset-4">Full Whatnot schedule <ArrowUpRight aria-hidden="true" className="size-4" /><span className="sr-only"> (opens in a new tab)</span></a>
     </div>
-    <p className="mt-4 text-sm leading-6 text-muted-foreground">All times are Mountain Time. These dates update automatically from Whatnot. New shows and schedule changes usually appear within a few minutes.</p>
+    <p className="mt-4 text-sm leading-6 text-muted-foreground">All times are Mountain Time. This schedule refreshes once a day from Whatnot. For changes made today, check our full Whatnot schedule.</p>
     {remaining.length ? <ol id="upcoming-show-list" className="mt-6 divide-y divide-border border-y border-border">
       {remaining.slice(0, visibleCount).map((show) => <li key={show.id} className="grid gap-3 py-6 sm:grid-cols-[180px_minmax(0,1fr)] sm:gap-6 lg:grid-cols-[180px_minmax(0,1fr)_auto] lg:items-center">
         <time dateTime={show.startsAt!} className="text-sm"><span className="block font-bold text-primary">{showDate(show.startsAt!)}</span><span className="mt-1 block text-muted-foreground">{showTime(show.startsAt!)}</span></time>

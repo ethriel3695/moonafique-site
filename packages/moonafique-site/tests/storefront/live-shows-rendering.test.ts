@@ -35,14 +35,23 @@ describe("server-rendered show experience", () => {
     expect(unavailable).toContain("Follow Moonafique on Whatnot");
   });
 
-  it("warns about stale dates and hides dates older than a day", () => {
-    const stale = render({ shows: [{ ...show, status: "live" }], syncedAt: "2026-11-08T01:40:00Z" });
+  it("warns about dates older than a day and hides dates older than two days", () => {
+    const stale = render({ shows: [{ ...show, status: "live" }], syncedAt: "2026-11-07T01:59:59Z" });
     expect(stale).toContain("Last successful update");
     expect(stale).toContain("Dates may have changed");
     expect(stale).not.toContain("Live now on Whatnot");
-    const expired = render({ shows: [show], syncedAt: "2026-11-07T01:59:59Z" });
+    const expired = render({ shows: [show], syncedAt: "2026-11-06T01:59:59Z" });
     expect(expired).not.toContain("8:00 PM MST");
     expect(expired).not.toContain("Grimm-Fest &amp; friends");
+  });
+
+  it("shows daily dates without an outage warning or an old live assertion", () => {
+    const html = render({ shows: [{ ...show, status: "live" }], syncedAt: "2026-11-07T03:00:00Z" });
+    expect(html).toContain("8:00 PM MST");
+    expect(html).toContain("refreshes once a day");
+    expect(html).not.toContain("Live now on Whatnot");
+    expect(html).not.toContain("Grimmfest is live on Whatnot");
+    expect(html).not.toContain("trouble refreshing");
   });
 
   it("can feature a current spontaneous live show without inventing a start time", () => {
