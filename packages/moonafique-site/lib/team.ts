@@ -1,4 +1,19 @@
-import { reubenAceoPhotos, alexDinosaurPhotos, keyaraAceoPhotos, rubyAceoPhotos, jessAceoPhotos, novemberGrimmWorldPhotos, novemberGrimmOfTheMonthPhotos, elizaCustomGrimmPhotos, elizaPetPhotos, elizaRainbowStarsPhotos } from "./project-photos";
+import {
+  meganPetCommissionPhotos,
+  meganCustomArtPhotos,
+  meganJessDuckPhotos,
+  meganJessZebraPhotos,
+  reubenAceoPhotos,
+  alexDinosaurPhotos,
+  keyaraAceoPhotos,
+  rubyAceoPhotos,
+  jessAceoPhotos,
+  novemberGrimmWorldPhotos,
+  novemberGrimmOfTheMonthPhotos,
+  elizaCustomGrimmPhotos,
+  elizaPetPhotos,
+  elizaRainbowStarsPhotos,
+} from "./project-photos";
 import type { CreationPhoto } from "./creations-showcase";
 
 export const teamMembers = [
@@ -112,6 +127,38 @@ export const novemberGrimmOfTheMonth: TeamProject = {
 };
 
 export const teamProjects: TeamProject[] = [
+  {
+    slug: "megan-pet-commissions",
+    title: "Megan’s custom pet portraits",
+    occasion: "Custom artwork commissions",
+    description: "Familiar faces, captured with a little Moonafique magic. These three commissioned dog portraits by Megan celebrate expressive eyes, fluffy curls, and the details that make each companion their own.",
+    creators: [{ slug: "megan", role: "Artwork" }],
+    photos: meganPetCommissionPhotos,
+  },
+  {
+    slug: "megan-custom-art",
+    title: "Megan’s little worlds",
+    occasion: "Custom artwork",
+    description: "A sleepy dragon, a shared lantern, and a pair of mushroom companions. Megan’s custom pieces turn small moments into gentle little stories, full of color and woodland whimsy.",
+    creators: [{ slug: "megan", role: "Artwork" }],
+    photos: meganCustomArtPhotos,
+  },
+  {
+    slug: "duck-aceo-companion",
+    title: "A rainy-day duck collaboration",
+    occasion: "ACEO & 3D companion collaboration",
+    description: "Some days call for a little duck attitude. Megan created the expressive ACEO shown here, and Jess designed the paint layout for its matching 3D-printed companion. One character, two ways to bring it into your collection.",
+    creators: [{ slug: "megan", role: "ACEO artwork" }, { slug: "jess", role: "3D companion paint design" }],
+    photos: meganJessDuckPhotos,
+  },
+  {
+    slug: "zebra-aceo-companion",
+    title: "A little zebra collaboration",
+    occasion: "ACEO & 3D companion collaboration",
+    description: "A bright-eyed zebra with a friendly little wave. Megan created the ACEO shown here, while Jess designed the paint layout for the matching 3D-printed companion, carrying that playful personality from the card into a collectible.",
+    creators: [{ slug: "megan", role: "ACEO artwork" }, { slug: "jess", role: "3D companion paint design" }],
+    photos: meganJessZebraPhotos,
+  },
   {
     slug: "reuben-aceo-art",
     title: "Reuben’s ACEO art",

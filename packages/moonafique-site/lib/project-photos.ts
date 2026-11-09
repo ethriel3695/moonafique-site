@@ -58,3 +58,23 @@ export const alexDinosaurPhotos: CreationPhoto[] = [
 export const reubenAceoPhotos: CreationPhoto[] = [
   { src: "/showcase/reuben-aceo-leafy-companion.jpg", alt: "Reuben’s ACEO of a cream-colored creature with red eyes, a leafy green head, and a tall flower stem, surrounded by small flowers against a bright yellow sky.", width: 1500, height: 2000, label: "A leafy little companion" },
 ];
+
+export const meganPetCommissionPhotos: CreationPhoto[] = [
+  { src: "/showcase/megan-pet-commission-pink-bow.jpg", alt: "Megan’s commissioned portrait of a smiling tan and white dog with upright ears and a pink bow with a daisy.", width: 1500, height: 2000, label: "A smile and a pink bow" },
+  { src: "/showcase/megan-pet-commission-curly-dog.jpg", alt: "Megan’s commissioned portrait of a curly-coated white and caramel dog with warm brown eyes against a blue background.", width: 1500, height: 2000, label: "Curls and kind eyes" },
+  { src: "/showcase/megan-pet-commission-fluffy-dog.jpg", alt: "Megan’s commissioned portrait of a fluffy white, tan, and gray dog surrounded by soft blue and purple brushstrokes.", width: 1500, height: 2000, label: "A fluffy little friend" },
+];
+
+export const meganCustomArtPhotos: CreationPhoto[] = [
+  { src: "/showcase/megan-custom-sleeping-dragon.jpg", alt: "Megan’s custom artwork of a sleepy blue dragon with green wings curled on a tree stump in a flower-filled meadow.", width: 1500, height: 2000, label: "A dragon’s daydream" },
+  { src: "/showcase/megan-custom-lantern-companions.jpg", alt: "Megan’s custom artwork of two woodland creatures in flowing leaf-like cloaks sharing the warm glow of a lantern.", width: 1500, height: 2000, label: "A little light to share" },
+  { src: "/showcase/megan-custom-mushroom-companions.jpg", alt: "Megan’s custom artwork of two woodland creatures wearing red spotted mushroom caps and holding tiny mushrooms.", width: 1500, height: 2000, label: "Mushroom companions" },
+];
+
+export const meganJessDuckPhotos: CreationPhoto[] = [
+  { src: "/showcase/megan-jess-duck-aceo.jpg", alt: "Megan’s ACEO of a yellow duck with orange feet and a sleepy expression beneath a dark rain cloud and falling blue raindrops.", width: 1500, height: 2000, label: "The duck ACEO" },
+];
+
+export const meganJessZebraPhotos: CreationPhoto[] = [
+  { src: "/showcase/megan-jess-zebra-aceo.jpg", alt: "Megan’s ACEO of a smiling baby zebra with bright eyes and one raised hoof, surrounded by vivid green foliage.", width: 1500, height: 2000, label: "The zebra ACEO" },
+];
