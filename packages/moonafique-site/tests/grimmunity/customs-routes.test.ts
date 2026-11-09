@@ -1,11 +1,13 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-const state = vi.hoisted(() => ({ user: null as null | { id: string; email: string }, submit: vi.fn(), update: vi.fn(), deliver: vi.fn(), after: vi.fn() }));
+const state = vi.hoisted(() => ({ user: null as null | { id: string; email: string }, submit: vi.fn(), update: vi.fn(), deliver: vi.fn(), photo: vi.fn(), after: vi.fn() }));
 vi.mock("@workos-inc/authkit-nextjs", () => ({ withAuth: async () => ({ user: state.user }) }));
 vi.mock("@/lib/grimmunity/db", () => ({ database: () => ({}) }));
 vi.mock("@/lib/grimmunity/runtime", () => ({ grimMode: () => "sandbox" }));
 vi.mock("@/lib/customs/store", () => ({ submitRequest: state.submit, updateRequest: state.update }));
 vi.mock("@/lib/customs/mail", () => ({ deliverCustomEmails: state.deliver }));
 vi.mock("next/server", async (original) => ({ ...await original<typeof import("next/server")>(), after: state.after }));
+vi.mock("@/lib/customs/photos", async (original) => ({ ...await original<typeof import("@/lib/customs/photos")>(), referencePhoto: state.photo }));
+import { GET as photoGET } from "@/app/api/custom-requests/photos/[id]/route";
 import { POST } from "@/app/api/custom-requests/route";
 import { PATCH } from "@/app/api/custom-requests/manage/route";
 import { POST as retry, GET as cron } from "@/app/api/custom-requests/notifications/route";
@@ -37,6 +39,24 @@ describe("custom request authorization", () => {
     state.user = { id: "user_staff", email: "staff@example.invalid" };
     expect((await PATCH(request("PATCH"))).status).toBe(200);
     expect(state.update).toHaveBeenCalledWith({}, "sandbox", {}, "user_staff");
+  });
+  it("protects photo bytes from visitors and ordinary customers and never caches staff responses", async () => {
+    const context = { params: Promise.resolve({ id: "11111111-1111-4111-8111-111111111111" }) };
+    expect((await photoGET(new Request("https://example.invalid"), context)).status).toBe(401);
+    state.user = { id: "ordinary_customer", email: "customer@example.invalid" };
+    expect((await photoGET(new Request("https://example.invalid"), context)).status).toBe(403);
+    expect(state.photo).not.toHaveBeenCalled();
+    state.user = { id: "user_staff", email: "staff@example.invalid" };
+    state.photo.mockResolvedValue({ data: Buffer.from("normalized photo") });
+    const result = await photoGET(new Request("https://example.invalid"), context);
+    expect(result.status).toBe(200);
+    expect(result.headers.get("Content-Type")).toBe("image/webp");
+    expect(result.headers.get("Cache-Control")).toBe("private, no-store");
+    expect(result.headers.get("X-Content-Type-Options")).toBe("nosniff");
+    expect(result.headers.get("Cross-Origin-Resource-Policy")).toBe("same-origin");
+    expect(state.photo).toHaveBeenCalledWith({}, "sandbox", "11111111-1111-4111-8111-111111111111");
+    state.photo.mockResolvedValue(null);
+    expect((await photoGET(new Request("https://example.invalid"), context)).status).toBe(404);
   });
   it("protects the scheduled email retry and can run without billing", async () => {
     vi.stubEnv("CRON_SECRET", "custom-email-cron-secret-at-least-32-characters");

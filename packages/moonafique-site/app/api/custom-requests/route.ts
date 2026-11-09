@@ -2,7 +2,7 @@ import { database } from "@/lib/grimmunity/db";
 import { sameOrigin } from "@/lib/grimmunity/http";
 import { grimMode } from "@/lib/grimmunity/runtime";
 import { submitRequest } from "@/lib/customs/store";
-import { customFailure, readRequestBody } from "@/lib/customs/http";
+import { customFailure, readSubmission } from "@/lib/customs/http";
 import { after } from "next/server";
 import { deliverCustomEmails } from "@/lib/customs/mail";
 
@@ -12,10 +12,10 @@ export const maxDuration = 30;
 export async function POST(request: Request) {
   try {
     sameOrigin(request);
-    const input = await readRequestBody(request);
+    const { input, photos } = await readSubmission(request);
     const ip = request.headers.get("x-vercel-forwarded-for")?.split(",")[0]?.trim() || "unknown";
     const mode = grimMode();
-    const reference = await submitRequest(database(), mode, input, ip, process.env.GRIM_INTEREST_SECRET ?? "");
+    const reference = await submitRequest(database(), mode, input, ip, process.env.GRIM_INTEREST_SECRET ?? "", new Date(), { photos });
     if (reference) after(async () => {
       try {
         const options = { requestId: reference, deadline: Date.now() + 20_000 };

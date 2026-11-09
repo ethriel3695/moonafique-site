@@ -1,3 +1,4 @@
+import { preparePhoto, validatePhotoFiles } from "./photos";
 import { createHmac } from "node:crypto";
 import type { Pool } from "pg";
 import { one, transaction } from "../grimmunity/db";
@@ -6,9 +7,11 @@ import { acknowledgementVersion, requestInput, shopToday, staffUpdateInput, type
 import { customRequestMessage } from "../../emails/custom-request-email";
 import { appOrigin } from "../grimmunity/stripe-gateway";
 
-export async function submitRequest(pool: Pool, mode: Mode, input: unknown, ip: string, secret: string, now = new Date(), options: { staffEmailTest?: boolean } = {}) {
+export async function submitRequest(pool: Pool, mode: Mode, input: unknown, ip: string, secret: string, now = new Date(), options: { staffEmailTest?: boolean; photos?: File[] } = {}) {
   const data = requestInput.parse(input);
   if (data.website) return null;
+  const photos = options.photos ?? [];
+  validatePhotoFiles(photos);
   if (data.hasDeadline && data.neededBy < shopToday(now)) throw new ClubError("custom_date_past", 400);
   if (secret.length < 32) throw new ClubError("custom_unavailable", 503);
   const hour = Math.floor(now.getTime() / 3_600_000);
@@ -29,7 +32,12 @@ export async function submitRequest(pool: Pool, mode: Mode, input: unknown, ip: 
     const saved = created ?? await one<{ id: string }>(db, "SELECT id FROM customs.requests WHERE mode=$1 AND submission_key=$2", [mode, data.submissionKey]);
     if (!saved) throw new ClubError("custom_unavailable", 503);
     if (created) {
-      const emailData = { id: created.id, name: data.name, email: data.email || null, whatnotUsername: data.whatnotUsername || null,
+      for (const [index, file] of photos.entries()) {
+        const photo = await preparePhoto(file);
+        await db.query("INSERT INTO customs.reference_photos(request_id,position,data,width,height) VALUES($1,$2,$3,$4,$5)",
+          [created.id, index + 1, photo.data, photo.width, photo.height]);
+      }
+      const emailData = { photoCount: photos.length, id: created.id, name: data.name, email: data.email || null, whatnotUsername: data.whatnotUsername || null,
         request: data.request, details: data.details, requestedDate: data.hasDeadline ? data.neededBy : null, occasion: data.hasDeadline ? data.occasion : "" };
       for (const kind of data.email ? ["staff", "customer"] as const : ["staff"] as const) {
         const message = await customRequestMessage(kind, emailData, appOrigin(), mode === "sandbox" || options.staffEmailTest);
@@ -51,7 +59,8 @@ export async function requestQueue(pool: Pool, mode: Mode, filter: QueueFilter =
   const total = await one<{ count: string }>(pool, `SELECT count(*) FROM customs.requests WHERE mode=$1 AND ${where}`, [mode]);
   const rows = (await pool.query<CustomRequest>(
     `SELECT id,name,email,whatnot_username,request,details,needed_by::text,occasion,status,staff_notes,revision,created_at,updated_at,
-       COALESCE((SELECT jsonb_agg(jsonb_build_object('kind',n.kind,'state',n.state) ORDER BY n.kind) FROM customs.notifications n WHERE n.request_id=r.id),'[]'::jsonb) AS notifications
+       COALESCE((SELECT jsonb_agg(jsonb_build_object('kind',n.kind,'state',n.state) ORDER BY n.kind) FROM customs.notifications n WHERE n.request_id=r.id),'[]'::jsonb) AS notifications,
+       COALESCE((SELECT jsonb_agg(jsonb_build_object('id',p.id,'position',p.position,'width',p.width,'height',p.height) ORDER BY p.position) FROM customs.reference_photos p WHERE p.request_id=r.id),'[]'::jsonb) AS photos
      FROM customs.requests r WHERE mode=$1 AND ${where}
      ORDER BY created_at ASC,id ASC LIMIT 50 OFFSET $2`, [mode, (currentPage - 1) * 50])).rows;
   return { rows, total: Number(total?.count ?? 0), page: currentPage };

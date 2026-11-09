@@ -1,3 +1,5 @@
+import sharp from "sharp";
+import { referencePhoto } from "../../lib/customs/photos";
 import { randomUUID } from "node:crypto";
 import { beforeAll, beforeEach, afterAll, describe, expect, it } from "vitest";
 import { Pool } from "pg";
@@ -30,6 +32,33 @@ describe("custom request queue", () => {
     expect(queue.rows[0].email).toBe("visitor@example.invalid");
     expect((await pool.query("SELECT count(*) FROM grim.interest")).rows[0].count).toBe(interestBefore);
     expect((await pool.query("SELECT count(*) FROM grim.memberships")).rows[0].count).toBe(membersBefore);
+  });
+  it("atomically saves photos, keeps retries idempotent, and isolates modes", async () => {
+    const bytes = await sharp({ create: { width: 10, height: 10, channels: 3, background: "purple" } }).png().toBuffer();
+    const photo = new File([new Uint8Array(bytes)], "private-name.png", { type: "image/png" });
+    const data = input();
+    const save = () => submitRequest(pool, "sandbox", data, "192.0.2.1", secret, now, { photos: [photo] });
+    const ids = await Promise.all([save(), save()]);
+    expect(ids[0]).toBe(ids[1]);
+    const row = (await requestQueue(pool, "sandbox")).rows[0];
+    expect(row.photos).toHaveLength(1);
+    expect(row.photos[0]).not.toHaveProperty("data");
+    const stored = await referencePhoto(pool, "sandbox", row.photos[0].id);
+    expect((await sharp(stored!.data).metadata()).format).toBe("webp");
+    expect(await referencePhoto(pool, "live", row.photos[0].id)).toBeUndefined();
+    const messages = JSON.stringify((await pool.query("SELECT message FROM customs.notifications")).rows);
+    expect(messages).toContain("1 reference photo");
+    expect(messages).not.toContain("private-name.png");
+    expect(messages).not.toContain(row.photos[0].id);
+    await pool.query("DELETE FROM customs.requests WHERE id=$1", [ids[0]]);
+    expect(await referencePhoto(pool, "sandbox", row.photos[0].id)).toBeUndefined();
+  });
+  it("never leaves a partial request or notification when image validation fails", async () => {
+    const bad = new File(["invalid pixels"], "image.jpg", { type: "image/jpeg" });
+    await expect(submitRequest(pool, "sandbox", input(), "192.0.2.1", secret, now, { photos: [bad] })).rejects.toMatchObject({ status: 400 });
+    expect((await requestQueue(pool, "sandbox")).total).toBe(0);
+    expect((await pool.query("SELECT count(*) FROM customs.notifications")).rows[0].count).toBe("0");
+    expect((await pool.query("SELECT count(*) FROM customs.reference_photos")).rows[0].count).toBe("0");
   });
   it("requires contact information, an idea, and the acknowledgement", async () => {
     for (const data of [input({ email: "" }), input({ email: "bad" }), input({ whatnotUsername: "https://whatnot.com/user" }), input({ acknowledged: false }), input({ request: "" })])

@@ -3,6 +3,7 @@ import { render } from "@react-email/render";
 import * as React from "react";
 
 export type RequestEmailData = {
+  photoCount?: number;
   id: string; name: string; email: string | null; whatnotUsername: string | null;
   request: string; details: string; requestedDate: string | null; occasion: string;
 };
@@ -29,6 +30,7 @@ export function CustomRequestEmail({ kind, data, siteUrl, test = false }: { kind
           <Text style={paragraph}>Thanks for sharing your idea with Moonafique! Your request has been saved in our queue.</Text>
           <Text style={paragraph}>We’ll use the contact details you provided to discuss what’s possible before agreeing on a project.</Text>
         </>}
+        {!!data.photoCount && <Text style={paragraph}>{data.photoCount} reference photo{data.photoCount === 1 ? "" : "s"} saved with your request. {staff ? "View them securely in the staff queue." : "Only Moonafique staff can view them on the website."}</Text>}
         <Text style={{ ...paragraph, backgroundColor: "#f5f0f8", borderRadius: 12, padding: 16 }}>{requestOrderPolicy}<br /><br />{requestDatePolicy}</Text>
         <Text style={paragraph}>Submitting a request does not guarantee acceptance or completion. It is not a confirmed order, and no payment has been taken.</Text>
         <Text style={{ fontSize: 13, lineHeight: "21px", overflowWrap: "anywhere" }}>Request reference: {data.id}</Text>

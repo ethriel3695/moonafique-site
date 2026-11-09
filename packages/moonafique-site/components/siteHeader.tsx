@@ -14,6 +14,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Cart } from "@/components/cart";
+import { Wordmark } from "@/components/wordmark";
 import { Logo } from "@/components/logo";
 import { siteNavigation } from "@/lib/site-content";
 import { cn } from "@/lib/utils";
@@ -31,9 +32,7 @@ export function SiteHeader() {
             className="flex shrink-0 items-center gap-2"
           >
             <Logo className="size-11" />
-            <span className="hidden font-display text-2xl text-primary min-[360px]:inline sm:text-3xl">
-              Moonafique
-            </span>
+            <Wordmark className="hidden text-2xl text-primary min-[360px]:inline-flex sm:text-3xl" />
           </Link>
         </div>
         <nav

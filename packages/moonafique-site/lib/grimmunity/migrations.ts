@@ -18,6 +18,7 @@ export async function migrate(pool: Pool) {
     [11, "011_prepaid_shipping_notices.sql"],
     [12, "012_renewal_replacement.sql"],
     [13, "013_email_opt_in.sql"],
+    [14, "014_custom_reference_photos.sql"],
   ] as const) {
     const sql = await readFile(
       path.join(process.cwd(), "db/grimmunity", filename),

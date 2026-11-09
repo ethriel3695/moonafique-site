@@ -46,7 +46,7 @@ export default function PrivacyPolicyPage() {
 
           <p className="text-muted-foreground">
             For custom requests, we store your name, email address or Whatnot username,
-            project description, additional details, and any requested date or occasion.
+            project description, additional details, any reference photos you upload, and any requested date or occasion. Reference photos are resized, stripped of embedded metadata, and stored privately with your request for staff review. We do not publish them in our galleries or attach them to notification emails.
             Moonafique staff receive a new-request notification and use these details to
             review requests in the order received and follow up with you. If you provide
             an email address, we send a request confirmation. Submitting does not add you to a mailing list. We use a

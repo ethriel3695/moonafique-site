@@ -1,3 +1,4 @@
+import { Wordmark } from "@/components/wordmark";
 import Link from "next/link";
 import { brandDescription, socialLinks } from "@/lib/site-content";
 const links = [
@@ -7,7 +8,7 @@ const links = [
   { label: "The creations showcase", href: "/creations" },
   { label: "Monthly memberships", href: "/communities" },
   { label: "Custom requests", href: "/customs" },
-  { label: "About Moonafique", href: "/about" },
+  { label: "Meet the team", href: "/about" },
   { label: "Contact", href: "/contact" },
 ];
 const policies = [
@@ -24,7 +25,7 @@ export function Footer() {
       <div className="mx-auto grid max-w-screen-xl gap-10 px-5 py-12 sm:px-8 lg:grid-cols-[1.3fr_1fr_0.7fr]">
         <div>
           <Link href="/" className="font-display text-3xl">
-            Moonafique
+            <Wordmark />
           </Link>
           <p className="mt-5 max-w-md leading-7 text-[#e3d6ec]">
             {brandDescription}

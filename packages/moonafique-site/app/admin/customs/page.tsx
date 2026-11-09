@@ -49,6 +49,18 @@ export default async function CustomQueuePage({ searchParams }: { searchParams: 
           {request.needed_by ? <div className="my-5 rounded-xl bg-amber-50 p-4 text-sm text-amber-950"><p className="font-bold">Requested date: {date(request.needed_by)} · For information only{request.needed_by < today && ["new", "reviewing", "in_progress"].includes(request.status) ? " · Date has passed" : ""}</p>{request.occasion && <p className="mt-2 whitespace-pre-wrap break-words">{request.occasion}</p>}</div> : <p className="my-5 text-sm text-muted-foreground">No requested date.</p>}
           <h3 className="text-sm font-bold">The idea</h3><p className="mt-2 whitespace-pre-wrap break-words text-sm leading-7">{request.request}</p>
           {request.details && <><h3 className="mt-4 text-sm font-bold">Additional details</h3><p className="mt-2 whitespace-pre-wrap break-words text-sm leading-7">{request.details}</p></>}
+          {!!request.photos.length && <section className="mt-5" aria-label="Private reference photos">
+            <h3 className="text-sm font-bold">Reference photos · Staff only</h3>
+            <p className="mt-2 text-xs text-muted-foreground">Open a photo for a larger view. These images are private and are not included in emails.</p>
+            <ul className="mt-3 grid grid-cols-3 gap-3">{request.photos.map((photo) => <li key={photo.id}>
+              <a href={`/api/custom-requests/photos/${photo.id}`} target="_blank" rel="noopener noreferrer" className="block rounded-lg border p-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary">
+                {/* Authenticated same-origin image; never use the public Next image optimizer. */}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={`/api/custom-requests/photos/${photo.id}`} alt={`Reference photo ${photo.position} for this custom request`} width={photo.width} height={photo.height} loading="lazy" className="aspect-square w-full rounded-md object-contain" />
+                <span className="block px-1 py-2 text-xs font-semibold underline">Photo {photo.position}<span className="sr-only"> (opens in a new tab)</span></span>
+              </a>
+            </li>)}</ul>
+          </section>}
           <p className="mt-5 break-all text-xs text-muted-foreground">Reference: {request.id}</p>
           {request.notifications.length > 0 && <ul className="mt-3 space-y-1 text-xs text-muted-foreground" aria-label="Email notifications">
             {request.notifications.map((notification) => <li key={notification.kind}>{notification.kind === "staff" ? "Staff notification" : "Customer confirmation"}: {notification.state === "review" ? "Needs review" : notification.state === "sent" ? "Sent" : "Pending"}</li>)}

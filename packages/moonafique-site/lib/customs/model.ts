@@ -61,5 +61,6 @@ export type CustomRequest = {
   revision: number;
   created_at: Date;
   updated_at: Date;
+  photos: { id: string; position: number; width: number; height: number }[];
   notifications: { kind: "staff" | "customer"; state: "pending" | "sent" | "review" }[];
 };
