@@ -78,3 +78,7 @@ export const meganJessDuckPhotos: CreationPhoto[] = [
 export const meganJessZebraPhotos: CreationPhoto[] = [
   { src: "/showcase/megan-jess-zebra-aceo.jpg", alt: "Megan’s ACEO of a smiling baby zebra with bright eyes and one raised hoof, surrounded by vivid green foliage.", width: 1500, height: 2000, label: "The zebra ACEO" },
 ];
+
+export const sophiaAceoPhotos: CreationPhoto[] = [
+  { src: "/showcase/sophia-aceo-platypus-pond.jpg", alt: "Sophia’s ACEO of a golden-brown platypus with a pink belly, dark bill, feet, and paddle tail floating in blue water among green lily pads and pink flowers.", width: 1500, height: 2000, label: "A little pond companion" },
+];

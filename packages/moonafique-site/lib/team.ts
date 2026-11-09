@@ -1,4 +1,5 @@
 import {
+  sophiaAceoPhotos,
   meganPetCommissionPhotos,
   meganCustomArtPhotos,
   meganJessDuckPhotos,
@@ -127,6 +128,14 @@ export const novemberGrimmOfTheMonth: TeamProject = {
 };
 
 export const teamProjects: TeamProject[] = [
+  {
+    slug: "sophia-aceo-art",
+    title: "Sophia’s ACEO art",
+    occasion: "Miniature art, big personality",
+    description: "A little float among the flowers. Sophia’s platypus pairs a pink belly and paddle tail with blue water, green lily pads, and soft pink blooms for a cheerful pond-side moment.",
+    creators: [{ slug: "sophia", role: "Artwork" }],
+    photos: sophiaAceoPhotos,
+  },
   {
     slug: "megan-pet-commissions",
     title: "Megan’s custom pet portraits",
