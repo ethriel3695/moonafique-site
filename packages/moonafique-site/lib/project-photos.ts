@@ -24,6 +24,7 @@ export const elizaPetPhotos: CreationPhoto[] = [
 export const novemberGrimmOfTheMonthPhotos: CreationPhoto[] = [
   { src: "/showcase/november-grimm-of-the-month-front.jpg", alt: "Jess’s November Grimm of the Month with a cream cat-eared hood, teal button eyes, an orange patchwork coat, and yellow boots.", width: 303, height: 862, label: "November’s Grimm" },
   { src: "/showcase/november-grimm-of-the-month-back.jpg", alt: "The back of Jess’s November Grimm of the Month, with a large sunflower and stitched-patch details on its orange coat.", width: 305, height: 842, label: "The sunflower detail" },
+  { src: "/showcase/november-grimm-of-the-month-pet.jpg", alt: "November Grimm of the Month in a cream hood and orange patchwork coat, holding its matching pet in the painted autumn Grimm World.", width: 538, height: 360, label: "Grimm & pet" },
 ];
 
 export const elizaRainbowStarsPhotos: CreationPhoto[] = [

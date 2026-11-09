@@ -39,7 +39,7 @@ export function CreationPhotoGallery({ title, photos }: { title: string; photos:
           <button
             type="button"
             aria-label={`Enlarge ${title} photo`}
-            className={`group relative block ${photos.every((item) => item.height > item.width) ? "aspect-[4/5]" : "aspect-[4/3]"} w-full overflow-hidden rounded-[1.5rem] bg-[#050505] ${focusStyle}`}
+            className={`group relative block ${photos[0].height > photos[0].width ? "aspect-[4/5]" : "aspect-[4/3]"} w-full overflow-hidden rounded-[1.5rem] bg-[#050505] ${focusStyle}`}
           >
             <Image
               src={photo.src}
@@ -80,7 +80,8 @@ export function CreationPhotoGallery({ title, photos }: { title: string; photos:
             width={photo.width}
             height={photo.height}
             sizes="(min-width: 960px) 848px, 90vw"
-            className="mx-auto h-auto max-h-[60dvh] w-auto max-w-full rounded-lg bg-black object-contain"
+            style={{ width: `min(100%, ${photo.width}px, calc(60dvh * ${photo.width / photo.height}))` }}
+            className="mx-auto h-auto max-h-[60dvh] max-w-full rounded-lg bg-black object-contain"
           />
           {choices && <div className="mt-4">{choices}</div>}
         </Dialog.Content>
