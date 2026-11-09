@@ -11,3 +11,7 @@ November is not mapped to a confirmed Whatnot inventory listing, so the card dir
 ## Verification
 
 TypeScript and the 87 storefront tests passed. Local browser checks covered Eliza’s photo selection, the November collection, the link to Jess’s portfolio, a 390px mobile view without horizontal overflow, and enlarged-photo dismissal with keyboard focus restored.
+
+## Release
+
+Published revision `ff818cd559eada7ea02c2b0d33ff598c12aad6c0` as Vercel deployment `dpl_3PofPUFnJ6LJcY9bpefzVWA1Fuuk`. Staged and public checks passed for the five new JPEGs, portfolio entries, November card, October vault status, and existing storefront access protections. Live browser review confirmed Eliza’s showcase and November’s collection card with Jess’s credit; no browser errors appeared. The local preview server was stopped.
