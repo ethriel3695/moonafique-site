@@ -7,3 +7,7 @@ The gallery uses its lead photograph to choose a stable portrait or landscape fr
 Browser review exposed an existing lightbox sizing issue: the browser interpreted an optimized Next.js image’s density as a smaller natural display size. Explicit width now respects the source width, available dialog width, and 60dvh height limit. The new photograph displays at 538 × 360 on desktop and fits a 390px phone viewport. Portrait images also remain within the height limit. Escape dismissal returns focus to the photo button.
 
 TypeScript and whitespace checks passed. Existing photos, creator credits, membership billing, and inventory data were preserved.
+
+## Publication
+
+Published revision `fc6d452a3f1ca94cfa92585a9bcafea888c047df` as Vercel deployment `dpl_GjoUc1jcKjXMmQtzAQLCDrDznRPG`. Staged and public checks confirmed the image download and its presence in both galleries, plus existing storefront protections. Live browser review verified the enlarged image and three-photo controls without browser errors. The local preview server was stopped.
