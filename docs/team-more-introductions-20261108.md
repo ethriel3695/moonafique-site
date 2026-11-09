@@ -9,3 +9,5 @@ Existing project authorship, galleries, and collection links remain intact. Soph
 Validation: TypeScript and whitespace checks; local browser review of the new biographies, person navigation, and layout.
 
 Removed em dashes from website copy, including metadata, form messages, membership guidance, and staff labels. Missing values now use N/A. No calculations or stored business data changed.
+
+Megan’s role and introduction also credit her with all custom pet commissions, alongside ACEO art, live shows, and Grimmfest games.

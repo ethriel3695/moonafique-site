@@ -30,9 +30,9 @@ export const teamProfiles: Partial<Record<TeamSlug, { role: string; bio: string[
     ],
   },
   megan: {
-    role: "ACEO artist · Live shows & Grimmfest games",
+    role: "ACEO & custom pet artist · Live shows & Grimmfest games",
     bio: [
-      "Megan brings a wonderfully extravagant imagination to the studio and is the artist behind many of our ACEOs. Her tiny canvases make room for big personality.",
+      "Megan brings a wonderfully extravagant imagination to the studio, from many of our ACEOs to all of our custom pet commissions. Whether she’s capturing a beloved pet or creating a tiny work of art, her pieces make room for big personality.",
       "She also helps keep the live shows moving alongside Jess and dreams up the games we play at Grimmfest. Art, play, and a little friendly mischief are all part of her corner of Moonafique.",
     ],
   },
