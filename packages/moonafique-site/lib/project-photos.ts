@@ -31,3 +31,7 @@ export const elizaRainbowStarsPhotos: CreationPhoto[] = [
   { src: "/showcase/eliza-rainbow-stars-grimm-front.png", alt: "Front view of Eliza’s hand-painted Grimm with a turquoise skull, black star-covered coat, rainbow trim, and striped metallic boots; hand and background removed.", width: 1086, height: 1448, label: "Rainbow & stars" },
   { src: "/showcase/eliza-rainbow-stars-grimm-back.png", alt: "Back view of Eliza’s Grimm with a rainbow-striped hood and colorful stars surrounding a large yellow starburst on its black coat; hand and background removed.", width: 1086, height: 1448, label: "Starburst details" },
 ];
+
+export const yuleGrimmPhotos: CreationPhoto[] = [
+  { src: "/showcase/yule-grimms-cleaned.png", alt: "Moonafique’s Yule Grimms in green and icy-blue tree-shaped coats, with smiling and skull faces, star toppers, colorful boots, and tiny companions on the studio table.", width: 851, height: 1849, label: "The Yule gathering", previewPosition: "center 35%" },
+];

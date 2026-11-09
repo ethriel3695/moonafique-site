@@ -6,6 +6,7 @@ export type CreationPhoto = {
   width: number;
   height: number;
   label?: string;
+  previewPosition?: string;
 };
 
 export type PrintWarsCreation = {

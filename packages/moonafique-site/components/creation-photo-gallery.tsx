@@ -47,7 +47,8 @@ export function CreationPhotoGallery({ title, photos }: { title: string; photos:
               width={photo.width}
               height={photo.height}
               sizes="(min-width: 1280px) 546px, (min-width: 768px) 45vw, 90vw"
-              className="h-full w-full object-contain"
+              style={photo.previewPosition ? { objectPosition: photo.previewPosition } : undefined}
+              className={`h-full w-full ${photo.previewPosition ? "object-cover" : "object-contain"}`}
             />
             <span className="absolute bottom-3 right-3 flex items-center gap-2 rounded-full border border-white/25 bg-black/80 px-3 py-2 text-xs font-semibold text-white group-hover:bg-black">
               <Expand className="size-3.5" aria-hidden="true" />
