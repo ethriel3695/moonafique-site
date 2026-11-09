@@ -49,9 +49,7 @@ export const teamProfiles: Partial<Record<TeamSlug, { role: string; bio: string[
   megan: {
     role: "Creative partner & artist",
     bio: [
-      "Megan is the foundation of Moonafique. She helps shape where this world of ours goes, and all of us count on her judgment, imagination, and care. As Jess’s creative partner, Megan brings her own vision to the ideas we pursue and the experiences we create together.",
-      "She has an incredible gift for turning almost anything into a work of art. From expressive ACEOs to deeply personal pet commissions, Megan finds the character in a subject and brings it to life with color, feeling, and unmistakable personality.",
-      "Megan can take the smallest spark of an idea and see what it could become. A game becomes something everyone wants to join, a familiar pet becomes a piece of art someone treasures, and a room full of collectors starts to feel like friends. There’s a whole lot of Megan magic in this little world.",
+      "Megan, also known as \"My Mom\" is a creator of ACEOs and loves to create combos of 3D creatures and art, bringing pieces to life. There’s a whole lot of Megan magic in this little world.",
     ],
   },
   keyara: {
