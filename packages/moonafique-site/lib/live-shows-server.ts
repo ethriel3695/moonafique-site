@@ -19,7 +19,7 @@ const cachedSchedule = unstable_cache(async () => {
     }).finally(() => { pending = undefined; });
   }
   return pending;
-}, ["whatnot-public-schedule-v1", connection], { revalidate: scheduleRefreshSeconds });
+}, ["whatnot-public-schedule-v2", connection], { revalidate: scheduleRefreshSeconds });
 
 export async function getLiveSchedule(): Promise<LiveSchedule> {
   if (!token) return emptySchedule;

@@ -38,15 +38,17 @@ describe("official Whatnot schedule import", () => {
     }
   });
 
-  it("excludes private, ended, cancelled, stopped and undated scheduled shows; limits 3DA to Print Wars", async () => {
+  it("includes public charity and raid-train shows while excluding private, finished and undated scheduled shows", async () => {
     const api = fakeApi(user, page([
       show(1, { visibility: "private" }), show(2, { status: "ended" }), show(3, { status: "cancelled" }),
       show(4, { status: "stopped" }), show(5, { scheduled_start_at: null }),
-      show(6, { title: "3DA Giving Tree" }), show(7, { title: "3D-Addicts raid" }),
+      show(6, { title: "3DA: Giving Tree Raid Train" }), show(7, { title: "Raid into the 3DA Giving Tree Train" }),
       show(8, { title: "3DA Print Wars" }), show(9, { title: "Grim-Fest" }),
+      show(11, { title: "3D-Addicts raid" }),
     ]), page([show(10, { status: "live", scheduled_start_at: null })]));
     const result = await fetchWhatnotSchedule("test-token", api);
-    expect(result.shows.map(s => s.id).sort()).toEqual([id(8), id(9), id(10)].sort());
+    expect(result.shows.map(s => s.id).sort()).toEqual([id(6), id(7), id(8), id(9), id(10), id(11)].sort());
+    expect(result.shows.find(s => s.id === id(6))).toMatchObject({ title: "3DA: Giving Tree Raid Train", series: "collectibles", href: `https://www.whatnot.com/live/${id(6)}` });
     expect(result.shows.find(s => s.id === id(8))?.series).toBe("print-wars");
     expect(result.shows.find(s => s.id === id(9))?.series).toBe("grimmfest");
   });

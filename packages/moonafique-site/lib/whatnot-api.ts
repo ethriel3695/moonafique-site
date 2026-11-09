@@ -80,9 +80,6 @@ export async function fetchWhatnotSchedule(token: string, fetcher: typeof fetch 
         }
         if (show.status === "scheduled" && !show.scheduled_start_at) continue;
         const series = seriesFor(show.title);
-        // Keep the owner's 3DA references limited to Print Wars. The full
-        // Whatnot profile remains available for other group events.
-        if (series !== "print-wars" && /\b3da\b|3d[\s-]*addicts/i.test(show.title)) continue;
         shows.set(show.id, {
           id: show.id, title: show.title, series, status: show.status,
           startsAt: show.scheduled_start_at,
