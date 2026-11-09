@@ -5,7 +5,7 @@ import { CreationPhotoGallery } from "@/components/creation-photo-gallery";
 import { ProjectCredits } from "@/components/project-credits";
 import { useEffect, useRef } from "react";
 import { ArrowUpRight, ChevronDown, Sparkles } from "lucide-react";
-import { teamMembers, teamProjects } from "@/lib/team";
+import { teamMembers, teamProjects, teamProfiles } from "@/lib/team";
 
 
 export function TeamSpotlight() {
@@ -49,10 +49,13 @@ export function TeamSpotlight() {
         {teamMembers.map((person, index) => <details suppressHydrationWarning key={person.slug} id={`team-${person.slug}`} open={index === 0} className="group/person scroll-mt-28 overflow-hidden rounded-2xl border bg-white shadow-sm">
           <summary className="flex min-h-24 cursor-pointer list-none items-center gap-4 px-5 py-5 marker:content-none focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-primary sm:px-7 [&::-webkit-details-marker]:hidden">
             <span aria-hidden="true" className="flex size-12 shrink-0 items-center justify-center rounded-full bg-secondary font-display text-2xl text-primary">{person.name.charAt(0)}</span>
-            <span className="min-w-0 flex-1"><span className="block font-display text-3xl">{person.name}</span><span className="mt-1 block text-xs text-muted-foreground">A corner of the Moonafique studio</span></span>
+            <span className="min-w-0 flex-1"><span className="block font-display text-3xl">{person.name}</span><span className="mt-1 block text-xs text-muted-foreground">{teamProfiles[person.slug]?.role ?? "A corner of the Moonafique studio"}</span></span>
             <ChevronDown aria-hidden="true" className="size-5 shrink-0 text-primary transition-transform group-open/person:rotate-180 motion-reduce:transition-none" />
           </summary>
           <div className="border-t border-border/60 px-5 pb-6 pt-5 sm:px-7">
+            {teamProfiles[person.slug] && <div className="mb-6 max-w-2xl space-y-3 border-b border-border/60 pb-6 text-base leading-7 text-muted-foreground">
+              {teamProfiles[person.slug]?.bio.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+            </div>}
             <div className="mb-4 flex flex-wrap items-center justify-between gap-3"><h3 className="text-sm font-bold">{person.name}’s project gallery</h3><a href={`#team-${person.slug}`} onClick={() => reveal(`#team-${person.slug}`)} className="inline-flex min-h-11 items-center gap-1 text-xs font-semibold text-primary underline underline-offset-4">Link to {person.name}’s gallery <ArrowUpRight className="size-3" aria-hidden="true" /></a></div>
             <div className="space-y-4">
               {teamProjects.filter((project) => project.creators.some((credit) => credit.slug === person.slug)).map((project) => <details suppressHydrationWarning key={project.slug} id={`project-${person.slug}-${project.slug}`} open className="group/project scroll-mt-28 overflow-hidden rounded-2xl border border-primary/20">

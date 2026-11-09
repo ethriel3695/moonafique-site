@@ -13,6 +13,31 @@ export const teamMembers = [
   { slug: "ruby", name: "Ruby" },
 ] as const;
 export type TeamSlug = typeof teamMembers[number]["slug"];
+
+export const teamProfiles: Partial<Record<TeamSlug, { role: string; bio: string[] }>> = {
+  jess: {
+    role: "CEO · Creative vision & live-show host",
+    bio: [
+      "Jess is the creative spark and familiar face of Moonafique. As CEO, designer, and ACEO artist, she dreams up the characters, tiny artworks, and wonderfully unexpected ideas that make this little world our own.",
+      "On Whatnot, she brings that imagination to the camera—sharing the creations, welcoming collectors, and inviting everyone into a little Moonafique mischief.",
+    ],
+  },
+  reuben: {
+    role: "COO · Operations & design",
+    bio: [
+      "Reuben keeps the Moonafique world turning behind the scenes. As COO, he handles operations, shipping, and custom order processing, helping each idea make its way from our studio to your collection.",
+      "He’s a maker, too, creating 3D designs and ACEO art. A little planning, a little problem-solving, and plenty of imagination go into keeping the creative chaos moving.",
+    ],
+  },
+  megan: {
+    role: "ACEO artist · Live shows & Grimmfest games",
+    bio: [
+      "Megan brings a wonderfully extravagant imagination to the studio and is the artist behind many of our ACEOs. Her tiny canvases make room for big personality.",
+      "She also helps keep the live shows moving alongside Jess and dreams up the games we play at Grimmfest. Art, play, and a little friendly mischief are all part of her corner of Moonafique.",
+    ],
+  },
+};
+
 export type TeamProject = {
   slug: string;
   title: string;
