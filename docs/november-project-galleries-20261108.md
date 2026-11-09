@@ -18,3 +18,9 @@ The shared photo viewer supports thumbnail selection, enlarged views, focus retu
 ## Verification
 
 TypeScript and all 87 storefront tests passed. Browser review covered desktop and 390px layouts, direct project links, shared creator credits, collection navigation, thumbnail switching, and enlarged-image dismissal. The phone collection had no horizontal overflow. No browser errors were observed in the reviewed preview. Existing inventory, prices, subscriptions, and billing were not edited.
+
+## Release
+
+Published application revision `a79659e70296092f9265f18dca45a9e9f79b3d6b` as Vercel deployment `dpl_8Sk3JGTsdKyY4UF5RdLJujuqSZA3`. The staged release passed its checks before promotion; the public release passed the same checks afterward. All six image URLs returned JPEG files successfully, both shared project anchors were present, and private uploads and staff dashboards retained their access checks.
+
+Live browser review confirmed the Keyara gallery, creator credits, and M.A.S.H. Machine gallery. No browser errors appeared in the reviewed pages. Screenshots were saved as `keyara-grimm-world-live-20261108.jpg` and `mash-machine-live-20261108.jpg` in the task visualization directory. The temporary preview server was stopped.
