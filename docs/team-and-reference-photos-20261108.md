@@ -27,3 +27,13 @@ The image limits leave room below Vercel’s [4.5 MB request limit](https://verc
 - TypeScript and targeted ESLint checks passed.
 - Local browser checks covered desktop and 390px layouts, direct links, keyboard disclosure controls, photo selection/removal, submission confirmation, and the saved staff image preview.
 - The synthetic submission used an isolated local database and no email credentials. No real request, order, payment, or email was created by that test.
+
+## Published release
+
+Published November 8, 2026 (Mountain time). Application revision: `ce5b1c5fb24e2146465f9d0001b9740bedf3fe2d`. Vercel deployment: `dpl_7mbDeXaDNgcnY7L8gVkFUnCPjGrC`. Both the apex and www aliases were verified against this deployment.
+
+Staged and public smoke checks passed for the team page, photo form, unauthorized photo access, staff queue sign-in, unsupported-file rejection, existing membership enrollment, shipping presentation, newsletter protection, Whatnot schedule, vaulted October showcase, and private analytics. Twenty-one client bundles were checked for exposed credentials. The existing inventory cache briefly returned an old snapshot with the quantity correctly hidden; the check allowed its background refresh to finish and verified a fresh result.
+
+Live browser review confirmed the new wordmark, nested gallery behavior, and a 390px photo-form layout with no horizontal overflow or browser errors. The production photo form was not submitted with a real request. Local end-to-end verification covered the persisted photo and staff preview. The temporary preview server and local test database were stopped.
+
+Review artifacts are under `/private/tmp/moonafique-team-photos-20261108/control`. The user-provided, untracked October PNG was preserved and excluded from this release.
