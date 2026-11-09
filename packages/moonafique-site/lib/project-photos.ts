@@ -49,3 +49,8 @@ export const rubyAceoPhotos: CreationPhoto[] = [
 export const keyaraAceoPhotos: CreationPhoto[] = [
   { src: "/showcase/keyara-aceo-decorative-doors.jpg", alt: "Keyara’s ACEO of ornate double doors with arched windows, pink and white curtains, gold handles, and delicate blue leaves and floral details.", width: 1500, height: 2000, label: "A doorway to a little wonder" },
 ];
+
+export const alexDinosaurPhotos: CreationPhoto[] = [
+  { src: "/showcase/alex-dinosaur-close-up.jpg", alt: "Alex’s close-up photograph of a dark dinosaur figure with a yellow eye and open jaws around a branch, framed by grass beneath a blue sky.", width: 2000, height: 1500, label: "Up close with a dinosaur" },
+  { src: "/showcase/alex-dinosaur-blue-sky.jpg", alt: "Alex’s low-angle photograph of a rust-red and dark green dinosaur figure against a clear blue sky, with softly blurred grass and trees behind it.", width: 2000, height: 1500, label: "A prehistoric perspective" },
+];

@@ -1,4 +1,4 @@
-import { keyaraAceoPhotos, rubyAceoPhotos, jessAceoPhotos, novemberGrimmWorldPhotos, novemberGrimmOfTheMonthPhotos, elizaCustomGrimmPhotos, elizaPetPhotos, elizaRainbowStarsPhotos } from "./project-photos";
+import { alexDinosaurPhotos, keyaraAceoPhotos, rubyAceoPhotos, jessAceoPhotos, novemberGrimmWorldPhotos, novemberGrimmOfTheMonthPhotos, elizaCustomGrimmPhotos, elizaPetPhotos, elizaRainbowStarsPhotos } from "./project-photos";
 import type { CreationPhoto } from "./creations-showcase";
 
 export const teamMembers = [
@@ -112,6 +112,14 @@ export const novemberGrimmOfTheMonth: TeamProject = {
 };
 
 export const teamProjects: TeamProject[] = [
+  {
+    slug: "alex-dinosaur-photography",
+    title: "Alex’s dinosaur photography",
+    occasion: "Small subjects, larger-than-life scenes",
+    description: "A tiny dinosaur can make a mighty impression. Alex uses close-up detail, low angles, and outdoor light to give these figures a world of their own, from a toothy encounter in the grass to a towering pose against the sky.",
+    creators: [{ slug: "alex", role: "Photography" }],
+    photos: alexDinosaurPhotos,
+  },
   {
     slug: "keyara-aceo-art",
     title: "Keyara’s ACEO art",
