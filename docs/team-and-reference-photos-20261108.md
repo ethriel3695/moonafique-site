@@ -6,9 +6,9 @@ The About page introduces Jess, Reuben, Megan, Keyara, Eliza, Ethan, Sophia, Ale
 
 ## Adding confirmed projects
 
-Edit `packages/moonafique-site/lib/team.ts`. Add entries to `teamProjects` using a listed creator slug and category, a unique project slug, a title, a short description, and image source, dimensions, and descriptive alt text. Verify the creator credit with the team first. Keep public project images separate from private customer references.
+Edit `packages/moonafique-site/lib/team.ts`. Add entries to `teamProjects` using a unique project slug, title, occasion, description, photo array, collection link, and a `creators` array of team slugs and roles. A shared project appears in every credited creator’s portfolio. Verify the creator credit with the team first. Keep public project images separate from private customer references.
 
-Example gallery links: `/about#team-jess` and `/about#team-megan-art-cards`. Project entries receive `project-<slug>` anchors and appear as responsive image cards within their category.
+Example gallery links: `/about#team-jess` and `/about#project-keyara-november-grimm-world`. Project anchors include both creator and project slugs to stay unique across shared portfolios. The owner requested project-specific portfolios; blanket categories were removed in the subsequent creations release.
 
 ## Customer photos
 

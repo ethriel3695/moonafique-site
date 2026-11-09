@@ -1,3 +1,5 @@
+import { mashMachinePhotos } from "./project-photos";
+
 export type CreationPhoto = {
   src: string;
   alt: string;
@@ -20,6 +22,15 @@ export type PrintWarsCreation = {
 // Use photographs of these finished pieces only. Keep the labeled placeholders
 // until the owners supply the remaining photos; do not substitute product art.
 export const printWarsCreations: PrintWarsCreation[] = [
+  {
+    id: 'mash-machine',
+    month: 'November',
+    title: 'Moonafique M.A.S.H. Machine',
+    description: 'The notebook game, brought off the page. Rainbow choice wheels, a spiral destiny dial, and glowing details make this Moonafique exclusive a playful return to childhood.',
+    theme: 'violet',
+    note: 'Childhood Unlocked · November 2026 Print Wars',
+    photos: mashMachinePhotos,
+  },
   {
     id: 'glow-butterfly-battle-bot',
     month: 'August',

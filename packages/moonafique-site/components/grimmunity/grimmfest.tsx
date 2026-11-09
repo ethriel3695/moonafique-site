@@ -1,3 +1,4 @@
+import { GrimmWorldsCollection } from "./grimm-worlds";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
@@ -17,12 +18,14 @@ export function Grimmfest({ initialNow }: { initialNow: string }) {
         <GrimmfestShowLink initialNow={initialNow} />
         <nav aria-label="Explore Grimmfest" className="mt-5 flex flex-wrap gap-x-6 gap-y-2 text-sm font-bold">
           <a href="#grim-showcase" className="inline-flex min-h-11 items-center gap-2 underline underline-offset-4">Past Grimm editions <ArrowRight className="size-4" aria-hidden="true" /></a>
+          <a href="#grimm-worlds" className="inline-flex min-h-11 items-center gap-2 underline underline-offset-4">The Grimm Worlds collection <ArrowRight className="size-4" aria-hidden="true" /></a>
           <Link href="/live-shows" className="inline-flex min-h-11 items-center gap-2 underline underline-offset-4">All live shows <ArrowRight className="size-4" aria-hidden="true" /></Link>
         </nav>
       </div>
       <GrimShowcaseFilm />
     </div>
   </section>
+  <GrimmWorldsCollection />
   <section id="moonafique-houses" aria-labelledby="moonafique-houses-title" className="mt-8 scroll-mt-28 rounded-[2rem] bg-[#2b2035] px-6 py-8 text-[#fbf5ec] sm:px-10 lg:px-12">
       <h2 id="moonafique-houses-title" className="text-3xl">The houses of Moonafique.</h2>
       <p className="mt-3 text-sm leading-6 text-[#d3c8d9]">Meet Marrowick, Hollowsmere, Veradell, and Glimmerfell—the four houses of Moonafique.</p>

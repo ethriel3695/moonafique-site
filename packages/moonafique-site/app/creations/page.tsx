@@ -1,3 +1,4 @@
+import { GrimmWorldsCollection } from "@/components/grimmunity/grimm-worlds";
 import Link from "next/link";
 import { CreationsShowcase } from "@/components/creations-showcase";
 export const metadata = {
@@ -21,6 +22,7 @@ export default function CreationsPage() {
         </p>
       </div>
       <CreationsShowcase headingLevel={1} />
+      <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8"><GrimmWorldsCollection /></div>
     </div>
   );
 }

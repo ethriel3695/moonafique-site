@@ -1,3 +1,6 @@
+import { novemberGrimmWorldPhotos } from "./project-photos";
+import type { CreationPhoto } from "./creations-showcase";
+
 export const teamMembers = [
   { slug: "jess", name: "Jess" },
   { slug: "reuben", name: "Reuben" },
@@ -10,19 +13,29 @@ export const teamMembers = [
   { slug: "ruby", name: "Ruby" },
 ] as const;
 export type TeamSlug = typeof teamMembers[number]["slug"];
-export const projectCategories = [
-  { slug: "custom-grimms", name: "Custom Grimms", detail: "Paint, personality, and little details." },
-  { slug: "custom-boxes", name: "Custom boxes", detail: "A little wonder, inside and out." },
-  { slug: "art-cards", name: "Art cards", detail: "Small canvases. Plenty of imagination." },
-] as const;
 export type TeamProject = {
   slug: string;
-  creator: TeamSlug;
-  category: typeof projectCategories[number]["slug"];
   title: string;
+  occasion: string;
   description: string;
-  image: { src: string; alt: string; width: number; height: number };
+  creators: { slug: TeamSlug; role: string }[];
+  photos: CreationPhoto[];
+  collectionHref: string;
 };
-// Add a project only after its image and creator credit are confirmed.
-// Empty categories are gallery placeholders, not claims of authorship.
-export const teamProjects: TeamProject[] = [];
+
+export const novemberGrimmWorld: TeamProject = {
+  slug: "november-grimm-world",
+  title: "November Grimm World",
+  occasion: "November 2026 · Grimmfest",
+  description: "A little autumn world, tucked inside a book. Open the leaf-decorated cover to discover a painted Grimm, tiny scenery, and a story waiting to unfold.",
+  creators: [
+    { slug: "keyara", role: "Design & painting" },
+    { slug: "jess", role: "Box collaboration" },
+  ],
+  photos: novemberGrimmWorldPhotos,
+  collectionHref: "/grimmunity#november-grimm-world",
+};
+
+// Shared credits place one project in each collaborator’s portfolio.
+// Keep each person’s portfolio specific to their confirmed work.
+export const teamProjects: TeamProject[] = [novemberGrimmWorld];

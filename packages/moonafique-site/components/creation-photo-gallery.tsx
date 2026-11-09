@@ -80,7 +80,7 @@ export function CreationPhotoGallery({ title, photos }: { title: string; photos:
             width={photo.width}
             height={photo.height}
             sizes="(min-width: 960px) 848px, 90vw"
-            className="h-[min(60dvh,600px)] w-full rounded-lg bg-black object-contain"
+            className="mx-auto h-auto max-h-[60dvh] w-auto max-w-full rounded-lg bg-black object-contain"
           />
           {choices && <div className="mt-4">{choices}</div>}
         </Dialog.Content>
