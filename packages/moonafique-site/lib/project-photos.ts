@@ -54,3 +54,7 @@ export const alexDinosaurPhotos: CreationPhoto[] = [
   { src: "/showcase/alex-dinosaur-close-up.jpg", alt: "Alex’s close-up photograph of a dark dinosaur figure with a yellow eye and open jaws around a branch, framed by grass beneath a blue sky.", width: 2000, height: 1500, label: "Up close with a dinosaur" },
   { src: "/showcase/alex-dinosaur-blue-sky.jpg", alt: "Alex’s low-angle photograph of a rust-red and dark green dinosaur figure against a clear blue sky, with softly blurred grass and trees behind it.", width: 2000, height: 1500, label: "A prehistoric perspective" },
 ];
+
+export const reubenAceoPhotos: CreationPhoto[] = [
+  { src: "/showcase/reuben-aceo-leafy-companion.jpg", alt: "Reuben’s ACEO of a cream-colored creature with red eyes, a leafy green head, and a tall flower stem, surrounded by small flowers against a bright yellow sky.", width: 1500, height: 2000, label: "A leafy little companion" },
+];

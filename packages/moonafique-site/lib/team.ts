@@ -1,4 +1,4 @@
-import { alexDinosaurPhotos, keyaraAceoPhotos, rubyAceoPhotos, jessAceoPhotos, novemberGrimmWorldPhotos, novemberGrimmOfTheMonthPhotos, elizaCustomGrimmPhotos, elizaPetPhotos, elizaRainbowStarsPhotos } from "./project-photos";
+import { reubenAceoPhotos, alexDinosaurPhotos, keyaraAceoPhotos, rubyAceoPhotos, jessAceoPhotos, novemberGrimmWorldPhotos, novemberGrimmOfTheMonthPhotos, elizaCustomGrimmPhotos, elizaPetPhotos, elizaRainbowStarsPhotos } from "./project-photos";
 import type { CreationPhoto } from "./creations-showcase";
 
 export const teamMembers = [
@@ -112,6 +112,14 @@ export const novemberGrimmOfTheMonth: TeamProject = {
 };
 
 export const teamProjects: TeamProject[] = [
+  {
+    slug: "reuben-aceo-art",
+    title: "Reuben’s ACEO art",
+    occasion: "Miniature art, big personality",
+    description: "A leafy little companion with a flower reaching for the sky. Reuben pairs bright yellow, fresh greens, and playful purple blooms in a cheerful ACEO full of garden-day charm.",
+    creators: [{ slug: "reuben", role: "Artwork" }],
+    photos: reubenAceoPhotos,
+  },
   {
     slug: "alex-dinosaur-photography",
     title: "Alex’s dinosaur photography",
