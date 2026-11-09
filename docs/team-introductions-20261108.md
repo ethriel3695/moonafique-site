@@ -9,3 +9,7 @@ Added owner-supplied roles and short biographies to the About page. Each role ap
 The copy uses the studio’s playful voice while keeping these responsibilities clear. `teamProfiles` in `lib/team.ts` holds optional biographies separately from project credits, so a general role does not assign authorship of a specific piece. The remaining six people retain their existing entries until the owner supplies their introductions. Existing projects, credits, and links are preserved.
 
 TypeScript and whitespace checks passed. Browser review covered all three introductions, direct name navigation, and the 390px mobile layout without horizontal overflow. Mobile role labels wrap within the accordion. No billing, stock, or customer data changed.
+
+## Publication
+
+Published revision `9e930dae313fa3b9235b4d069515a80200431753` as Vercel deployment `dpl_FDX2VfJxihGaX1yVqEmsi8yjRvx3`. Staged and public checks confirmed all three role labels and biographies, prior gallery entries, and storefront access protections. Live browser review confirmed the published introduction without console errors. The temporary preview server was stopped.
