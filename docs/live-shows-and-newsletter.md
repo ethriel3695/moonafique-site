@@ -81,3 +81,13 @@ The corrections are published on both public domains. The production build, stag
 ## Inventory and signup follow-up
 
 The November 7 [inventory and signup release](whatnot-inventory-and-signup-20261107.md) supersedes the manual October count and update date described above. Remaining inventory now comes from Whatnot. That release also preserves signup fields through reauthentication and prevents search autofocus when the menu opens.
+
+## Complete public schedule — November 9, 2026
+
+The owner reported missing shows, including Saturday's charity raid train. A direct Whatnot API read returned 96 public shows; the website returned 94. A title filter excluded both Giving Tree listings because they contained “3DA.” The schedule now includes every public scheduled or live show. The Print Wars focus in the editorial sections does not restrict the schedule.
+
+The two restored listings are “Raid into the 3DA Giving Tree Train” on November 14 at 7:45 a.m. Mountain and “3DA: Giving Tree Raid Train” that day at 3:30 p.m. Mountain. The ACEO shows on November 9 at 7 p.m. and November 10 at 3 p.m. were already present in both feeds.
+
+The cache version changed so the release starts with a complete snapshot. The existing two-minute refresh and private-show protections remain in place. Future updates require only scheduling or editing the public show in Whatnot. All 87 storefront tests and the TypeScript check passed.
+
+Published source `2decd04a7c434882cb6c25f16108afffdc535d2a` as Vercel deployment `dpl_EkFVGKR2wU2vTUBNBN6dGyzRRnYa`. Staged and public checks verified the 96-show snapshot, both ACEO listings, both Giving Tree listings, and protected staff endpoints. Browser review confirmed the restored events and their Mountain times on the public Live Shows page. Both public domains use this deployment; `dpl_G2JsvamCpnqcwbeMYBy9zFsMytZW` is the rollback reference.
