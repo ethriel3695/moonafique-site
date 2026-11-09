@@ -15,3 +15,12 @@ export const lora = localFont({
   display: "swap",
   fallback: ["Georgia"],
 });
+
+// Self-hosted script lettering for the brand wordmark only.
+export const playball = localFont({
+  src: "../public/fonts/playball-regular.ttf",
+  weight: "400",
+  style: "normal",
+  display: "swap",
+  fallback: ["Georgia"],
+});

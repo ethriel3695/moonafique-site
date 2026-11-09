@@ -1,12 +1,13 @@
 "use client";
 
 import { useId } from "react";
+import { playball } from "@/lib/site-fonts";
 import { cn } from "@/lib/utils";
 
 /** The M uses the original logo vector, not a replacement font. */
 export function Wordmark({ className }: { className?: string }) {
   const clipId = useId();
-  return <span className={cn("inline-flex items-baseline whitespace-nowrap font-display", className)}>
+  return <span className={cn("inline-flex items-baseline whitespace-nowrap font-normal", playball.className, className)}>
     <span className="sr-only">Moonafique</span>
     <svg aria-hidden="true" viewBox="435 313 365 275" className="relative top-[0.06em] mr-[0.01em] h-[0.92em] w-[1.22em] shrink-0 overflow-hidden" fill="currentColor">
         <defs><clipPath id={clipId}><path d="M435 500 H480 V354 H680 V313 H800 V550 H770 V588 H435 Z" /></clipPath></defs>
