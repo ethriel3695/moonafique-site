@@ -32,26 +32,26 @@ export type TeamSlug = typeof teamMembers[number]["slug"];
 
 export const teamProfiles: Partial<Record<TeamSlug, { role: string; bio: string[] }>> = {
   jess: {
-    role: "CEO · Creative vision & live-show host",
+    role: "Creative vision · Voice of Moonafique",
     bio: [
-      "Jess is the life and heart of Moonafique. Our CEO and creative visionary pours her imagination, energy, and care into this world, dreaming up the bold designs and unexpected little characters that make it feel like ours. Her love for the work is woven into everything we do.",
+      "Jess is the life and heart of Moonafique. Our creative visionary pours her imagination, energy, and care into this world, dreaming up the bold designs and unexpected little characters that make it feel like ours. Her love for the work is woven into everything we do.",
       "She brings those ideas to life with her own hands, designing, sculpting, painting, and creating ACEOs full of personality. She also does the planning that gives a big idea a way forward. From an ambitious shop exclusive to the smallest painted detail, Jess puts her heart into the work that makes Moonafique Moonafique.",
-      "On Whatnot, she shares that same spirit with everyone who joins us, welcoming collectors, revealing new creations, and bringing a little Moonafique mischief to the camera. She and Keyara also photograph our Print Wars pieces, capturing the details and imagination behind each one. Jess brings the world to life, then invites you into it.",
+      "Jess is the voice of Moonafique, on Whatnot and beyond. Hers is the familiar voice welcoming collectors into our live shows, revealing new creations, and sharing the stories behind the pieces. She brings our personality to the camera, with warmth, imagination, and a little Moonafique mischief. She and Keyara also photograph our Print Wars pieces, capturing the details and imagination behind each one. Jess brings the world to life, then invites you into it.",
     ],
   },
   reuben: {
-    role: "COO · Operations & design",
+    role: "Operations & design",
     bio: [
-      "Reuben keeps the Moonafique world turning behind the scenes. As COO, he handles operations, shipping, and custom order processing, helping each idea make its way from our studio to your collection.",
+      "Reuben keeps the Moonafique world turning behind the scenes. He handles operations, shipping, and custom order processing, helping each idea make its way from our studio to your collection.",
       "He’s a maker, too, creating 3D designs and ACEO art. A little planning, a little problem-solving, and plenty of imagination go into keeping the creative chaos moving.",
     ],
   },
   megan: {
-    role: "Artist · Show operations & Grimmfest innovation",
+    role: "Creative partner & artist",
     bio: [
-      "Megan brings a wonderfully extravagant imagination to the studio, from many of our ACEOs to all of our custom pet commissions. Whether she’s capturing a beloved pet or creating a tiny work of art, her pieces make room for big personality.",
-      "Megan makes our live shows run. She runs shows alongside Jess, keeps inventory updated, and manages the giveaways that bring a little extra excitement to the room. While the creations take the spotlight, she keeps the moving parts working together.",
-      "She’s also the imagination behind our Grimmfest games, dreaming up new ways to play and turning each gathering into a shared adventure. Her ideas and artistic vision help shape the direction of Moonafique, from what we create to how we bring our community together. There’s a whole lot of Megan magic in this little world.",
+      "Megan is the foundation of Moonafique. She helps shape where this world of ours goes, and all of us count on her judgment, imagination, and care. As Jess’s creative partner, Megan brings her own vision to the ideas we pursue and the experiences we create together.",
+      "She has an incredible gift for turning almost anything into a work of art. From expressive ACEOs to deeply personal pet commissions, Megan finds the character in a subject and brings it to life with color, feeling, and unmistakable personality.",
+      "Megan can take the smallest spark of an idea and see what it could become. A game becomes something everyone wants to join, a familiar pet becomes a piece of art someone treasures, and a room full of collectors starts to feel like friends. There’s a whole lot of Megan magic in this little world.",
     ],
   },
   keyara: {
