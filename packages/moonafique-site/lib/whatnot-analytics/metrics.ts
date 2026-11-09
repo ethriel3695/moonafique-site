@@ -5,7 +5,7 @@ export const zone = "America/Boise";
 export const shopDay = (at: string | Date) => new Intl.DateTimeFormat("en-CA", { timeZone: zone, year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date(at));
 export const shiftDay = (day: string, count: number) => new Date(Date.parse(day + "T12:00:00Z") + count * 86_400_000).toISOString().slice(0, 10);
 export const money = (amount: number | null, currency = "USD") => amount === null ? "Not available" : new Intl.NumberFormat("en-US", { style: "currency", currency }).format(amount / 100);
-export const percent = (value: number | null) => value === null ? "—" : `${(value * 100).toFixed(1)}%`;
+export const percent = (value: number | null) => value === null ? "N/A" : `${(value * 100).toFixed(1)}%`;
 export const ratio = (a: number, b: number) => b > 0 ? a / b : null;
 export type DateRange = { start: string; end: string };
 export type DashboardFilters = DateRange & { range: string; view: "overview" | "shows" | "products" | "records"; currency: string; search: string; page: number };

@@ -39,7 +39,7 @@ export const showcaseFeatures: ShowcaseFeature[] = [
     category: 'A world to get lost in',
     title: 'The four houses of Moonafique',
     description:
-      'Meet Marrowick, Hollowsmere, Veradell, and Glimmerfell—the four houses of Moonafique, with room for a whole world of stories.',
+      'Meet Marrowick, Hollowsmere, Veradell, and Glimmerfell, the four houses of Moonafique, with room for a whole world of stories.',
     detail: 'Marrowick · Hollowsmere · Veradell · Glimmerfell',
     missingImage: 'The four approved Moonafique house crests',
     images: [
@@ -79,7 +79,7 @@ export const showcaseFeatures: ShowcaseFeature[] = [
     category: 'Original art, up close',
     title: 'Art that fits in your hand',
     description:
-      'Small enough to hold in one hand, with plenty to look at. Our original ACEOs measure just 2.5 by 3.5 inches—space for a closer look.',
+      'Small enough to hold in one hand, with plenty to look at. Our original ACEOs measure just 2.5 by 3.5 inches, with plenty to discover up close.',
     detail: 'ACEO · 2.5 × 3.5 inches',
     missingImage: 'A photograph or scan of the original ACEO collection',
     images: [{

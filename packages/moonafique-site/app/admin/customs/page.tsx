@@ -27,7 +27,7 @@ export default async function CustomQueuePage({ searchParams }: { searchParams: 
   return (
     <div className="mx-auto max-w-6xl px-5 py-10 sm:px-8">
       <nav aria-label="Staff tools" className="mb-8 flex flex-wrap gap-5 text-sm font-semibold"><Link className="underline" href="/admin/grimmunity">Grimmunity fulfillment</Link><Link className="underline" href="/admin/whatnot">Whatnot business</Link><Link className="underline" href="/customs">Open customer form</Link></nav>
-      {mode === "sandbox" && <p role="note" className="mb-6 rounded-xl bg-amber-100 p-4 text-sm text-amber-950">Test queue — separate from real customer requests.</p>}
+      {mode === "sandbox" && <p role="note" className="mb-6 rounded-xl bg-amber-100 p-4 text-sm text-amber-950">Test queue. Separate from real customer requests.</p>}
       <p className="mb-3 text-xs font-bold uppercase tracking-widest text-primary">Moonafique staff</p>
       <h1 className="font-display text-4xl sm:text-5xl">Custom request queue</h1>
       <p className="mt-5 max-w-3xl leading-7 text-muted-foreground">Requests appear in the order received, oldest first. A requested date is for information only: it does not change the queue order or commit us to completion or delivery by that date.</p>

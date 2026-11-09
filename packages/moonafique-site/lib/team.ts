@@ -19,7 +19,7 @@ export const teamProfiles: Partial<Record<TeamSlug, { role: string; bio: string[
     role: "CEO · Creative vision & live-show host",
     bio: [
       "Jess is the creative spark and familiar face of Moonafique. As CEO, designer, and ACEO artist, she dreams up the characters, tiny artworks, and wonderfully unexpected ideas that make this little world our own.",
-      "On Whatnot, she brings that imagination to the camera—sharing the creations, welcoming collectors, and inviting everyone into a little Moonafique mischief. She and Keyara also photograph our Print Wars pieces, capturing the details that make each creation special.",
+      "On Whatnot, she brings that imagination to the camera, sharing the creations, welcoming collectors, and inviting everyone into a little Moonafique mischief. She and Keyara also photograph our Print Wars pieces, capturing the details that make each creation special.",
     ],
   },
   reuben: {
@@ -68,7 +68,7 @@ export const teamProfiles: Partial<Record<TeamSlug, { role: string; bio: string[
     role: "3D printing · Grimm builder & ACEO artist",
     bio: [
       "Ruby helps run the 3D print side of Moonafique alongside Jess and Reuben. She designs creations like our fabulous ice cream sets and is our official Grimm builder, assembling the pre-built characters that are ready to join your collection.",
-      "Her creativity reaches beyond the print shop, too. Ruby is an ACEO artist and has brought custom artwork commissions to life—another way she turns a little inspiration into something personal.",
+      "Her creativity reaches beyond the print shop, too. Ruby is an ACEO artist and has brought custom artwork commissions to life, another way she turns a little inspiration into something personal.",
     ],
   },
 };

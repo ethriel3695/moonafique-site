@@ -12,7 +12,7 @@ export default function CustomsPage() {
     <div className="bg-[#f8f5fb] text-[#30263b]">
       <div className="mx-auto max-w-6xl px-5 py-10 sm:px-8 lg:py-16">
         <Link href="/#showcase" className="mb-10 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-[#4c326d] hover:underline"><ArrowLeft className="size-4" aria-hidden="true" />Back to our creations</Link>
-        {process.env.GRIM_MODE === "sandbox" && <p role="note" className="mb-8 rounded-xl bg-amber-100 p-4 text-sm text-amber-950">Test site — requests here go to a separate test queue.</p>}
+        {process.env.GRIM_MODE === "sandbox" && <p role="note" className="mb-8 rounded-xl bg-amber-100 p-4 text-sm text-amber-950">Test site. Requests here go to a separate test queue.</p>}
         <div className="grid items-start gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
           <div>
             <p className="mb-5 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-[#704a91]"><Sparkles className="size-4" aria-hidden="true" />Made at Moonafique</p>

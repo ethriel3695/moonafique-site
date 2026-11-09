@@ -45,7 +45,7 @@ export function CustomRequestForm() {
       const response = await fetch("/api/custom-requests", {
         method: "POST", body,
       });
-      const result = await response.json().catch(() => ({ error: response.status === 413 ? "These photos are too large. Remove one and try again." : "We couldn’t save your request. Your form is still here—please try again." }));
+      const result = await response.json().catch(() => ({ error: response.status === 413 ? "These photos are too large. Remove one and try again." : "We couldn’t save your request. Your form is still here. Please try again." }));
       if (!response.ok || !result.ok) throw new Error(result.error ?? "We couldn’t save your request. Please try again.");
       setPhotos([]);
       setSaved({ reference: result.reference, hasEmail: !!parsed.data.email, photoCount: photos.length });

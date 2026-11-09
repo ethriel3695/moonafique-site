@@ -428,7 +428,7 @@ export function JoinForm({
           </legend>
           <p className="mb-4 text-sm leading-6">
             Pick six colors you love and tell us any you’d rather skip. We’ll
-            take it from there—the monthly design is part of the surprise.
+            take it from there. The monthly design is part of the surprise.
           </p>
           <div className="grid gap-3 sm:grid-cols-3">
             {Array.from({ length: 6 }, (_, n) => (

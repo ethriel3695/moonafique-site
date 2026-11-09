@@ -336,7 +336,7 @@ export async function provisionPreview(
       enabled_events: [
         ...handledEvents,
       ] as Stripe.WebhookEndpointCreateParams.EnabledEvent[],
-      description: "Grimmunity protected Vercel Preview — sandbox only",
+      description: "Grimmunity protected Vercel Preview (sandbox only)",
       metadata: {
         grim_setup: setupTag,
         grim_program: "sandbox",

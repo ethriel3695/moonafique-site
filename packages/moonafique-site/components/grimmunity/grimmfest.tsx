@@ -31,7 +31,7 @@ export function Grimmfest({ initialNow }: { initialNow: string }) {
   <GrimmWorldsCollection />
   <section id="moonafique-houses" aria-labelledby="moonafique-houses-title" className="mt-8 scroll-mt-28 rounded-[2rem] bg-[#2b2035] px-6 py-8 text-[#fbf5ec] sm:px-10 lg:px-12">
       <h2 id="moonafique-houses-title" className="text-3xl">The houses of Moonafique.</h2>
-      <p className="mt-3 text-sm leading-6 text-[#d3c8d9]">Meet Marrowick, Hollowsmere, Veradell, and Glimmerfell—the four houses of Moonafique.</p>
+      <p className="mt-3 text-sm leading-6 text-[#d3c8d9]">Meet Marrowick, Hollowsmere, Veradell, and Glimmerfell, the four houses of Moonafique.</p>
       <div className="mt-7 grid grid-cols-2 gap-x-5 gap-y-7 sm:grid-cols-4">
         {houses.map((house) => <figure key={house.src} className="text-center">
           <Image src={house.src} alt={house.alt} width={house.width} height={house.height} sizes="(min-width: 768px) 220px, 40vw" className="mx-auto aspect-square w-full max-w-44 rounded-2xl object-contain" />

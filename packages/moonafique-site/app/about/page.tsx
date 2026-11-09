@@ -5,7 +5,7 @@ import { TeamSpotlight } from "@/components/about/team-spotlight";
 
 export const metadata = {
   title: "Meet the Moonafique team",
-  description: "Meet Jess, Reuben, Megan, Keyara, Eliza, Ethan, Sophia, Alex, and Ruby—the people behind Moonafique. Explore our growing project galleries.",
+  description: "Meet Jess, Reuben, Megan, Keyara, Eliza, Ethan, Sophia, Alex, and Ruby, the people behind Moonafique. Explore our growing project galleries.",
 };
 export default function AboutPage() {
   return <div className="mx-auto max-w-screen-xl px-5 py-12 sm:px-8 sm:py-16">

@@ -87,8 +87,8 @@ export function SandboxBanner({ fixture = false }: { fixture?: boolean }) {
     >
       <strong>
         {fixture
-          ? "Fixture preview — no real payment or membership."
-          : "Stripe sandbox — test payments only."}
+          ? "Fixture preview. No real payment or membership."
+          : "Stripe sandbox. Test payments only."}
       </strong>{" "}
       Shipping quotes and payments on this screen are for testing.
     </div>
