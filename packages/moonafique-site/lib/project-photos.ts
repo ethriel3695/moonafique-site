@@ -35,3 +35,9 @@ export const elizaRainbowStarsPhotos: CreationPhoto[] = [
 export const yuleGrimmPhotos: CreationPhoto[] = [
   { src: "/showcase/yule-grimms-cleaned.png", alt: "Moonafique’s Yule Grimms in green and icy-blue tree-shaped coats, with smiling and skull faces, star toppers, colorful boots, and tiny companions on the studio table.", width: 851, height: 1849, label: "The Yule gathering", previewPosition: "center 35%" },
 ];
+
+export const jessAceoPhotos: CreationPhoto[] = [
+  { src: "/showcase/jess-aceo-crowned-bird.jpg", alt: "Jess’s ACEO of a white crowned duck holding a pink mirror, with a gold necklace and a lavender background.", width: 1086, height: 1448, label: "A royal reflection" },
+  { src: "/showcase/jess-aceo-woodland-lights.jpg", alt: "Jess’s ACEO of a wide-eyed woodland character reaching toward golden winged lights against colorful swirling brushstrokes.", width: 1500, height: 2000, label: "Woodland lights" },
+  { src: "/showcase/jess-aceo-purple-dinosaur.jpg", alt: "Jess’s ACEO of a smiling purple dinosaur with a sparkling pink butterfly on its head against turquoise and pastel strokes.", width: 1439, height: 2000, label: "A tiny visitor" },
+];

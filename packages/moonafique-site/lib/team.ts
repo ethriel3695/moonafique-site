@@ -1,4 +1,4 @@
-import { novemberGrimmWorldPhotos, novemberGrimmOfTheMonthPhotos, elizaCustomGrimmPhotos, elizaPetPhotos, elizaRainbowStarsPhotos } from "./project-photos";
+import { jessAceoPhotos, novemberGrimmWorldPhotos, novemberGrimmOfTheMonthPhotos, elizaCustomGrimmPhotos, elizaPetPhotos, elizaRainbowStarsPhotos } from "./project-photos";
 import type { CreationPhoto } from "./creations-showcase";
 
 export const teamMembers = [
@@ -112,6 +112,14 @@ export const novemberGrimmOfTheMonth: TeamProject = {
 };
 
 export const teamProjects: TeamProject[] = [
+  {
+    slug: "jess-aceo-art",
+    title: "Jess’s ACEO art",
+    occasion: "Miniature art, big personality",
+    description: "A royal reflection, a woodland wonder, and a dinosaur with a tiny visitor. These three ACEOs by Jess bring playful characters, expressive faces, and plenty of color to a little piece of art.",
+    creators: [{ slug: "jess", role: "Artwork" }],
+    photos: jessAceoPhotos,
+  },
   novemberGrimmOfTheMonth,
   novemberGrimmWorld,
   {
