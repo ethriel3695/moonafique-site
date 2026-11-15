@@ -34,9 +34,9 @@ export const teamProfiles: Partial<Record<TeamSlug, { role: string; bio: string[
   jess: {
     role: "Creative vision · Voice of Moonafique",
     bio: [
-      "Jess is the life and heart of Moonafique. Our creative visionary pours her imagination, energy, and care into this world, dreaming up the bold designs and unexpected little characters that make it feel like ours. Her love for the work is woven into everything we do.",
-      "She brings those ideas to life with her own hands, designing, sculpting, painting, and creating ACEOs full of personality. She also does the planning that gives a big idea a way forward. From an ambitious shop exclusive to the smallest painted detail, Jess puts her heart into the work that makes Moonafique Moonafique.",
-      "Jess is the voice of Moonafique, on Whatnot and beyond. Hers is the familiar voice welcoming collectors into our live shows, revealing new creations, and sharing the stories behind the pieces. She brings our personality to the camera, with warmth, imagination, and a little Moonafique mischief. She and Keyara also photograph our Print Wars pieces, capturing the details and imagination behind each one. Jess brings the world to life, then invites you into it.",
+      "Jess loves all things creative and is always looking for ways to include the things she loves with the people she loves. That is how her journey with 3D printing started.",
+      "She bought her husband (Reuben) an old used printer and learning to use it together she fell in love and of course, had to share the passion with her children and her siblings and her parents, you get the picture.",
+      "Everything she creates has a story and comes to life in her mind.  A few tears have been shed as some of her creations have found new homes. Starting at craft fairs Jess became the voice of Moonafique, she loves talking to people and always goes above and beyond to find the perfect piece for you. Jess doesn’t just 3D print, growing up she loved art and drew little doodles on everything she could. Jess wanted to find a way to bring her to passions together creating her own community and inspiring others to create in their own way.",
     ],
   },
   reuben: {
