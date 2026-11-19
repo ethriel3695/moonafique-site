@@ -24,10 +24,9 @@ export const OpensAnswer: Story = {
       name: /how long does shipping take\?/i,
     });
 
+    const shippingAnswer = canvas.getByText(/^standard shipping\b/i);
+    await expect(shippingAnswer).not.toBeVisible();
     await userEvent.click(shippingQuestion);
-
-    await expect(
-      canvas.getByText(/standard shipping usually arrives within 3 to 5 business days/i)
-    ).toBeInTheDocument();
+    await expect(shippingAnswer).toBeVisible();
   },
 };
