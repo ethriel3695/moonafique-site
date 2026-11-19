@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { expect, waitFor, within } from "storybook/test";
 import { OfferView } from "./views";
-import { FilmPlaybackContext } from "./showcase-film";
+import { FilmPlaybackContext, filmSource } from "./showcase-film";
 import {
   StoryFrame,
   storyAvailability,
@@ -79,9 +79,19 @@ export const EnrollmentOpen: Story = {
 };
 export const AlreadyHasGrimmMembership: Story = {
   args: { existingMembershipName: "Grimmoire Collection" },
+  loaders: [async ({ abortSignal }) => {
+    const response = await fetch(filmSource, { signal: abortSignal });
+    if (!response.ok) throw new Error(`Could not load the Grimmfest film (HTTP ${response.status})`);
+    return { film: await response.blob() };
+  }],
+  beforeEach: ({ loaded }) => {
+    const source = URL.createObjectURL(loaded.film);
+    loaded.filmUrl = source;
+    return () => URL.revokeObjectURL(source);
+  },
   decorators: [
-    (Story) => (
-      <FilmPlaybackContext.Provider value="manual">
+    (Story, { loaded }) => (
+      <FilmPlaybackContext.Provider value={{ manualSource: loaded.filmUrl }}>
         <Story />
       </FilmPlaybackContext.Provider>
     ),
@@ -101,7 +111,9 @@ export const AlreadyHasGrimmMembership: Story = {
     await waitFor(async () => {
       await expect(video.readyState).toBeGreaterThanOrEqual(HTMLMediaElement.HAVE_CURRENT_DATA);
       await expect(video.duration).toBeGreaterThan(0);
-      await expect(video.networkState).toBe(HTMLMediaElement.NETWORK_IDLE);
+      await expect(video.buffered.length).toBe(1);
+      await expect(video.buffered.start(0)).toBe(0);
+      await expect(video.buffered.end(0)).toBeCloseTo(video.duration, 2);
     }, { timeout: 10_000 });
     await expect(video.controls).toBe(true);
     await expect(video.paused).toBe(true);

@@ -4,9 +4,9 @@ import Image from "next/image";
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { Pause, Play } from "lucide-react";
 
-const filmSource = "/showcase/grim-of-the-month-film.mp4";
+export const filmSource = "/showcase/grim-of-the-month-film.mp4";
 const filmPoster = "/showcase/grim-of-the-month-film-poster.jpg";
-export const FilmPlaybackContext = createContext<"auto" | "manual" | "poster">("auto");
+export const FilmPlaybackContext = createContext<"auto" | "poster" | { manualSource: string }>("auto");
 
 export function GrimShowcaseFilm() {
   const playback = useContext(FilmPlaybackContext);
@@ -87,7 +87,7 @@ export function GrimShowcaseFilm() {
         muted
         loop
         playsInline
-        preload={playback === "manual" ? "auto" : "metadata"}
+        preload={playback === "auto" ? "metadata" : "auto"}
         poster={filmPoster}
         width={720}
         height={1280}
@@ -100,7 +100,7 @@ export function GrimShowcaseFilm() {
         }}
         onError={() => setUnavailable(true)}
       >
-        <source src={filmSource} type="video/mp4" />
+        <source src={playback === "auto" ? filmSource : playback.manualSource} type="video/mp4" />
         <a href={filmSource}>Watch the Grim of the Month film.</a>
       </video>}
       <figcaption className="mt-3 flex items-center justify-between gap-3">
