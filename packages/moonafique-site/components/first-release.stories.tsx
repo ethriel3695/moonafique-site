@@ -106,6 +106,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 export const Desktop: Story = {};
 export const Mobile: Story = {
+  parameters: {
+    chromatic: { modes: { mobile: { viewport: "mobile" } } },
+  },
   globals: { viewport: { value: "mobile", isRotated: false } },
 };
 
