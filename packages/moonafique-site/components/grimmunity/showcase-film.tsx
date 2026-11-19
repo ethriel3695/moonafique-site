@@ -16,6 +16,10 @@ export function GrimShowcaseFilm() {
     const video = videoRef.current;
     if (!video) return;
 
+    // Keep the poster visible throughout a Chromatic capture, including viewport resizes.
+    if (navigator.userAgent.includes("Chromatic") ||
+        new URLSearchParams(window.location.search).get("chromatic") === "true") return;
+
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     let inView = false;
 
