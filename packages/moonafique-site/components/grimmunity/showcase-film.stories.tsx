@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { expect } from "storybook/test";
-import { GrimShowcaseFilm } from "./showcase-film";
+import { FilmPosterOnlyContext, GrimShowcaseFilm } from "./showcase-film";
 
 const meta = {
   component: GrimShowcaseFilm,
@@ -10,10 +10,15 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const ShowcaseFilm: Story = {
+export const ShowcaseFilm: Story = {};
+
+export const CapturePoster: Story = {
+  decorators: [
+    (Story) => <FilmPosterOnlyContext.Provider value={true}><Story /></FilmPosterOnlyContext.Provider>,
+  ],
   play: async ({ canvas }) => {
-    const film = canvas.getByLabelText("Grimmfest: August through October Grim of the Month showcase");
-    await expect(film).toHaveAttribute("poster", "/showcase/grim-of-the-month-film-poster.jpg");
-    await expect(canvas.getByRole("button", { name: /^(play|pause) video$/i })).toBeVisible();
+    const poster = canvas.getByRole("img", { name: /Grimmfest: August through October/ });
+    await expect(poster).toHaveAttribute("src", "/showcase/grim-of-the-month-film-poster.jpg");
+    await expect(canvas.getByRole("button", { name: "Play video" })).toBeVisible();
   },
 };

@@ -1,11 +1,15 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { Pause, Play } from "lucide-react";
 
 const filmSource = "/showcase/grim-of-the-month-film.mp4";
+const filmPoster = "/showcase/grim-of-the-month-film-poster.jpg";
+export const FilmPosterOnlyContext = createContext(false);
 
 export function GrimShowcaseFilm() {
+  const posterOnly = useContext(FilmPosterOnlyContext);
   const videoRef = useRef<HTMLVideoElement>(null);
   const userPaused = useRef(false);
   const automaticPause = useRef(false);
@@ -15,10 +19,6 @@ export function GrimShowcaseFilm() {
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
-
-    // Keep the poster visible throughout a Chromatic capture, including viewport resizes.
-    if (navigator.userAgent.includes("Chromatic") ||
-        new URLSearchParams(window.location.search).get("chromatic") === "true") return;
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     let inView = false;
@@ -51,7 +51,7 @@ export function GrimShowcaseFilm() {
       automaticPause.current = true;
       video.pause();
     };
-  }, []);
+  }, [posterOnly]);
 
   const togglePlayback = () => {
     const video = videoRef.current;
@@ -66,7 +66,19 @@ export function GrimShowcaseFilm() {
 
   return (
     <figure className="mx-auto w-full max-w-xs">
-      <video
+      {posterOnly ? (
+        <Image
+          id="grim-showcase-film"
+          src={filmPoster}
+          alt="Grimmfest: August through October Grim of the Month showcase"
+          aria-describedby="grim-film-description"
+          width={720}
+          height={1280}
+          loading="eager"
+          unoptimized
+          className="block aspect-[9/16] w-full rounded-2xl border border-white/15 bg-black object-contain"
+        />
+      ) : <video
         ref={videoRef}
         id="grim-showcase-film"
         aria-label="Grimmfest: August through October Grim of the Month showcase"
@@ -76,7 +88,7 @@ export function GrimShowcaseFilm() {
         loop
         playsInline
         preload="metadata"
-        poster="/showcase/grim-of-the-month-film-poster.jpg"
+        poster={filmPoster}
         width={720}
         height={1280}
         className="block aspect-[9/16] w-full rounded-2xl border border-white/15 bg-black object-contain"
@@ -90,7 +102,7 @@ export function GrimShowcaseFilm() {
       >
         <source src={filmSource} type="video/mp4" />
         <a href={filmSource}>Watch the Grim of the Month film.</a>
-      </video>
+      </video>}
       <figcaption className="mt-3 flex items-center justify-between gap-3">
         <p className="text-xs leading-5 text-[#d3c8d9]">Grimmfest, in motion.<br />August–October 2026</p>
         <button
