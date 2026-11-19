@@ -25,8 +25,10 @@ export const OpensAnswer: Story = {
     });
 
     const shippingAnswer = canvas.getByText(/^standard shipping\b/i);
+    await expect(shippingQuestion).toHaveAttribute('aria-expanded', 'false');
     await expect(shippingAnswer).not.toBeVisible();
     await userEvent.click(shippingQuestion);
+    await expect(shippingQuestion).toHaveAttribute('aria-expanded', 'true');
     await expect(shippingAnswer).toBeVisible();
   },
 };
