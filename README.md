@@ -31,6 +31,19 @@ pnpm --filter moonafique-site lint
 pnpm --filter moonafique-site storybook
 ```
 
+## Storefront visual regression tests
+
+Add the storefront's Chromatic project token to GitHub under **Settings → Secrets and variables → Actions → New repository secret**. Name the secret `CHROMATIC_PROJECT_TOKEN`.
+
+The **Chromatic** workflow builds the storefront Storybook on each branch push. The first run establishes a visual baseline. Open the Chromatic build link in the workflow log to review changes on later runs.
+
+To run locally, set `CHROMATIC_PROJECT_TOKEN` in your shell and run these commands from the repository root:
+
+```bash
+pnpm --filter moonafique-site build-storybook --stats-json
+pnpm dlx chromatic@18.15.0
+```
+
 ## App Location
 
 The storefront source now lives in `packages/moonafique-site`, including:

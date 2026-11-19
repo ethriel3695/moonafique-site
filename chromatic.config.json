@@ -1,0 +1,8 @@
+{
+  "$schema": "https://www.chromatic.com/config-file.schema.json",
+  "storybookBuildDir": "packages/moonafique-site/storybook-static",
+  "storybookBaseDir": "packages/moonafique-site",
+  "externals": ["packages/moonafique-site/public/**"],
+  "onlyChanged": true,
+  "exitZeroOnChanges": true
+}
