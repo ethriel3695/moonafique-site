@@ -1,4 +1,4 @@
-import type {} from '@vitest/browser/providers/playwright';
+import { playwright } from "@vitest/browser-playwright";
 import { coverageConfigDefaults, defineConfig } from "vitest/config";
 import { storybookTest } from "@storybook/addon-vitest/vitest-plugin";
 import path from "node:path";
@@ -21,17 +21,13 @@ export default defineConfig({
     browser: {
       enabled: true,
       headless: true,
-      provider: "playwright",
-      instances: [
-        {
-          browser: "chromium",
-          launch: {
-            channel: process.env.STORYBOOK_BROWSER_CHANNEL ?? "chromium",
-          },
+      provider: playwright({
+        launchOptions: {
+          channel: process.env.STORYBOOK_BROWSER_CHANNEL ?? "chromium",
         },
-      ],
+      }),
+      instances: [{ browser: "chromium" }],
     },
-    setupFiles: [".storybook/vitest.setup.ts"],
     coverage: {
       // 👇 Add this
       exclude: [
