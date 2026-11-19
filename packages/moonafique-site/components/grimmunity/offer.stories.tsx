@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { expect, within } from "storybook/test";
 import { OfferView } from "./views";
+import { FilmPosterOnlyContext } from "./showcase-film";
 import {
   StoryFrame,
   storyAvailability,
@@ -78,8 +79,14 @@ export const EnrollmentOpen: Story = {
 };
 export const AlreadyHasGrimmMembership: Story = {
   args: { existingMembershipName: "Grimmoire Collection" },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+  decorators: [
+    (Story) => (
+      <FilmPosterOnlyContext.Provider value={true}>
+        <Story />
+      </FilmPosterOnlyContext.Provider>
+    ),
+  ],
+  play: async ({ canvas }) => {
     await expect(
       canvas.getByText("Grimmoire Collection is already on your account."),
     ).toBeVisible();
@@ -87,6 +94,11 @@ export const AlreadyHasGrimmMembership: Story = {
     await expect(
       canvas.getByRole("link", { name: "Manage my membership" }),
     ).toHaveAttribute("href", "/account/grimmunity");
+
+    const poster = canvas.getByRole<HTMLImageElement>("img", { name: /Grimmfest: August through October/ });
+    await poster.decode();
+    await expect(poster).toBeVisible();
+    await expect(canvas.getByRole("button", { name: "Play video" })).toBeVisible();
   },
 };
 export const ACEOEnrollmentClosed: Story = {
