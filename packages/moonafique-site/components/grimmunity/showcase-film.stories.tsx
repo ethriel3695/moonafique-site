@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { expect } from "storybook/test";
-import { FilmPosterOnlyContext, GrimShowcaseFilm } from "./showcase-film";
+import { FilmPlaybackContext, GrimShowcaseFilm } from "./showcase-film";
 
 const meta = {
   component: GrimShowcaseFilm,
@@ -14,7 +14,7 @@ export const ShowcaseFilm: Story = {};
 
 export const CapturePoster: Story = {
   decorators: [
-    (Story) => <FilmPosterOnlyContext.Provider value={true}><Story /></FilmPosterOnlyContext.Provider>,
+    (Story) => <FilmPlaybackContext.Provider value="poster"><Story /></FilmPlaybackContext.Provider>,
   ],
   play: async ({ canvas }) => {
     const poster = canvas.getByRole("img", { name: /Grimmfest: August through October/ });

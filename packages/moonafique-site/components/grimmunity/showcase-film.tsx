@@ -6,10 +6,10 @@ import { Pause, Play } from "lucide-react";
 
 const filmSource = "/showcase/grim-of-the-month-film.mp4";
 const filmPoster = "/showcase/grim-of-the-month-film-poster.jpg";
-export const FilmPosterOnlyContext = createContext(false);
+export const FilmPlaybackContext = createContext<"auto" | "manual" | "poster">("auto");
 
 export function GrimShowcaseFilm() {
-  const posterOnly = useContext(FilmPosterOnlyContext);
+  const playback = useContext(FilmPlaybackContext);
   const videoRef = useRef<HTMLVideoElement>(null);
   const userPaused = useRef(false);
   const automaticPause = useRef(false);
@@ -18,7 +18,7 @@ export function GrimShowcaseFilm() {
 
   useEffect(() => {
     const video = videoRef.current;
-    if (!video) return;
+    if (!video || playback !== "auto") return;
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     let inView = false;
@@ -51,7 +51,7 @@ export function GrimShowcaseFilm() {
       automaticPause.current = true;
       video.pause();
     };
-  }, [posterOnly]);
+  }, [playback]);
 
   const togglePlayback = () => {
     const video = videoRef.current;
@@ -66,7 +66,7 @@ export function GrimShowcaseFilm() {
 
   return (
     <figure className="mx-auto w-full max-w-xs">
-      {posterOnly ? (
+      {playback === "poster" ? (
         <Image
           id="grim-showcase-film"
           src={filmPoster}
@@ -87,7 +87,7 @@ export function GrimShowcaseFilm() {
         muted
         loop
         playsInline
-        preload="metadata"
+        preload={playback === "manual" ? "auto" : "metadata"}
         poster={filmPoster}
         width={720}
         height={1280}

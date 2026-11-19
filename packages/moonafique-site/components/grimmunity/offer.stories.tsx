@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { expect, within } from "storybook/test";
+import { expect, waitFor, within } from "storybook/test";
 import { OfferView } from "./views";
-import { FilmPosterOnlyContext } from "./showcase-film";
+import { FilmPlaybackContext } from "./showcase-film";
 import {
   StoryFrame,
   storyAvailability,
@@ -81,9 +81,9 @@ export const AlreadyHasGrimmMembership: Story = {
   args: { existingMembershipName: "Grimmoire Collection" },
   decorators: [
     (Story) => (
-      <FilmPosterOnlyContext.Provider value={true}>
+      <FilmPlaybackContext.Provider value="manual">
         <Story />
-      </FilmPosterOnlyContext.Provider>
+      </FilmPlaybackContext.Provider>
     ),
   ],
   play: async ({ canvas }) => {
@@ -95,10 +95,17 @@ export const AlreadyHasGrimmMembership: Story = {
       canvas.getByRole("link", { name: "Manage my membership" }),
     ).toHaveAttribute("href", "/account/grimmunity");
 
-    const poster = canvas.getByRole<HTMLImageElement>("img", { name: /Grimmfest: August through October/ });
-    await poster.decode();
-    await expect(poster).toBeVisible();
-    await expect(canvas.getByRole("button", { name: "Play video" })).toBeVisible();
+    const video = canvas.getByLabelText<HTMLVideoElement>(/Grimmfest: August through October/);
+    await expect(video).toBeInstanceOf(HTMLVideoElement);
+    // The native timeline paints buffered progress even while the film is paused.
+    await waitFor(async () => {
+      await expect(video.readyState).toBeGreaterThanOrEqual(HTMLMediaElement.HAVE_CURRENT_DATA);
+      await expect(video.duration).toBeGreaterThan(0);
+      await expect(video.networkState).toBe(HTMLMediaElement.NETWORK_IDLE);
+    }, { timeout: 10_000 });
+    await expect(video.controls).toBe(true);
+    await expect(video.paused).toBe(true);
+    await expect(video.currentTime).toBe(0);
   },
 };
 export const ACEOEnrollmentClosed: Story = {

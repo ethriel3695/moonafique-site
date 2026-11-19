@@ -1,5 +1,5 @@
 import { createElement } from "react";
-import { FilmPosterOnlyContext } from "../components/grimmunity/showcase-film";
+import { FilmPlaybackContext } from "../components/grimmunity/showcase-film";
 import { lora, manrope } from "../lib/site-fonts";
 import type { Preview } from "@storybook/nextjs-vite";
 import "@radix-ui/themes/styles.css";
@@ -12,7 +12,7 @@ const preview: Preview = {
         window.navigator.userAgent.includes("Chromatic") ||
         new URLSearchParams(window.location.search).get("chromatic") === "true"
       );
-      return createElement(FilmPosterOnlyContext.Provider, { value: capturing }, createElement(Story));
+      return createElement(FilmPlaybackContext.Provider, { value: capturing ? "poster" : "auto" }, createElement(Story));
     },
     (Story) =>
       createElement(
